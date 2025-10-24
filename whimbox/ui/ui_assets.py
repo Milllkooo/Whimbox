@@ -9,7 +9,6 @@ AreaPageTitleFeature = Area()
 # 主界面、esc菜单相关
 IconPageMainFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
 IconDungeonFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
-TextPageEscFeature = Text("美鸭梨", cap_area = AreaPageTitleFeature)
 AreaUITime = Area()
 AreaEscEntrances = Area()
 
@@ -53,13 +52,8 @@ IconFishingPullLineAlt = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.8)  # 拉�
 IconFishingReelLine = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.8)  # 收线图标
 IconFishingSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.8) # 跳过
 
-# 每日任务相关
-AreaDailyTaskFeature = Area()
-TextDailyTaskFeature = Text("每日灵感", cap_area = AreaDailyTaskFeature)
-ButtonHuanjingGo = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
-
 # 幻境挑战页面
-TextHuanjingFeature = Text("幻境挑战", cap_area = AreaPageTitleFeature)
+ButtonHuanjingGo = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 AreaHuanjingMonsterEntrace = Area()
 TextHuanjingMonsterEntrace = Text("魔物试炼幻境", cap_area = AreaHuanjingMonsterEntrace)
 AreaHuanjingBlessEntrace = Area()
@@ -72,7 +66,6 @@ AreaHuanjingBossEntrace = Area()
 TextHuanjingBossEntrace = Text("心之突破幻境", cap_area = AreaHuanjingBossEntrace)
 
 # 祝福闪光幻境相关
-TextHuanjingBlessFeature = Text("祝福闪光幻境", cap_area = AreaPageTitleFeature)
 AreaBlessHuanjingLevelsSelect = Area()
 AreaBlessHuanjingDifficulty3 = Area()
 TextBlessHuanjingDifficulty3 = Text("困难", cap_area = AreaBlessHuanjingDifficulty3)
@@ -81,7 +74,6 @@ ButtonBlessHuanjingNumMax = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 ButtonBlessHuanjingConfirm = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 
 # 素材激化幻境相关
-TextHuanjingJihuaFeature = Text("素材激化幻境", cap_area = AreaPageTitleFeature)
 ButtonJihuaInnerGo = Button(print_log=LOG_WHEN_TRUE,threshold=0.99)
 AreaTextJihuatai = Area()
 TextJihuatai = Text("打开素材激化台", cap_area = AreaTextJihuatai)
@@ -92,7 +84,7 @@ ButtonJihuaNumConfirm = Button(print_log=LOG_WHEN_TRUE,threshold=0.99)
 ButtonJihuaFinallyConfirm = Button(print_log=LOG_WHEN_TRUE,threshold=0.99)
 
 # 魔物试炼幻境相关
-TextHuanjingMonsterFeature = Text("魔物试炼幻境", cap_area = AreaPageTitleFeature)
+# 基本可以复用祝福闪光幻境
 
 # 美鸭梨挖掘相关
 ButtonDigGather = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
@@ -156,13 +148,11 @@ IconMaterialTypeOther = ImgIcon()
 IconMaterialTypeDig1 = ImgIcon()
 
 # 拍照相关
-TextPhotoFeature = Text("大喵相机", cap_area = AreaPageTitleFeature)
 IconPhotoEdit = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.99)
 IconPhotoDelete = ImgIcon()
 ButtonPhotoDeleteConfirm = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 
 # 大月卡，奇迹之旅
-TextMonthlyPassFeature = Text("奇迹之旅", cap_area = AreaPageTitleFeature)
 ButtonMonthlyPassAward = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 ButtonMonthlyPassTab1 = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 ButtonMonthlyPassTab2 = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
