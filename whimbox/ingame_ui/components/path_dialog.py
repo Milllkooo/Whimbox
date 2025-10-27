@@ -143,13 +143,34 @@ class PathSelectionDialog(QDialog):
         
         layout.addLayout(filter_row1)
         
-        # 第二行：重置按钮
+        # 第二行：刷新和重置按钮
         filter_row2 = QHBoxLayout()
         filter_row2.setSpacing(12)
         filter_row2.setContentsMargins(0, 4, 0, 8)
         filter_row2.addStretch()
         
-        reset_button = QPushButton("🔄 重置筛选")
+        refresh_button = QPushButton("🔄 刷新路线")
+        refresh_button.setFixedSize(120, 35)
+        refresh_button.clicked.connect(self.reload_paths)
+        refresh_button.setStyleSheet("""
+            QPushButton {
+                background-color: #2196F3;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #1976D2;
+            }
+            QPushButton:pressed {
+                background-color: #1565C0;
+            }
+        """)
+        filter_row2.addWidget(refresh_button)
+        
+        reset_button = QPushButton("🗑️ 重置筛选")
         reset_button.setFixedSize(120, 35)
         reset_button.clicked.connect(self.reset_filters)
         reset_button.setStyleSheet("""
@@ -318,6 +339,12 @@ class PathSelectionDialog(QDialog):
         dialog_layout.setContentsMargins(0, 0, 0, 0)
         dialog_layout.addWidget(main_container)
     
+    def reload_paths(self):
+        """刷新路径列表"""
+        path_manager.init_path_dict()
+        self.load_paths()
+        self.reset_filters()
+
     def load_paths(self):
         """加载路径列表"""
         try:

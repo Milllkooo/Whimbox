@@ -49,18 +49,25 @@ class PathManager:
         if self._initialized:
             return
         self.path_dict = {}
-        self._init_path_dict()
+        self.init_path_dict()
 
         self._initialized = True
 
-    def _init_path_dict(self):
+    def init_path_dict(self):
+        self.path_dict = {}
         for file in os.listdir(SCRIPT_PATH):
             if file.endswith(".json"):
                 with open(os.path.join(SCRIPT_PATH, file), "r", encoding="utf-8") as f:
                     try:
                         path_record = PathRecord.model_validate_json(f.read())
                         path_name = path_record.info.name
-                        self.path_dict[path_name] = path_record
+                        if path_name in self.path_dict:
+                            if self.path_dict[path_name].info.update_time < path_record.info.update_time:
+                                self.path_dict[path_name] = path_record
+                            else:
+                                continue
+                        else:
+                            self.path_dict[path_name] = path_record
                     except Exception as e:
                         logger.error(f"读取路径文件{file}失败: {e}")
                         continue
