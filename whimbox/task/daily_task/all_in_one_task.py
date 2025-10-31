@@ -42,8 +42,8 @@ class AllInOneTask(TaskTemplate):
     @register_step("开始完成朝夕心愿任务")
     def step3(self):
         task_dict = {
-            DAILY_TASK_PICKUP: AutoPathTask(path_name="example1_采集测试", excepted_num=5),
-            DAILY_TASK_CATCH_INSECT: AutoPathTask(path_name="example4_捕虫测试", excepted_num=3),
+            DAILY_TASK_PICKUP: AutoPathTask(path_name="朝夕心愿_采集", excepted_num=5),
+            DAILY_TASK_CATCH_INSECT: AutoPathTask(path_name="朝夕心愿_捕虫", excepted_num=3),
             DAILY_TASK_GET_BLESS: daily_task.BlessTask(),
             DAILY_TASK_JIHUA: daily_task.JihuaTask(),
             DAILY_TASK_MONSTER: daily_task.MonsterTask(),

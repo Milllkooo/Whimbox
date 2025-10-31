@@ -185,7 +185,7 @@ class AutoPathTask(TaskTemplate):
                         task_result = pickup_task.task_run()
                         self.merge_material_count_dict(task_result.data)
                     elif self.target_point.action == ACTION_CATCH_INSECT:
-                        excepted_count = int(self.target_point.action_params)
+                        excepted_count = int(self.target_point.action_params or 1)
                         catch_insect_task = CatchInsectTask(
                             self.path_info.target, 
                             expected_count=excepted_count,
@@ -193,7 +193,7 @@ class AutoPathTask(TaskTemplate):
                         task_result = catch_insect_task.task_run()
                         self.merge_material_count_dict(task_result.data)
                     elif self.target_point.action == ACTION_CLEAN_ANIMAL:
-                        excepted_count = int(self.target_point.action_params)
+                        excepted_count = int(self.target_point.action_params or 1)
                         clean_animal_task = CleanAnimalTask(
                             self.path_info.target, 
                             expected_count=excepted_count,
