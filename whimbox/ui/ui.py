@@ -166,4 +166,4 @@ ui_control = UI()
 if __name__ == '__main__':
     # ui_control.goto_page(page_esc)
     # ui_control.goto_page(page_huanjing_jihua)
-    ui_control.goto_page(page_photo)
+    ui_control.goto_page(page_main)

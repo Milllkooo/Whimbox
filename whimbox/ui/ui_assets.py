@@ -7,7 +7,7 @@ from whimbox.ui.template.text_manager import TextTemplate, Text
 AreaPageTitleFeature = Area()
 
 # 主界面、esc菜单相关
-IconPageMainFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
+IconPageMainFeature = ImgIcon(print_log=LOG_NONE, threshold=0.999)
 IconDungeonFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
 AreaUITime = Area()
 AreaEscEntrances = Area()
