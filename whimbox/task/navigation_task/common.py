@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 import os
+import json
 
 from whimbox.common.path_lib import SCRIPT_PATH
 from whimbox.common.logger import logger
@@ -104,5 +105,75 @@ class PathManager:
             return res[0] if res else None
         else:
             return res
+    
+    def delete_path(self, path_name: str) -> int:
+        """
+        删除指定名称的路线
+        
+        Args:
+            path_name: 路线名称
+            
+        Returns:
+            删除的文件数量，如果出错返回 0
+        """
+        if not path_name:
+            logger.warning("Path name is empty, cannot delete")
+            return 0
+        
+        if not os.path.exists(SCRIPT_PATH):
+            logger.warning(f"Script path does not exist: {SCRIPT_PATH}")
+            return 0
+        
+        try:
+            target_filepath = []
+            for file in os.listdir(SCRIPT_PATH):
+                if not file.endswith(".json"):
+                    continue
+                
+                file_path = os.path.join(SCRIPT_PATH, file)
+                try:
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        try:
+                            path_data = json.load(f)
+                            # 检查路线名是否匹配
+                            if path_data.get("info", {}).get("name") == path_name:
+                                target_filepath.append(file_path)
+                        except (json.JSONDecodeError, KeyError, TypeError):
+                            # 跳过格式错误的文件
+                            continue
+                except Exception as e:
+                    logger.warning(f"Failed to read file {file}: {e}")
+                    continue
+            
+            # 删除成功后，重新初始化路径字典
+            deleted_count = 0
+            for file_path in target_filepath:
+                try:
+                    os.remove(file_path)
+                    deleted_count += 1
+                except Exception as e:
+                    logger.warning(f"Failed to delete file {file_path}: {e}")
+                    continue
+            if deleted_count > 0:
+                self.init_path_dict()
+                logger.info(f"Deleted {deleted_count} file(s) for path '{path_name}'")
+            return deleted_count
+            
+        except Exception as e:
+            logger.error(f"Failed to delete path '{path_name}': {e}")
+            return 0
+
+    def open_path_folder(self):
+        """打开路线文件夹"""
+        try:
+            if os.path.exists(SCRIPT_PATH):
+                os.startfile(SCRIPT_PATH)
+                logger.info(f"Opened path folder: {SCRIPT_PATH}")
+            else:
+                return False, f"路线文件夹不存在:{SCRIPT_PATH}"
+        except Exception as e:
+            logger.error(f"Failed to open path folder: {e}")
+            return False, f"无法打开路线文件夹:{str(e)}"
+        return True, f"已打开路线文件夹:{SCRIPT_PATH}"
 
 path_manager = PathManager()

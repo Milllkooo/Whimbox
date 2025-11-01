@@ -2,9 +2,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import win32gui
+import os
 
 from whimbox.common.logger import logger
 from whimbox.common.handle_lib import HANDLE_OBJ
+from whimbox.common.path_lib import SCRIPT_PATH
 from whimbox.task.navigation_task.common import path_manager
 
 
@@ -148,6 +150,27 @@ class PathSelectionDialog(QDialog):
         filter_row2.setSpacing(12)
         filter_row2.setContentsMargins(0, 4, 0, 8)
         filter_row2.addStretch()
+        
+        open_folder_button = QPushButton("📁 打开路线文件夹")
+        open_folder_button.setFixedSize(150, 35)
+        open_folder_button.clicked.connect(self.open_path_folder)
+        open_folder_button.setStyleSheet("""
+            QPushButton {
+                background-color: #9E9E9E;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #757575;
+            }
+            QPushButton:pressed {
+                background-color: #616161;
+            }
+        """)
+        filter_row2.addWidget(open_folder_button)
         
         refresh_button = QPushButton("🔄 刷新路线")
         refresh_button.setFixedSize(120, 35)
@@ -306,6 +329,32 @@ class PathSelectionDialog(QDialog):
         """)
         self.start_button.setEnabled(False)
         
+        self.delete_button = QPushButton("🗑️ 删除路线")
+        self.delete_button.setFixedHeight(40)
+        self.delete_button.clicked.connect(self.on_delete_clicked)
+        self.delete_button.setEnabled(False)
+        self.delete_button.setStyleSheet("""
+            QPushButton {
+                background-color: #FF5722;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #E64A19;
+            }
+            QPushButton:pressed {
+                background-color: #D84315;
+            }
+            QPushButton:disabled {
+                background-color: #FFCCBC;
+                color: #E0E0E0;
+            }
+        """)
+        
         cancel_button = QPushButton("取消")
         cancel_button.setFixedHeight(40)
         cancel_button.clicked.connect(self.reject)
@@ -328,6 +377,7 @@ class PathSelectionDialog(QDialog):
         """)
         
         button_layout.addWidget(self.start_button)
+        button_layout.addWidget(self.delete_button)
         button_layout.addWidget(cancel_button)
         layout.addLayout(button_layout)
         
@@ -338,6 +388,12 @@ class PathSelectionDialog(QDialog):
         dialog_layout = QVBoxLayout(self)
         dialog_layout.setContentsMargins(0, 0, 0, 0)
         dialog_layout.addWidget(main_container)
+    
+    def open_path_folder(self):
+        """打开路线文件夹"""
+        res, msg = path_manager.open_path_folder()
+        if not res:
+            QMessageBox.warning(self, "提示", msg)
     
     def reload_paths(self):
         """刷新路径列表"""
@@ -455,8 +511,10 @@ class PathSelectionDialog(QDialog):
                 name_item = self.path_list.item(row, 0)
                 if name_item and name_item.data(Qt.UserRole):
                     self.start_button.setEnabled(True)
+                    self.delete_button.setEnabled(True)
                     return
         self.start_button.setEnabled(False)
+        self.delete_button.setEnabled(False)
     
     def on_start_clicked(self):
         """点击开始按钮"""
@@ -476,6 +534,45 @@ class PathSelectionDialog(QDialog):
         logger.info(f"Selected path: {path_record.info.name}")
         self.path_selected.emit(path_record.info.name)
         self.accept()
+    
+    def on_delete_clicked(self):
+        """点击删除按钮"""
+        row = self.path_list.currentRow()
+        if row < 0:
+            QMessageBox.warning(self, "提示", "请先选择一条路线")
+            return
+        
+        name_item = self.path_list.item(row, 0)
+        if not name_item:
+            return
+        
+        path_record = name_item.data(Qt.UserRole)
+        if not path_record:
+            return
+        
+        path_name = path_record.info.name
+        
+        # 弹出确认对话框
+        reply = QMessageBox.question(
+            self,
+            "确认删除",
+            f"确定要删除路线「{path_name}」吗？\n（订阅路线请在路线订阅网站取消订阅来删除）",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        
+        if reply != QMessageBox.Yes:
+            return
+        
+        # 调用 PathManager 的删除方法
+        deleted_count = path_manager.delete_path(path_name)
+        
+        if deleted_count > 0:
+            QMessageBox.information(self, "成功", f"已删除路线「{path_name}」")
+            # 重新加载路径列表
+            self.reload_paths()
+        else:
+            QMessageBox.warning(self, "提示", f"未找到路线「{path_name}」的文件")
     
     def show_centered(self):
         """在游戏窗口中央显示对话框"""

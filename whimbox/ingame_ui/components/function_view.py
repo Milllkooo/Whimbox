@@ -25,6 +25,12 @@ FUNCTION_BUTTONS = [
         'task_params': {},
         'start_message': '开始录制路线，按"引号"键，停止录制\n',
     },
+    {
+        'label': '打开路线文件夹',
+        'task_name': 'open_path_folder',
+        'task_params': {},
+        'start_message': '打开路线文件夹\n',
+    },
 ]
 
 

@@ -168,6 +168,17 @@ async def record_path() -> dict:
     return task_result.to_dict()
 
 @mcp.tool()
+async def open_path_folder() -> dict:
+    """
+    打开路线文件夹
+    """
+    res, msg = path_manager.open_path_folder()
+    return {
+        "status": STATE_TYPE_SUCCESS if res else STATE_TYPE_ERROR,
+        "message": msg
+    }
+
+@mcp.tool()
 async def daily_photo_task() -> dict:
     """
     简单拍照，用于完成每日任务
