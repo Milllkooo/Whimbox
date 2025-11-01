@@ -35,11 +35,10 @@ class InteractionNormal(InteractionTemplate):
         self.MapVirtualKeyW = ctypes.windll.user32.MapVirtualKeyW
         self.VkKeyScanA = ctypes.windll.user32.VkKeyScanA
         self.WHEEL_DELTA = 120
-        self.DEFAULT_DELAY_TIME = 0.05
         
     def left_click(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-        time.sleep(0.05)
+        time.sleep(0.1)
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
     def left_down(self):
@@ -77,12 +76,12 @@ class InteractionNormal(InteractionTemplate):
 
     def right_click(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
-        time.sleep(0.05)
+        time.sleep(0.1)
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
     
     def middle_click(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0)
-        time.sleep(0.05)
+        time.sleep(0.1)
         win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP, 0, 0, 0, 0)
     
     def middle_scroll(self, distance):
@@ -98,7 +97,7 @@ class InteractionNormal(InteractionTemplate):
     
     def key_press(self, key):
         self.key_down(key)
-        time.sleep(0.05)
+        time.sleep(0.1)
         self.key_up(key)
     
     def move_to(self, x: int, y: int, relative=False, isBorderlessWindow=False):
