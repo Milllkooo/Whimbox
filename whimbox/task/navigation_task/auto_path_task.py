@@ -92,7 +92,7 @@ class AutoPathTask(TaskTemplate):
                 # 游戏中二段跳瞬间，会出现一帧WALK状态的图标，所以这里还要判断连续两帧都是WALK，避免误判
                 if self.jump_controller.is_double_jumping() \
                     and self.jump_controller.double_jump_begin_time \
-                    and time.time() - self.jump_controller.double_jump_begin_time > 0.1:
+                    and time.time() - self.jump_controller.double_jump_begin_time > 0.2:
                         self.jump_controller.clear_jump_state()
                 self.jump_controller.start_jump()
             # 如果游戏中是跳跃图标，但是控制器不在跳跃，就说明被什么机制弹起来了或是下落中，触发一下二段跳

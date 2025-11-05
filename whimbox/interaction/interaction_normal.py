@@ -97,7 +97,7 @@ class InteractionNormal(InteractionTemplate):
     
     def key_press(self, key):
         self.key_down(key)
-        time.sleep(0.1)
+        time.sleep(0.05)
         self.key_up(key)
     
     def move_to(self, x: int, y: int, relative=False, isBorderlessWindow=False):
