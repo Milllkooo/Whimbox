@@ -130,10 +130,12 @@ class UI():
                 elif isinstance(button, Text):
                     itt.appear_then_click(button)
                 
-                itt.delay(0.7, comment="goto_page is waiting for page transition")
-                
+                # itt.delay(1, comment="goto_page is waiting for page transition")
+                logger.info("waiting for page transition")
+                itt.wait_until_stable(threshold=0.90)
                 # Handle loading screen
                 self.ui_additional()
+                logger.info("page transition completed")
                 
                 # Verify we reached the expected page
                 if not to_page.is_current_page(itt):
@@ -165,5 +167,5 @@ ui_control = UI()
 
 if __name__ == '__main__':
     # ui_control.goto_page(page_esc)
-    # ui_control.goto_page(page_huanjing_jihua)
-    ui_control.goto_page(page_main)
+    ui_control.goto_page(page_huanjing_jihua)
+    # ui_control.goto_page(page_ability)
