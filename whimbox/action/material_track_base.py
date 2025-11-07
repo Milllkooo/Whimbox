@@ -86,6 +86,7 @@ class MaterialTrackBaseTask(TaskTemplate):
                         self.post_play_func()
                         break
             if no_material_near:
+                self.log_to_gui("附近已经没有追踪的材料了")
                 break
         itt.right_up()
         itt.key_up('w')

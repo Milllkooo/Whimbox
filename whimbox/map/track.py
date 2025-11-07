@@ -80,8 +80,10 @@ class Track:
             ui_control.goto_page(page_main)
             return True
         elif button_text == "取消追踪":
+            self.tracking_material = material_name
             itt.key_press('esc')
             ui_control.goto_page(page_main)
+            return True
         else:
             raise Exception("该材料未开启精确追踪")
 
@@ -108,30 +110,34 @@ class Track:
         if circles is not None:
             minimap_center = (MINIMAP_RADIUS, MINIMAP_RADIUS)
             min_dist = 99999
+            track_circle = None
             for x, y, r in circles[0, :]:
                 # 如果之前没有追踪，就追踪最近的一个，否则追踪之前的点
                 if self.last_track_posi is None:
                     dist = euclidean_distance(minimap_center, (x, y))
+                    track_circle = (x, y, r)
                 else:
                     dist = euclidean_distance(self.last_track_posi, (x, y))
                 if dist < min_dist:
                     min_dist = dist
-                    closest_circle = (x, y, r)
-            self.last_track_posi = closest_circle[0:2]
+                    track_circle = (x, y, r)
+            self.last_track_posi = track_circle[0:2]
 
             if CV_DEBUG_MODE:
                 print(min_dist)
-                x, y, r = np.uint16(np.around(closest_circle))
+                x, y, r = np.uint16(np.around(track_circle))
                 cv2.circle(minimap_img, (x, y), r, (0, 0, 255), 2)
                 cv2.circle(minimap_img, (x, y), 2, (0, 0, 255), 3)
                 cv2.imshow("minimap_img", minimap_img)
                 cv2.waitKey(1)
             
-            # 如果材料出现在小地图边缘，说明附近已经没有材料了
-            if min_dist > MINIMAP_RADIUS - 20:
+            # 只追踪身边的材料，太远的就不管了（按布布袜虫的敏感距离推算）
+            track_dist = euclidean_distance(minimap_center, track_circle[0:2])
+            if track_dist > 50:
+                self.last_track_posi = None
                 return None
             else:
-                degree = calculate_posi2degree(minimap_center, closest_circle[0:2])
+                degree = calculate_posi2degree(minimap_center, track_circle[0:2])
                 return degree
         return None
 
@@ -183,7 +189,7 @@ material_track = Track()
 
 if __name__ == "__main__":
     CV_DEBUG_MODE = True
-    material_track.change_tracking_material("发卡蚱蜢")
-    # while True:
-    #     material_track.get_material_track_degree()
-    #     time.sleep(0.2)
+    # material_track.change_tracking_material("发卡蚱蜢")
+    while True:
+        print(material_track.get_material_track_degree())
+        time.sleep(0.2)
