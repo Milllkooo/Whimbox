@@ -95,6 +95,9 @@ class Track:
         upper = [15, 200, 255]
         minimap_hsv = process_with_hsv_limit(minimap_img, lower, upper)
         minimap_blur = cv2.GaussianBlur(minimap_hsv, (3, 3), 1)
+        if CV_DEBUG_MODE:
+            cv2.imshow("minimap_blur", minimap_blur)
+            cv2.waitKey(1)
 
         circles = cv2.HoughCircles(
             minimap_blur,
@@ -102,7 +105,7 @@ class Track:
             dp=1,          # 累加器分辨率（可调 1.0~1.5）
             minDist=10,      # 圆心最小间距，建议≈ 2*minRadius - 些许
             param1=100,      # Canny高阈值
-            param2=9,       # 累加器阈值，越小越容易出圆（可调 8~18）
+            param2=8,       # 累加器阈值，越小越容易出圆（可调 8~18）
             minRadius=14,
             maxRadius=16
         )
