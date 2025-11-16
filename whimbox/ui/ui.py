@@ -146,7 +146,7 @@ class UI():
             if not success:
                 self.switch_ui_lock.release()
                 if retry_times >= max_retry:
-                    raise Exception(f"Failed to navigate to {target_page} after {max_retry} retries")
+                    raise Exception(f"前往页面 {target_page} 失败")
                 self.goto_page(target_page, retry_times=retry_times + 1, max_retry=max_retry)
             else:
                 logger.info(f"Successfully arrived at {target_page}")
