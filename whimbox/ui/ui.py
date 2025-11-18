@@ -17,7 +17,7 @@ class UI():
         """
         Handle all annoying popups during UI switching.
         """
-        while page_loading.is_current_page(itt):
+        while page_loading.is_current_page(itt) and not global_stop_flag.is_set():
             itt.delay(1, comment='game is loading...')
 
     def is_valid_page(self):

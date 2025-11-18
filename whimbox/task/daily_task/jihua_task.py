@@ -38,7 +38,10 @@ class JihuaTask(TaskTemplate):
 
     @register_step("正在前往激化台")
     def step3(self):
-        if not wait_until_appear(IconPageMainFeature, retry_time=10):
+        # 等待loading结束
+        itt.wait_until_stable(threshold=0.90, timeout=2)
+        ui_control.ui_additional()
+        if not wait_until_appear(IconPageMainFeature):
             raise Exception("未进入素材激化幻境")
         
         retry_time = 3
