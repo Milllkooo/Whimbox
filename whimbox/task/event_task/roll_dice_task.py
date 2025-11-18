@@ -278,6 +278,9 @@ class RollDiceTask(TaskTemplate):
         # 关闭弹幕
         if itt.get_img_existence(ButtonMonopolySendBullet):
             itt.move_and_click(ButtonMonopolyCloseBullet.click_position())
+        if not self.check_can_play():
+            self.task_stop(message="骰子不可交互，请先手动完成进行中的事件")
+            return
         # 获取骰子数量
         max_try = 3
         while max_try > 0:
