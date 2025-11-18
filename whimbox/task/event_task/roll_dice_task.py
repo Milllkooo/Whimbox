@@ -273,6 +273,8 @@ class RollDiceTask(TaskTemplate):
         ui_control.goto_page(page_event)
         wait_until_appear_then_click(ButtonMonopolyEntrance)
         itt.wait_until_stable(threshold=0.90, timeout=2)
+        # 领取每日奖励
+        wait_until_appear_then_click(ButtonMonopolyConfirmDailyAward)
         # 关闭弹幕
         if itt.get_img_existence(ButtonMonopolySendBullet):
             itt.move_and_click(ButtonMonopolyCloseBullet.click_position())

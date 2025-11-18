@@ -165,6 +165,7 @@ ButtonMiraCrownQuickPlay = Button(print_log=LOG_WHEN_TRUE)
 # 活动相关
 # 1.11大富翁活动
 ButtonMonopolyEntrance = Button(print_log=LOG_WHEN_TRUE)
+ButtonMonopolyConfirmDailyAward = Button(print_log=LOG_WHEN_TRUE)
 ButtonMonopolySendBullet = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 ButtonMonopolyCloseBullet = Button(print_log=LOG_WHEN_TRUE)
 AreaMonopolyDiceNum = Area()
