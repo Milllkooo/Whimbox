@@ -7,8 +7,8 @@ from whimbox.ui.template.text_manager import TextTemplate, Text
 AreaPageTitleFeature = Area()
 
 # 主界面、esc菜单、抽卡、商城相关
-IconPageMainFeature = ImgIcon(print_log=LOG_NONE, threshold=0.98, gray_limit=(230, 255))
-IconDungeonFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.98, gray_limit=(230, 255))
+IconPageMainFeature = ImgIcon(print_log=LOG_NONE, threshold=0.90, gray_limit=(230, 255))
+IconDungeonFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(230, 255))
 AreaUITime = Area()
 AreaEscEntrances = Area()
 IconGachaFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
@@ -33,8 +33,8 @@ AreaBigMapMaterialTrackConfirm = Area()
 # 大世界采集、跳跃、移动、跳过等相关的UI
 AreaFPickup = Area()
 TextFPickUp = Text("拾取", cap_area = AreaFPickup)
-IconSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.98, gray_limit=(230, 255))
-IconClickSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.98, gray_limit=(230, 255))
+IconSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(230, 255))
+IconClickSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.75, gray_limit=(230, 255))
 AreaMovementWalk = Area()
 IconMovementWalking = ImgIcon()
 AreaMaterialTrackNear = Area()

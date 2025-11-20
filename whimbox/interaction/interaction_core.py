@@ -178,7 +178,7 @@ class InteractionBGD:
         elif imgicon.gray_limit is not None:
             cap = cv2.cvtColor(cap, cv2.COLOR_BGRA2GRAY)
             _, cap = cv2.threshold(cap, imgicon.gray_limit[0], imgicon.gray_limit[1], cv2.THRESH_BINARY)
-            target_img = cap
+            target_img = imgicon.image[:, :, 0]
         else:
             target_img = imgicon.image
         matching_rate = similar_img(cap, target_img, is_gray=is_gray)
