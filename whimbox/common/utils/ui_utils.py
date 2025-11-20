@@ -188,28 +188,37 @@ def wait_until_appear(obj, retry_time=3):
 
 
 def back_to_page_main():
+    # 让UI返回到主界面
     while not global_stop_flag.is_set():
         if itt.get_img_existence(IconDungeonFeature):
             itt.key_press(keybind.KEYBIND_BACK)
-        elif itt.get_img_existence(IconPageMainFeature):
+        if itt.get_img_existence(IconPageMainFeature):
             break
         else:
             itt.key_press('esc')
         time.sleep(1)
 
 def skip_to_page_main():
-    '''第一次获取到某个东西，会弹个窗口，按f跳过'''
-    if not itt.get_img_existence(IconPageMainFeature):
-        itt.key_press(keybind.KEYBIND_INTERACTION)
+    # 采集时，如果遇到没有的东西，会自动弹出获取窗口，不断按f跳过直到回到主界面
+    while not global_stop_flag.is_set():
+        time.sleep(0.5)
+        if not itt.get_img_existence(IconPageMainFeature):
+            itt.key_press(keybind.KEYBIND_INTERACTION)
+        else:
+            break
+        
             
 if __name__ == "__main__":
-    back_to_page_main()
-    # CV_DEBUG_MODE = True
-    # from whimbox.ui.material_icon_assets import material_icon_dict
+    # while True:
+    #     print(itt.get_img_existence(IconDungeonFeature, ret_mode=IMG_RATE))
+    #     time.sleep(1)
+    # back_to_page_main()
+    CV_DEBUG_MODE = True
+    from whimbox.ui.material_icon_assets import material_icon_dict
     # material_name = "纯真丝线"
-    # # material_name = "玉簪蚱蜢"
-    # target = material_icon_dict[material_name]["icon"]
-    # # scroll_find_click(AreaBigMapMaterialSelect, target, threshold=0.9, scale=0.45)
+    material_name = "玉簪蚱蜢"
+    target = material_icon_dict[material_name]["icon"]
+    scroll_find_click(AreaBigMapMaterialSelect, target, threshold=0.8, scale=0.45)
     # cap = itt.capture(posi=AreaDigItemSelect.position)
     # find_game_img(target, cap, threshold=0.7, scale=0.46)
     # cap = itt.capture(posi=AreaBigMapMaterialSelect.position)

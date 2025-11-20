@@ -5,6 +5,7 @@ import re
 
 from whimbox.common.cvars import CV_DEBUG_MODE
 from whimbox.common.timer_module import AdvanceTimer
+from whimbox.common.utils.ui_utils import skip_to_page_main
 from whimbox.task.task_template import TaskTemplate, register_step
 from whimbox.interaction.interaction_core import itt
 from whimbox.ui.page_assets import page_main
@@ -128,9 +129,10 @@ class FishingTask(TaskTemplate):
 
     def handle_skip(self):
         self.log_to_gui("状态: 跳过")
-        while not ui_control.verify_page(page_main):
-            itt.key_press(keybind.KEYBIND_INTERACTION)
-            time.sleep(0.2)
+        # while not ui_control.verify_page(page_main):
+        #     itt.key_press(keybind.KEYBIND_INTERACTION)
+        #     time.sleep(0.2)
+        skip_to_page_main()
         self.record_material()
 
     def record_material(self):

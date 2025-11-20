@@ -18,6 +18,8 @@ class ImgIcon(AssetBase):
                  bbg_posi=None,
                  cap_posi = None,
                  threshold=None,
+                 hsv_limit=None,
+                 gray_limit=None,
                  win_text = None,
                  offset = 0,
                  print_log = LOG_ALL if DEBUG_MODE else LOG_WHEN_TRUE):
@@ -70,6 +72,8 @@ class ImgIcon(AssetBase):
             self.cap_posi = [0, 0, 1080, 1920]
         
         self.threshold = threshold
+        self.hsv_limit = hsv_limit
+        self.gray_limit = gray_limit
         self.win_text = win_text
         self.offset = offset
         self.print_log = print_log

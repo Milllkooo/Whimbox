@@ -185,8 +185,8 @@ class ZhaoxiTask(TaskTemplate):
     def step4(self):
         if not itt.get_img_existence(ButtonZxxyRewarded):
             itt.move_and_click(ButtonZxxyRewarded.click_position())
-            time.sleep(0.2)
-            if wait_until_appear(TextClickSkip):
+            itt.wait_until_stable(threshold=0.95, timeout=2)
+            if wait_until_appear(IconClickSkip):
                 itt.key_press(keybind.KEYBIND_INTERACTION)
             self.update_task_result(message="成功领取朝夕心愿奖励", data=self.todo_list)
         else:

@@ -1,4 +1,4 @@
-from whimbox.ui.template.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHEN_FALSE, ImgIcon, GameImg
+from whimbox.ui.template.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHEN_FALSE, ImgIcon
 from whimbox.ui.template.button_manager import Button
 from whimbox.ui.template.posi_manager import PosiTemplate, Area
 from whimbox.ui.template.text_manager import TextTemplate, Text
@@ -8,7 +8,7 @@ AreaPageTitleFeature = Area()
 
 # 主界面、esc菜单、抽卡、商城相关
 IconPageMainFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
-IconDungeonFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.99)
+IconDungeonFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.98, gray_limit=(230, 255))
 AreaUITime = Area()
 AreaEscEntrances = Area()
 IconGachaFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
@@ -30,13 +30,11 @@ AreaBigMapMaterialTypeSelect = Area()
 AreaBigMapMaterialSelect = Area()
 AreaBigMapMaterialTrackConfirm = Area()
 
-# 大世界采集、跳跃、移动相关的UI
+# 大世界采集、跳跃、移动、跳过等相关的UI
 AreaFPickup = Area()
 TextFPickUp = Text("拾取", cap_area = AreaFPickup)
-AreaFSkip = Area()
-TextFSkip = Text("跳过", cap_area = AreaFSkip)
-AreaClickSkip = Area()
-TextClickSkip = Text("空白区域继续", cap_area = AreaClickSkip)
+IconSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.98, gray_limit=(230, 255))
+IconClickSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.98, gray_limit=(230, 255))
 AreaMovementWalk = Area()
 IconMovementWalking = ImgIcon()
 AreaMaterialTrackNear = Area()

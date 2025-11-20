@@ -18,12 +18,14 @@ class MonthlyPassTask(TaskTemplate):
     def step2(self):
         if wait_until_appear_then_click(ButtonMonthlyPassTab2):
             if wait_until_appear_then_click(ButtonMonthlyPassAward):
-                if wait_until_appear(TextClickSkip, retry_time=2):
+                if wait_until_appear(IconClickSkip, retry_time=2):
+                    itt.wait_until_stable(threshold=0.95, timeout=2)
                     itt.key_press(keybind.KEYBIND_INTERACTION)
             time.sleep(0.5)
             if wait_until_appear_then_click(ButtonMonthlyPassTab1):
                 if wait_until_appear_then_click(ButtonMonthlyPassAward):
-                    if wait_until_appear(TextClickSkip):
+                    if wait_until_appear(IconClickSkip):
+                        itt.wait_until_stable(threshold=0.95, timeout=2)
                         itt.key_press(keybind.KEYBIND_INTERACTION)
                         time.sleep(0.2)
                         self.update_task_result(message="成功领取奇迹之旅奖励")

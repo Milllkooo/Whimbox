@@ -19,11 +19,11 @@ def empty(a):
 cv2.namedWindow("TrackBars")  
 cv2.resizeWindow("TrackBars", 640, 300)  
 init_data = {
-    'h_min': 25,
-    'h_max': 30,
-    's_min': 35,
-    's_max': 45,
-    'v_min': 249,
+    'h_min': 0,
+    'h_max': 179,
+    's_min': 0,
+    's_max': 25,
+    'v_min': 240,
     'v_max': 255,
 }
 cv2.createTrackbar("Hue Min", "TrackBars", init_data['h_min'], 179, empty)  
@@ -32,18 +32,32 @@ cv2.createTrackbar("Sat Min", "TrackBars", init_data['s_min'], 255, empty)
 cv2.createTrackbar("Sat Max", "TrackBars", init_data["s_max"], 255, empty)  
 cv2.createTrackbar("Val Min", "TrackBars", init_data['v_min'], 255, empty)  
 cv2.createTrackbar("Val Max", "TrackBars", init_data['v_max'], 255, empty)  
-        
 
-if __name__ == "__main__" and True:
+if __name__ == "__main__" and True:    
+    from whimbox.common.path_lib import *
+    # file_path = "D:\\workspaces\\python\\Whimbox\\whimbox\\assets\\imgs\\Windows\\General\\AreaClickSkip.png"
+    # img = cv2.imread(file_path)
+    img =cv2.imread(os.path.join(ROOT_PATH, "..", "tools", "snapshot", "1763610947.9422815.png"))
+    img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+    lower = 230
+    upper = 255
+    # mask = process_with_hsv_limit(img, lower, upper)
+    _, img = cv2.threshold(img, lower, upper, cv2.THRESH_BINARY)
+    cv2.imshow("img_gray", img)
+    cv2.waitKey(0)
+    cv2.imwrite(os.path.join(ROOT_PATH, "..", "tools", "snapshot", "1763610947.9422815_gray.png"), img)
+
+if __name__ == "__main__" and False:
     from whimbox.interaction.interaction_core import itt
     from whimbox.ui.ui_assets import *
     from whimbox.common.utils.posi_utils import *
     from whimbox.common.path_lib import *
-    org = cv2.imread(os.path.join(ROOT_PATH, "..", "tools", "snapshot", "7D41A5127C42BA98B48324E85A28CB6A.png"))
-    img = org.copy()
+    # org = cv2.imread(os.path.join(ROOT_PATH, "..", "tools", "snapshot", "1763610947.9422815.png"))
+    # org = cv2.imread("D:\\workspaces\\python\\Whimbox\\whimbox\\assets\\imgs\\Windows\\General\\AreaClickSkip.png")
+    # img = org.copy()
     while True:
-        img = crop(org, AreaMonopolyDiceNum.position)
-        # img = itt.capture(posi=AreaMonopolyDiceNum.position)
+        # img = crop(org, AreaClickSkip.position)
+        img = itt.capture()
         # 调用回调函数，获取滑动条的值  
         h_min, h_max, s_min, s_max, v_min, v_max = empty(0)  
         lower = np.array([h_min, s_min, v_min])  

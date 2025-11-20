@@ -53,7 +53,8 @@ class BlessTask(TaskTemplate):
 
     @register_step("等待挑战完成")
     def step5(self):
-        if wait_until_appear(TextClickSkip):
+        itt.wait_until_stable(threshold=0.95, timeout=2)
+        if wait_until_appear(IconClickSkip):
             itt.key_press(keybind.KEYBIND_INTERACTION)
             time.sleep(0.2)
             self.update_task_result(message="祝福闪光幻境完成")

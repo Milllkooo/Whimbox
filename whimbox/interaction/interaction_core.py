@@ -172,8 +172,16 @@ class InteractionBGD:
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if cap is None:
             cap = self.capture(posi=imgicon.cap_posi)
-
-        matching_rate = similar_img(cap, imgicon.image, is_gray=is_gray)
+        if imgicon.hsv_limit is not None:
+            cap = process_with_hsv_limit(cap, imgicon.hsv_limit[0], imgicon.hsv_limit[1])
+            target_img = imgicon.image[:, :, 0]
+        elif imgicon.gray_limit is not None:
+            cap = cv2.cvtColor(cap, cv2.COLOR_BGRA2GRAY)
+            _, cap = cv2.threshold(cap, imgicon.gray_limit[0], imgicon.gray_limit[1], cv2.THRESH_BINARY)
+            target_img = cap
+        else:
+            target_img = imgicon.image
+        matching_rate = similar_img(cap, target_img, is_gray=is_gray)
         
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:

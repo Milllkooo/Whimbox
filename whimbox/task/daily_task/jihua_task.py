@@ -105,23 +105,18 @@ class JihuaTask(TaskTemplate):
 
     @register_step("等待激化完成")
     def step8(self):
-        if wait_until_appear(TextFSkip):
+        if wait_until_appear(IconSkip):
             itt.key_press(keybind.KEYBIND_INTERACTION)
-            time.sleep(0.2)
-            if wait_until_appear(TextClickSkip):
+            itt.wait_until_stable(threshold=0.95, timeout=2)
+            if wait_until_appear(IconClickSkip):
                 itt.key_press(keybind.KEYBIND_INTERACTION)
-                time.sleep(0.2)
-                itt.key_press('esc')
                 self.update_task_result(message="激化完成")
                 return
         raise Exception("卡在激化完成的时候了？！")
 
     @register_step("退出激化幻境")
     def step9(self):
-        if wait_until_appear(IconPageMainFeature):
-            itt.key_press(keybind.KEYBIND_BACK)
-            return
-        raise Exception("退不出激化幻境了？！")
+        back_to_page_main()
 
 
 
