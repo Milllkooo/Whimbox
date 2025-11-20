@@ -56,6 +56,13 @@ class FishingTask(TaskTemplate):
         merged_bbox = union_bbox(*bboxes)
         return merged_bbox
 
+    def check_target_state(self, target_icon):
+        cap = itt.capture(posi=target_icon.bbg_posi)
+        _, cap = cv2.threshold(cap, 210, 255, cv2.THRESH_BINARY)
+        if itt.get_img_existence(target_icon, cap=cap):
+            return True
+
+
     def get_current_state(self):
         """在模板区域内检测当前状态"""
         cap = itt.capture(posi=self.state_area)
@@ -77,11 +84,11 @@ class FishingTask(TaskTemplate):
         """
         itt.key_down(key)
         while not self.need_stop():
-            time.sleep(0.5)
+            time.sleep(0.3)
             cap = itt.capture(posi=AreaFishingDetection.position)
             current_px_count = count_px_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
-            if current_px_count < px_count:
-                logger.debug(f"方向正确: {key}, {px_count} -> {current_px_count}")
+            logger.debug(f"尝试方向: {key}, {px_count} -> {current_px_count}")
+            if current_px_count <= px_count:
                 px_count = current_px_count
                 if px_count == 0:
                     break
@@ -96,12 +103,12 @@ class FishingTask(TaskTemplate):
         self.log_to_gui("进入拉扯鱼线状态")
         cap = itt.capture(posi=AreaFishingDetection.position)
         px_count = count_px_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
-        while px_count > 0 and not self.need_stop():
+        while not self.need_stop():
             px_count = self._pull_in_direction('a', px_count)
-            if px_count == 0:
+            if not self.check_target_state(IconFishingPullLine):
                 break
             px_count = self._pull_in_direction('d', px_count)
-            if px_count == 0:
+            if not self.check_target_state(IconFishingPullLine):
                 break
 
     def handle_strike(self):
@@ -115,7 +122,7 @@ class FishingTask(TaskTemplate):
                 itt.right_click()
             else:
                 itt.key_press(keybind.KEYBIND_FISHING_REEL_IN)
-            if self.get_current_state() != FishingState.REEL_IN:
+            if not self.check_target_state(IconFishingReelIn):
                 break
             # time.sleep(0.1)
 
