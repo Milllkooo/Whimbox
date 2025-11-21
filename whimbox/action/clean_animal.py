@@ -4,8 +4,8 @@ from whimbox.common.utils.ui_utils import *
 from whimbox.common.keybind import keybind
 
 class CleanAnimalTask(MaterialTrackBaseTask):
-    def __init__(self, animal_name, expected_count=1, check_stop_func=None):
-        super().__init__(animal_name, expected_count, check_stop_func)
+    def __init__(self, animal_name, expected_count=1):
+        super().__init__(animal_name, expected_count)
 
     # def pre_play_func(self):
     #     # 主动按F跳过清洁动画

@@ -3,8 +3,8 @@ from whimbox.action.material_track_base import MaterialTrackBaseTask
 from whimbox.common.utils.ui_utils import *
 
 class CatchInsectTask(MaterialTrackBaseTask):
-    def __init__(self, insect_name, expected_count=1, check_stop_func=None):
-        super().__init__(insect_name, expected_count, check_stop_func)
+    def __init__(self, insect_name, expected_count=1):
+        super().__init__(insect_name, expected_count)
 
     def pre_play_func(self):
         pass

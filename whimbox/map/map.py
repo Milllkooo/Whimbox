@@ -13,7 +13,7 @@ from whimbox.common.logger import logger
 from whimbox.common.utils.posi_utils import *
 from whimbox.common.errors import BigMapTPError
 from whimbox.common.utils.ui_utils import *
-from whimbox.common.cvars import global_stop_flag
+from whimbox.common.cvars import get_current_stop_flag
 
 import threading
 import time
@@ -181,7 +181,7 @@ class Map(MiniMap, BigMap):
         # todo：原地tp，会导致ButtonBigMapZoom被弹出的传送菜单遮挡，无法继续
         ui_control.ensure_page(page_bigmap)
         times = 3
-        while times > 0 and not itt.get_img_existence(IconBigMapMaxScale) and not global_stop_flag.is_set():
+        while times > 0 and not itt.get_img_existence(IconBigMapMaxScale):
             itt.appear_then_click(ButtonBigMapZoom)
             time.sleep(0.5)
             times -= 1
@@ -193,7 +193,7 @@ class Map(MiniMap, BigMap):
         logger.debug(f"bigmap px posi: {self.bigmap_position}")
         return self.bigmap_position
 
-    def _move_bigmap(self, target_posi, float_posi=0, force_center=False, csf=lambda: False) -> list:
+    def _move_bigmap(self, target_posi, float_posi=0, force_center=False) -> list:
         """move bigmap center to target position
 
         Args:
@@ -215,7 +215,8 @@ class Map(MiniMap, BigMap):
         screen_center_x = 1920 / 2
         screen_center_y = 1080 / 2
 
-        if csf():
+        stop_flag = get_current_stop_flag()
+        if stop_flag.is_set():
             return list([screen_center_x, screen_center_y])
 
         itt.move_to([screen_center_x + float_posi, screen_center_y + float_posi])  # screen center
@@ -259,9 +260,9 @@ class Map(MiniMap, BigMap):
             return list([screen_center_x, screen_center_y])  # screen center
         else:
             if euclidean_distance(after_move_posi, curr_posi) <= self.BIGMAP_TP_OFFSET:
-                return self._move_bigmap(target_posi=target_posi, float_posi=float_posi + 45, csf=csf)
+                return self._move_bigmap(target_posi=target_posi, float_posi=float_posi + 45)
             else:
-                return self._move_bigmap(target_posi=target_posi, csf=csf)
+                return self._move_bigmap(target_posi=target_posi)
 
     def find_closest_teleporter(self, posi: list, map_name: str):
         """
@@ -316,12 +317,11 @@ class Map(MiniMap, BigMap):
         else:
             return True
 
-    def bigmap_tp(self, posi: list, map_name: str, csf=lambda: False) -> t.Tuple[float, float]:
+    def bigmap_tp(self, posi: list, map_name: str) -> t.Tuple[float, float]:
         """传送到指定坐标。
 
         Args:
             posi (list)
-            csf (_type_, optional): checkup stop func. Defaults to lambda:False.
 
         Returns:
             TianLiPosition: _description_
@@ -339,7 +339,7 @@ class Map(MiniMap, BigMap):
             logger.error(f"地图切换到'{tp_province}-{tp_region}'失败")
             raise Exception(f"地图切换到'{tp_province}-{tp_region}'失败")
 
-        click_posi = self._move_bigmap(tp_posi, csf=csf)
+        click_posi = self._move_bigmap(tp_posi)
         itt.move_and_click(click_posi)
         itt.wait_until_stable()
         if not itt.appear_then_click(ButtonBigMapTeleport):
@@ -354,7 +354,8 @@ class Map(MiniMap, BigMap):
                 raise BigMapTPError("大地图传送失败")
 
         # 等待传送完成
-        while not (ui_control.verify_page(page_main)) and not global_stop_flag.is_set():
+        stop_flag = get_current_stop_flag()
+        while not (ui_control.verify_page(page_main)) and not stop_flag.is_set():
             time.sleep(0.5)
         itt.wait_until_stable(threshold=0.9)
 

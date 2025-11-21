@@ -182,27 +182,25 @@ class AutoPathTask(TaskTemplate):
                     self.stop_move()
                     self.change_to_walk()
                     if self.target_point.action == ACTION_PICK_UP:
-                        pickup_task = PickupTask(check_stop_func=self.need_stop)
+                        pickup_task = PickupTask()
                         task_result = pickup_task.task_run()
                         self.merge_material_count_dict(task_result.data)
                     elif self.target_point.action == ACTION_CATCH_INSECT:
                         excepted_count = int(self.target_point.action_params or 1)
                         catch_insect_task = CatchInsectTask(
                             self.path_info.target, 
-                            expected_count=excepted_count,
-                            check_stop_func=self.need_stop)
+                            expected_count=excepted_count)
                         task_result = catch_insect_task.task_run()
                         self.merge_material_count_dict(task_result.data)
                     elif self.target_point.action == ACTION_CLEAN_ANIMAL:
                         excepted_count = int(self.target_point.action_params or 1)
                         clean_animal_task = CleanAnimalTask(
                             self.path_info.target, 
-                            expected_count=excepted_count,
-                            check_stop_func=self.need_stop)
+                            expected_count=excepted_count)
                         task_result = clean_animal_task.task_run()
                         self.merge_material_count_dict(task_result.data)
                     elif self.target_point.action == ACTION_FISHING:
-                        fishing_task = FishingTask(check_stop_func=self.need_stop)
+                        fishing_task = FishingTask()
                         task_result = fishing_task.task_run()
                         self.merge_material_count_dict(task_result.data)
                     elif self.target_point.action == ACTION_WAIT:
@@ -231,7 +229,7 @@ class AutoPathTask(TaskTemplate):
                 self.log_to_gui(f"传送到附近的流转之柱")
                 self.stop_move()
                 self.change_to_walk()
-                nikki_map.bigmap_tp(self.target_point.position, self.path_info.map, csf=self.need_stop)
+                nikki_map.bigmap_tp(self.target_point.position, self.path_info.map)
                 self.curr_position = nikki_map.get_position()
         return is_end
 
@@ -298,6 +296,6 @@ class AutoPathTask(TaskTemplate):
 
 
 if __name__ == "__main__":
-    task = AutoPathTask(path_name="example2_跳跃测试")
+    task = AutoPathTask(path_name="example5_钓鱼测试")
     task_result = task.task_run()
     print(task_result.to_dict())

@@ -44,8 +44,8 @@ FISHING_STATE_MAPPING = [
 ]
 
 class FishingTask(TaskTemplate):
-    def __init__(self, check_stop_func=None):
-        super().__init__("fishing_task", check_stop_func)
+    def __init__(self):
+        super().__init__("fishing_task")
         self.state_area = self.get_state_area()
         self.material_count_dict = {}
 

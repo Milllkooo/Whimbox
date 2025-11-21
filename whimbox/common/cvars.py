@@ -1,16 +1,31 @@
 """Constants."""
 
 import threading
+import contextvars
 from whimbox.common.path_lib import IS_DEV_MODE
 from whimbox.config.config import global_config
 
 DEBUG_MODE = global_config.get_bool('General', 'debug') and IS_DEV_MODE
 CV_DEBUG_MODE = global_config.get_bool('General', 'cv_debug') and IS_DEV_MODE
 
-# 全局的任务停止信号
-# 所有和自动化相关的耗时循环都应该检查这个信号
-# 比如页面切换、地图移动等等，（task相关已经在TaskTemplate中统一检查）
-global_stop_flag = threading.Event()
+# 使用 contextvars 来存储当前任务的 stop_flag
+# 这样每个任务都有独立的 stop_flag，无需在每个函数中显式传递
+current_stop_flag: contextvars.ContextVar[threading.Event] = contextvars.ContextVar(
+    'current_stop_flag', 
+    default=None
+)
+
+def get_current_stop_flag() -> threading.Event:
+    """获取当前上下文的 stop_flag
+    
+    如果当前上下文没有设置 stop_flag，返回一个永远不会被设置的 flag
+    这样可以保证代码在没有 task 上下文时也能正常运行
+    """
+    flag = current_stop_flag.get()
+    if flag is None:
+        # 如果没有设置，创建一个永远不会被设置的 flag
+        flag = threading.Event()
+    return flag
 
 MCP_TOOL_TIMEOUT = 24*60*60  # mcp工具调用超时时间设为24小时
 

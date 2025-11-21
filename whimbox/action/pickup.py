@@ -6,8 +6,8 @@ from whimbox.common.utils.ui_utils import skip_to_page_main
 from whimbox.common.keybind import keybind
 
 class PickupTask(TaskTemplate):
-    def __init__(self, check_stop_func=None):
-        super().__init__("pickup_task", check_stop_func)
+    def __init__(self):
+        super().__init__("pickup_task")
         self.material_count_dict = {}
 
     @register_step("开始采集")

@@ -8,8 +8,8 @@ from whimbox.interaction.interaction_core import itt
 from whimbox.common.utils.img_utils import *
 from whimbox.common.utils.posi_utils import *
 from whimbox.ui.ui_assets import *
-from whimbox.common.cvars import global_stop_flag
 from whimbox.common.keybind import keybind
+from whimbox.common.cvars import get_current_stop_flag
 import time
 
 
@@ -81,7 +81,8 @@ def scroll_find_click(area: Area, target, threshold=0, hsv_limit=None, scale=0, 
     box = None
     cap = itt.capture(posi = area.position)
     while True:
-        if global_stop_flag.is_set():
+        stop_flag = get_current_stop_flag()
+        if stop_flag.is_set():
             return False
         if isinstance(target, ImgIcon):
             target_img = target.image
@@ -189,7 +190,8 @@ def wait_until_appear(obj, retry_time=3):
 
 def back_to_page_main():
     # 让UI返回到主界面
-    while not global_stop_flag.is_set():
+    stop_flag = get_current_stop_flag()
+    while not stop_flag.is_set():
         if itt.get_img_existence(IconDungeonFeature):
             itt.key_press(keybind.KEYBIND_BACK)
         if itt.get_img_existence(IconPageMainFeature):
@@ -200,7 +202,8 @@ def back_to_page_main():
 
 def skip_to_page_main():
     # 采集时，如果遇到没有的东西，会自动弹出获取窗口，不断按f跳过直到回到主界面
-    while not global_stop_flag.is_set():
+    stop_flag = get_current_stop_flag()
+    while not stop_flag.is_set():
         time.sleep(0.5)
         if not itt.get_img_existence(IconPageMainFeature):
             itt.key_press(keybind.KEYBIND_INTERACTION)

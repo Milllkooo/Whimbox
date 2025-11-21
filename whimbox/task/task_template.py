@@ -2,12 +2,13 @@
 # 所以就不整原项目thread管理那一套了，怎么简单怎么来
 from whimbox.common.logger import logger
 from whimbox.ingame_ui.ingame_ui import win_ingame_ui
-from whimbox.common.cvars import DEBUG_MODE, global_stop_flag
 from whimbox.common.utils.ui_utils import back_to_page_main
+from whimbox.common.cvars import current_stop_flag, get_current_stop_flag
 
 from pynput import keyboard
 import time
 import traceback
+import threading
 
 STATE_TYPE_SUCCESS = "success"
 STATE_TYPE_ERROR = "error"
@@ -49,10 +50,24 @@ class TaskResult:
         return f"{{'status': {self.status}, 'message': {self.message}}}"
 
 class TaskTemplate:
-    def __init__(self, name="", check_stop_func=None):
+    def __init__(self, name=""):
         self.name = name
-        global_stop_flag.clear()
-        self.check_stop_func = check_stop_func
+        
+        # 尝试从 context 获取父任务的 stop_flag
+        stop_flag = current_stop_flag.get()
+        
+        if stop_flag is None:
+            # 这是顶层任务，创建新的 stop_flag
+            stop_flag = threading.Event()
+            current_stop_flag.set(stop_flag)
+            self.is_top_level_task = True
+        else:
+            # 这是子任务，复用父任务的 stop_flag
+            self.is_top_level_task = False
+        
+        # 保存为实例属性，供 pynput 回调和任务内部使用
+        self.stop_flag = stop_flag
+        
         self.step_sleep = 0.2   # 步骤执行后等待时间
         self.steps_dict = {}    # {step_name: TaskStep} 步骤字典
         self.step_order = []    # [step_name, ...] 默认执行顺序
@@ -61,19 +76,24 @@ class TaskTemplate:
         self.task_result = TaskResult()
         self.__auto_register_steps()
 
-        # 创建pynput监听器
-        self.key_callbacks = {}  # 存储按键回调
-        self.listener = keyboard.Listener(on_press=self._on_key_press)
-        self.listener.daemon = True  # 设为守护线程
-        self.listener.start()
-
-        # 添加默认停止热键
-        self.add_hotkey("/", self.task_stop)
+        # 只有顶层任务才创建 pynput 监听器
+        if self.is_top_level_task:
+            self.key_callbacks = {}  # 存储按键回调
+            self.listener = keyboard.Listener(on_press=self._on_key_press)
+            self.listener.daemon = True  # 设为守护线程
+            self.listener.start()
+            # 添加默认停止热键
+            self.add_hotkey("/", self.task_stop)
+        else:
+            self.key_callbacks = None
+            self.listener = None
 
         
     def _on_key_press(self, key):
-        """处理按键事件"""
+        """处理按键事件（仅在顶层任务中使用）"""
         try:
+            if self.key_callbacks is None:
+                return
             # 检查是否是字符键
             if hasattr(key, 'char') and key.char in self.key_callbacks:
                 self.key_callbacks[key.char]()
@@ -84,7 +104,9 @@ class TaskTemplate:
             logger.error(f"热键处理错误: {e}")
 
     def add_hotkey(self, key_str, callback):
-        """添加热键监听"""
+        """添加热键监听（仅在顶层任务中有效）"""
+        if self.key_callbacks is None:
+            return
         # 将字符串键转换为pynput键对象
         if len(key_str) == 1:  # 单个字符
             self.key_callbacks[key_str] = callback
@@ -121,18 +143,23 @@ class TaskTemplate:
         return wrapper
 
     def task_run(self):
-        res = self._task_run()
-        if res.status in [STATE_TYPE_SUCCESS, STATE_TYPE_STOP]:
-            return res
-        else:
-            # 非手动停止导致的失败，就再试一次
-            if not self.need_stop():
-                self.log_to_gui(f"自动返回主界面，重试一次")
-                back_to_page_main()
-                res = self._task_run()
+        try:
+            res = self._task_run()
+            if res.status in [STATE_TYPE_SUCCESS, STATE_TYPE_STOP]:
                 return res
             else:
-                return res
+                # 非手动停止导致的失败，就再试一次
+                if not self.need_stop():
+                    self.log_to_gui(f"自动返回主界面，重试一次")
+                    back_to_page_main()
+                    res = self._task_run()
+                    return res
+                else:
+                    return res
+        finally:
+            # 只有顶层任务才清理 context
+            if self.is_top_level_task:
+                current_stop_flag.set(None)
 
     def _task_run(self):
         """核心执行逻辑"""
@@ -179,11 +206,12 @@ class TaskTemplate:
         finally:
             self.handle_finally()
             back_to_page_main()
-            # 停止键盘监听器
-            self.key_callbacks.clear()
-            if self.listener.is_alive():
-                self.listener.stop()
-                self.listener.join()
+            # 只有顶层任务才清理监听器
+            if self.is_top_level_task and self.listener:
+                self.key_callbacks.clear()
+                if self.listener.is_alive():
+                    self.listener.stop()
+                    self.listener.join()
             return self.task_result
 
 
@@ -201,12 +229,13 @@ class TaskTemplate:
 
     def task_stop(self, message=None, data=None):
         '''如果子类有自己额外的停止代码，就实现这个方法，并调用父类的这个方法'''
-        global_stop_flag.set()
+        if not self.stop_flag.is_set():
+            self.stop_flag.set()
         self.update_task_result(status=STATE_TYPE_STOP, message=message or "停止任务", data=data)
 
     def need_stop(self):
         # 综合判断是否需要停止
-        return global_stop_flag.is_set() or (self.check_stop_func and self.check_stop_func())
+        return self.stop_flag.is_set()
 
     def get_state_msg(self):
         """获得当前任务的状态信息，供agent显示"""

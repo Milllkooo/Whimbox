@@ -5,6 +5,7 @@ from whimbox.ui.template.button_manager import Button
 from whimbox.common.logger import logger
 from whimbox.ui.page import TitlePage
 from whimbox.common.utils.ui_utils import back_to_page_main
+from whimbox.common.cvars import get_current_stop_flag
 
 from threading import Lock
 
@@ -17,7 +18,8 @@ class UI():
         """
         Handle all annoying popups during UI switching.
         """
-        while page_loading.is_current_page(itt) and not global_stop_flag.is_set():
+        stop_flag = get_current_stop_flag()
+        while page_loading.is_current_page(itt) and not stop_flag.is_set():
             itt.delay(1, comment='game is loading...')
 
     def is_valid_page(self):
@@ -106,8 +108,9 @@ class UI():
             
             # Execute the path step by step
             success = True
+            stop_flag = get_current_stop_flag()
             for i in range(len(path) - 1):
-                if global_stop_flag.is_set():
+                if stop_flag.is_set():
                     self.switch_ui_lock.release()
                     return 
                 from_page = path[i]

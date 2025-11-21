@@ -11,8 +11,8 @@ from whimbox.common.utils.ui_utils import *
 from whimbox.common.keybind import keybind
 
 class MaterialTrackBaseTask(TaskTemplate):
-    def __init__(self, material_name, expected_count=1, check_stop_func=None):
-        super().__init__("MaterialTrackBaseTask", check_stop_func)
+    def __init__(self, material_name, expected_count=1):
+        super().__init__("MaterialTrackBaseTask")
         self.material_name = material_name
         if material_name not in material_icon_dict:
             raise Exception(f"不支持追踪{material_name}")
