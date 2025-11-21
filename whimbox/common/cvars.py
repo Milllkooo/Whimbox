@@ -27,6 +27,22 @@ def get_current_stop_flag() -> threading.Event:
         flag = threading.Event()
     return flag
 
+# 全局前台任务运行标志（用于后台任务判断是否有前台任务在运行）
+_foreground_task_running = False
+_foreground_task_lock = threading.Lock()
+
+def set_foreground_task_running(running: bool):
+    """设置前台任务运行状态"""
+    global _foreground_task_running
+    with _foreground_task_lock:
+        _foreground_task_running = running
+
+def has_foreground_task() -> bool:
+    """检查是否有前台任务在运行"""
+    global _foreground_task_running
+    with _foreground_task_lock:
+        return _foreground_task_running
+
 MCP_TOOL_TIMEOUT = 24*60*60  # mcp工具调用超时时间设为24小时
 
 # Angle modes

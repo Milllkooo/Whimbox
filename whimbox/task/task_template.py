@@ -1,9 +1,12 @@
 # 因为我们的task将直接被mcp调用
 # 所以就不整原项目thread管理那一套了，怎么简单怎么来
 from whimbox.common.logger import logger
-from whimbox.ingame_ui.ingame_ui import win_ingame_ui
 from whimbox.common.utils.ui_utils import back_to_page_main
-from whimbox.common.cvars import current_stop_flag, get_current_stop_flag
+from whimbox.common.cvars import (
+    current_stop_flag, 
+    get_current_stop_flag,
+    set_foreground_task_running
+)
 
 from pynput import keyboard
 import time
@@ -68,6 +71,9 @@ class TaskTemplate:
         # 保存为实例属性，供 pynput 回调和任务内部使用
         self.stop_flag = stop_flag
         
+        # 标记是否为后台任务（后台任务需要特殊处理）
+        self.is_background_task = (name == "background_task")
+        
         self.step_sleep = 0.2   # 步骤执行后等待时间
         self.steps_dict = {}    # {step_name: TaskStep} 步骤字典
         self.step_order = []    # [step_name, ...] 默认执行顺序
@@ -82,8 +88,9 @@ class TaskTemplate:
             self.listener = keyboard.Listener(on_press=self._on_key_press)
             self.listener.daemon = True  # 设为守护线程
             self.listener.start()
-            # 添加默认停止热键
-            self.add_hotkey("/", self.task_stop)
+            # 添加默认停止热键（后台任务除外）
+            if not self.is_background_task:
+                self.add_hotkey("/", self.task_stop)
         else:
             self.key_callbacks = None
             self.listener = None
@@ -144,6 +151,10 @@ class TaskTemplate:
 
     def task_run(self):
         try:
+            # 如果是顶层任务且不是后台任务，设置前台任务运行标志
+            if self.is_top_level_task and not self.is_background_task:
+                set_foreground_task_running(True)
+            
             res = self._task_run()
             if res.status in [STATE_TYPE_SUCCESS, STATE_TYPE_STOP]:
                 return res
@@ -157,6 +168,10 @@ class TaskTemplate:
                 else:
                     return res
         finally:
+            # 如果是顶层任务且不是后台任务，清除前台任务运行标志
+            if self.is_top_level_task and not self.is_background_task:
+                set_foreground_task_running(False)
+            
             # 只有顶层任务才清理 context
             if self.is_top_level_task:
                 current_stop_flag.set(None)
@@ -175,7 +190,8 @@ class TaskTemplate:
                 self.current_step = step
                 
                 # 显示步骤信息
-                self.log_to_gui(step.state.msg)
+                if step.state.msg:
+                    self.log_to_gui(step.state.msg)
                 
                 # 运行步骤
                 next_step_name = step.run()
@@ -205,7 +221,6 @@ class TaskTemplate:
         
         finally:
             self.handle_finally()
-            back_to_page_main()
             # 只有顶层任务才清理监听器
             if self.is_top_level_task and self.listener:
                 self.key_callbacks.clear()
@@ -224,7 +239,7 @@ class TaskTemplate:
         如果子类有需要在finally时进行的操作，就实现这个方法
         比如需要在结束时释放资源等等
         '''
-        pass
+        back_to_page_main()
 
 
     def task_stop(self, message=None, data=None):
@@ -247,6 +262,7 @@ class TaskTemplate:
             msg = f"✅ {msg}\n"
         else:
             msg = f"❌ {msg}\n"
+        from whimbox.ingame_ui.ingame_ui import win_ingame_ui
         if win_ingame_ui:
             win_ingame_ui.update_message(msg)
         logger.info(msg)

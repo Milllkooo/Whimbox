@@ -292,6 +292,7 @@ class AutoPathTask(TaskTemplate):
 
 
     def handle_finally(self):
+        super().handle_finally()
         self.clear_all()
 
 
