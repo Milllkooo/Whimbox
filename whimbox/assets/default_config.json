@@ -11,10 +11,6 @@
         "ocr": {
             "value": "rapid",
             "description": "OCR引擎，可选：rapid"
-        },
-        "mcp_port": {
-            "value": 2333,
-            "description": "MCP服务端口"
         }
     },
     "Agent": {

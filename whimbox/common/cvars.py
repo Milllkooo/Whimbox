@@ -8,6 +8,11 @@ from whimbox.config.config import global_config
 DEBUG_MODE = global_config.get_bool('General', 'debug') and IS_DEV_MODE
 CV_DEBUG_MODE = global_config.get_bool('General', 'cv_debug') and IS_DEV_MODE
 
+MCP_CONFIG = {
+    "port": 2333,
+    "timeout": 24*60*60,    # mcp工具调用超时时间设为24小时
+}
+
 # 使用 contextvars 来存储当前任务的 stop_flag
 # 这样每个任务都有独立的 stop_flag，无需在每个函数中显式传递
 current_stop_flag: contextvars.ContextVar[threading.Event] = contextvars.ContextVar(
@@ -42,8 +47,6 @@ def has_foreground_task() -> bool:
     global _foreground_task_running
     with _foreground_task_lock:
         return _foreground_task_running
-
-MCP_TOOL_TIMEOUT = 24*60*60  # mcp工具调用超时时间设为24小时
 
 # Angle modes
 ANGLE_NORMAL = 0

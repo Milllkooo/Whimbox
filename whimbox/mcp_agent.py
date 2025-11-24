@@ -1,20 +1,20 @@
 import asyncio
+import requests
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.prebuilt import create_react_agent
 from langchain.chat_models import init_chat_model
 from langgraph.checkpoint.memory import MemorySaver
 from whimbox.common.logger import logger
-import aiohttp
 from whimbox.config.config import global_config
-from whimbox.common.cvars import MCP_TOOL_TIMEOUT
+from whimbox.common.cvars import MCP_CONFIG
 
 
-async def is_mcp_ready(url: str) -> bool:
+def is_mcp_ready(url: str) -> bool:
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as resp:
-                return resp.status in (200, 406)
-    except Exception:
+        response = requests.get(url)
+        return response.status_code == 200
+    except Exception as e:
+        logger.error(f"检查MCP服务器是否健康失败: {e}")
         return False
 
 class Agent:
@@ -63,11 +63,10 @@ class Agent:
 
         # 初始化mcp tool信息(不重复初始化)
         if self.tools is None:
-            mcp_port = global_config.get_int("General", "mcp_port")
-            mcp_url = f"http://127.0.0.1:{mcp_port}/mcp"
+            server_url = f"http://127.0.0.1:{MCP_CONFIG['port']}"
             flag = False
             for _ in range(10):
-                if await is_mcp_ready(mcp_url):
+                if is_mcp_ready(f'{server_url}/health'):
                     flag = True
                     break
                 await asyncio.sleep(0.5)
@@ -75,9 +74,9 @@ class Agent:
                 logger.debug("MCP server ready")
                 client = MultiServerMCPClient({
                     "whimbox": {
-                        "url": mcp_url,
+                        "url": f'{server_url}/mcp',
                         "transport": "streamable_http",
-                        "sse_read_timeout": MCP_TOOL_TIMEOUT,
+                        "sse_read_timeout": MCP_CONFIG["timeout"],
                     }
                 })
                 self.tools = await client.get_tools()

@@ -5,12 +5,12 @@ from whimbox.task.navigation_task.record_path_task import RecordPathTask
 from whimbox.task.photo_task.daily_photo_task import DailyPhotoTask
 from whimbox.task.event_task.roll_dice_task import RollDiceTask
 from whimbox.task.task_template import STATE_TYPE_SUCCESS, STATE_TYPE_ERROR
-from whimbox.common.path_lib import SCRIPT_PATH
-from whimbox.config.config import global_config
 from whimbox.common.logger import logger
+from whimbox.common.cvars import MCP_CONFIG
 
+import socket
 from fastmcp import FastMCP
-import os
+from starlette.responses import JSONResponse
 
 mcp = FastMCP('whimbox_server')
 
@@ -219,13 +219,42 @@ async def roll_dice_task() -> dict:
     task_result = roll_dice_task.task_run()
     return task_result.to_dict()
 
+@mcp.custom_route("/health", methods=["GET"])
+async def health_check(request):
+    """
+    检查MCP服务器是否健康
+    """
+    return JSONResponse({"status": "healthy", "service": "mcp-server"})
+
+def is_port_in_use(port: int, host: str = "0.0.0.0") -> bool:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind((host, port))
+            return False
+        except OSError:
+            return True
+
+def get_available_port(max_attempts: int = 100) -> int:
+    port = MCP_CONFIG["port"]
+    host = '0.0.0.0'
+    for _ in range(max_attempts):
+        if not is_port_in_use(port, host):
+            MCP_CONFIG["port"] = port
+            logger.debug(f"MCP服务器使用端口 {port}")
+            return port
+        logger.debug(f"MCP服务器端口 {port} 已被占用，尝试下一个端口")
+        port += 1
+    
+    raise RuntimeError(f"MCP服务器无法找到可用端口，已尝试从 {MCP_CONFIG['port']} 到 {port-1}")
+
 def start_mcp_server():
     logger.debug("开始初始化MCP服务器")
-    mcp_port = global_config.get_int("General", "mcp_port")
+    get_available_port()
+
     mcp.run(
         show_banner=False,
         transport="streamable-http",
-        host="0.0.0.0",
-        port=mcp_port,
+        host='0.0.0.0',
+        port=MCP_CONFIG["port"],
     )
     

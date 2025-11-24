@@ -4,7 +4,7 @@ import asyncio
 from whimbox.config.config import global_config
 from whimbox.common.logger import logger
 from fastmcp.client.transports import StreamableHttpTransport
-from whimbox.common.cvars import MCP_TOOL_TIMEOUT
+from whimbox.common.cvars import MCP_CONFIG
 
 
 class TaskCallWorker(QThread):
@@ -16,8 +16,7 @@ class TaskCallWorker(QThread):
         super().__init__()
         self.tool_name = tool_name
         self.params = params
-        mcp_port = global_config.get_int("General", "mcp_port")
-        self.mcp_url = f"http://127.0.0.1:{mcp_port}/mcp"
+        self.mcp_url = f"http://127.0.0.1:{MCP_CONFIG['port']}/mcp"
     
     def run(self):
         """在后台线程中执行异步调用"""
@@ -44,7 +43,7 @@ class TaskCallWorker(QThread):
     async def _call_tool(self):
         """异步调用工具"""
         try:
-            transport = StreamableHttpTransport(url=self.mcp_url, sse_read_timeout=MCP_TOOL_TIMEOUT)
+            transport = StreamableHttpTransport(url=self.mcp_url, sse_read_timeout=MCP_CONFIG["timeout"])
             client = Client(transport)
             async with client:
                 result = await client.call_tool(
