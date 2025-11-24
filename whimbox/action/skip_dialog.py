@@ -15,7 +15,7 @@ class SkipDialogTask(TaskTemplate):
                 itt.key_press(keybind.KEYBIND_INTERACTION)
             else:
                 break
-            time.sleep(0.4)
+            time.sleep(0.2)
     
     def handle_finally(self):
         pass
