@@ -97,7 +97,7 @@ AreaDigMainTypeSelect = Area()
 AreaDigSubTypeSelect = Area()
 AreaDigItemSelect = Area()
 ButtonDigConfirm = Button(print_log=LOG_WHEN_TRUE)
-ButtonDigTime20h = Button(print_log=LOG_WHEN_TRUE)
+ButtonDigTime20h = Button(print_log=LOG_WHEN_TRUE, threshold=0.95)
 
 # 朝夕心愿相关
 ButtonZxxyEntrance = Button(print_log=LOG_WHEN_TRUE)

@@ -107,7 +107,10 @@ class DigTask(TaskTemplate):
                 time.sleep(0.5)
 
             # 寻找材料图标
-            if not scroll_find_click(AreaDigItemSelect, material_info["icon"], threshold=0.7, scale=0.46):
+            threshold = 0.7
+            if item_name == "纯真丝线": # 这货太特殊了，就几根线条，识别率太低
+                threshold = 0.5
+            if not scroll_find_click(AreaDigItemSelect, material_info["icon"], threshold=threshold, scale=0.46):
                 raise Exception(f"未找到{item_name}")
             time.sleep(0.5)
             # 选择挖掘时间
