@@ -10,8 +10,8 @@ while 1:
     input('enter to capture') 
     # time.sleep(0.2)
     cap = itt.capture()
-    cap = cv2.cvtColor(cap, cv2.COLOR_BGRA2GRAY)
-    _, cap = cv2.threshold(cap, 210, 255, cv2.THRESH_BINARY)
+    # cap = cv2.cvtColor(cap, cv2.COLOR_BGRA2GRAY)
+    # _, cap = cv2.threshold(cap, 210, 255, cv2.THRESH_BINARY)
     # lower = [0, 0, 175]
     # upper = [20, 255, 255]
     # cap = process_with_hsv_limit(cap, lower, upper)

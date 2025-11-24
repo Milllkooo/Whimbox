@@ -32,7 +32,7 @@ class Capture():
             if img.shape == (1080,1920,4):
                 return img
             else:
-                return cv2.resize(img, (1920, 1080), interpolation=cv2.INTER_AREA)
+                return cv2.resize(img, (1920, 1080), interpolation=cv2.INTER_NEAREST)
         else:
             self.resolution = None
             return None

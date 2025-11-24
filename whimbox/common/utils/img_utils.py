@@ -340,8 +340,9 @@ def similar_img(img, target, is_gray=False, is_show_res: bool = False, ret_mode=
     # 获取结果中最大值和最小值以及他们的坐标
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
     if is_show_res:
+        cv2.imshow("img", img)
+        cv2.imshow("target", target)
         cv2.waitKey(0)
-    # 在窗口截图中匹配位置画红色方框
     matching_rate = max_val
     
     if ret_mode == IMG_RATE:

@@ -6,7 +6,7 @@ from copy import deepcopy
 from whimbox.common.timer_module import Timer
 from whimbox.common.utils.asset_utils import *
 from whimbox.common.cvars import *
-from whimbox.common.utils.img_utils import crop
+from whimbox.common.utils.img_utils import crop, process_with_hsv_limit
 
 
 class ImgIcon(AssetBase):
@@ -83,10 +83,21 @@ class ImgIcon(AssetBase):
             
         self.cap_center_position_xy = [(self.cap_posi[0]+self.cap_posi[2])/2, (self.cap_posi[1]+self.cap_posi[3])/2]
         
+        
         if self.is_bbg:
             self.image = crop(self.raw_image, self.bbg_posi)
         else:
             self.image = self.raw_image.copy()
+        
+        if self.hsv_limit is not None:
+            temp_image = process_with_hsv_limit(self.image, self.hsv_limit[0], self.hsv_limit[1])
+            box = asset_get_bbox(temp_image)
+            self.image = crop(temp_image, box, copy=False)
+        elif self.gray_limit is not None:
+            self.image = cv2.cvtColor(self.image, cv2.COLOR_BGRA2GRAY)
+            _, temp_image = cv2.threshold(self.image, self.gray_limit[0], self.gray_limit[1], cv2.THRESH_BINARY)
+            box = asset_get_bbox(temp_image)
+            self.image = crop(temp_image, box, copy=False)
             
     def copy(self):
         return deepcopy(self)
