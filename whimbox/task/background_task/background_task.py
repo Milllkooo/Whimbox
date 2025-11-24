@@ -192,8 +192,8 @@ class BackgroundTask:
 
     def _detect_dialogue_opportunity(self, cap) -> bool:
         """检测是否进入对话"""
-        cap = crop(cap, IconSkipDialog.cap_posi)
-        if itt.get_img_existence(IconSkipDialog, cap=cap):
+        cap = crop(cap, IconBGSkipDialog.cap_posi)
+        if itt.get_img_existence(IconBGSkipDialog, cap=cap):
             return True
         return False
     

@@ -19,14 +19,14 @@ class MonthlyPassTask(TaskTemplate):
         if wait_until_appear_then_click(ButtonMonthlyPassTab2):
             if wait_until_appear_then_click(ButtonMonthlyPassAward):
                 if wait_until_appear(IconClickSkip, retry_time=2):
-                    itt.delay(0.2, comment="不加延迟，有些电脑就是不行")
+                    itt.delay(1, comment="不加延迟，有些电脑就是不行")
                     itt.wait_until_stable(threshold=0.95, timeout=2)
                     itt.key_press(keybind.KEYBIND_INTERACTION)
             time.sleep(0.5)
             if wait_until_appear_then_click(ButtonMonthlyPassTab1):
                 if wait_until_appear_then_click(ButtonMonthlyPassAward):
                     if wait_until_appear(IconClickSkip):
-                        itt.delay(0.2, comment="不加延迟，有些电脑就是不行")
+                        itt.delay(1, comment="不加延迟，有些电脑就是不行")
                         itt.wait_until_stable(threshold=0.95, timeout=2)
                         itt.key_press(keybind.KEYBIND_INTERACTION)
                         self.update_task_result(message="成功领取奇迹之旅奖励")
