@@ -170,8 +170,8 @@ class BackgroundTask:
     
     def _detect_fishing_opportunity(self, cap) -> bool:
         """检测是否可以钓鱼"""
-        cap = crop(cap, IconBGFishingFeature.cap_posi)
-        if itt.get_img_existence(IconBGFishingFeature, cap=cap):
+        cap = crop(cap, IconFishingFinish.cap_posi)
+        if itt.get_img_existence(IconFishingFinish, cap=cap):
             return True
         return False
     
@@ -192,17 +192,17 @@ class BackgroundTask:
 
     def _detect_dialogue_opportunity(self, cap) -> bool:
         """检测是否进入对话"""
-        cap = crop(cap, IconBGSkipDialog.cap_posi)
-        if itt.get_img_existence(IconBGSkipDialog, cap=cap):
+        cap = crop(cap, IconSkipDialog.cap_posi)
+        if itt.get_img_existence(IconSkipDialog, cap=cap):
             return True
         return False
     
     def _execute_dialogue(self):
         """执行对话任务"""
-        self.log_to_gui("检测到对话界面，开始自动对话", type="add_ai_message")
+        # self.log_to_gui("检测到对话界面，开始自动对话", type="add_ai_message")
         skip_dialog_task = SkipDialogTask()
         skip_dialog_task.task_run()
-        self.log_to_gui(f"自动对话结束", type="finalize_ai_message")
+        # self.log_to_gui(f"自动对话结束", type="finalize_ai_message")
 
 
 if __name__ == "__main__":

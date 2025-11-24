@@ -74,9 +74,6 @@
   "AreaFSkip": {
     "rel_path": "imgs\\Windows\\General\\AreaFSkip.png"
   },
-  "AreaFishingDetection": {
-    "rel_path": "imgs\\Windows\\Fishing\\AreaFishingDetection.jpg"
-  },
   "AreaHuanjingBlessEntrace": {
     "rel_path": "imgs\\Windows\\UI\\huanjing\\AreaHuanjingBlessEntrace.png"
   },
@@ -295,27 +292,6 @@
   },
   "IconDungeonFeature": {
     "rel_path": "imgs\\Windows\\UI\\IconDungeonFeature.png"
-  },
-  "IconFishingNoFish": {
-    "rel_path": "imgs\\Windows\\Fishing\\IconFishingNoFish.png"
-  },
-  "IconFishingPullLine": {
-    "rel_path": "imgs\\Windows\\Fishing\\IconFishingPullLine.jpg"
-  },
-  "IconFishingPullLineAlt": {
-    "rel_path": "imgs\\Windows\\Fishing\\IconFishingPullLineAlt.jpg"
-  },
-  "IconFishingFinish": {
-    "rel_path": "imgs\\Windows\\Fishing\\IconFishingFinish.jpg"
-  },
-  "IconFishingReelIn": {
-    "rel_path": "imgs\\Windows\\Fishing\\IconFishingReelIn.png"
-  },
-  "IconFishingSkip": {
-    "rel_path": "imgs\\Windows\\Fishing\\IconFishingSkip.jpg"
-  },
-  "IconFishingStrike": {
-    "rel_path": "imgs\\Windows\\Fishing\\IconFishingStrike.jpg"
   },
   "IconMaterialTypeAnimal": {
     "rel_path": "imgs\\Windows\\Material\\IconMaterialTypeAnimal.png"

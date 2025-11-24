@@ -38,44 +38,21 @@ FISHING_STATE_MAPPING = [
     (IconFishingFinish, FishingState.FINISH),
     (IconFishingStrike, FishingState.STRIKE),
     (IconFishingPullLine, FishingState.PULL_LINE),
-    (IconFishingPullLineAlt, FishingState.PULL_LINE),
     (IconFishingReelIn, FishingState.REEL_IN),
-    (IconFishingSkip, FishingState.SKIP),
+    (IconSkip, FishingState.SKIP),
 ]
 
 class FishingTask(TaskTemplate):
     def __init__(self):
         super().__init__("fishing_task")
-        self.state_area = self.get_state_area()
         self.material_count_dict = {}
-
-    def get_state_area(self):
-        """获取状态判断区域"""
-        bboxes = []
-        for icon, _ in FISHING_STATE_MAPPING:
-            bboxes.append(icon.bbg_posi)
-        merged_bbox = union_bbox(*bboxes)
-        return merged_bbox
-
-    def check_target_state(self, target_icon):
-        cap = itt.capture(posi=target_icon.bbg_posi)
-        _, cap = cv2.threshold(cap, 210, 255, cv2.THRESH_BINARY)
-        if itt.get_img_existence(target_icon, cap=cap):
-            return True
-
 
     def get_current_state(self):
         """在模板区域内检测当前状态"""
-        cap = itt.capture(posi=self.state_area)
-        _, cap = cv2.threshold(cap, 210, 255, cv2.THRESH_BINARY)
-        if CV_DEBUG_MODE:
-            cv2.imshow("cap", cap)
-            cv2.waitKey(1)
-
+        cap = itt.capture(posi=AreaFishingIcons.position)
         for icon, state in FISHING_STATE_MAPPING:
-            if itt.get_img_existence(icon, is_gray=True, cap=cap):
+            if itt.get_img_existence(icon, cap=cap):
                 return state
-
         return FishingState.UNKNOWN
 
     def _pull_in_direction(self, key, px_count):
@@ -89,12 +66,13 @@ class FishingTask(TaskTemplate):
             cap = itt.capture(posi=AreaFishingDetection.position)
             current_px_count = count_px_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
             logger.debug(f"尝试方向: {key}, {px_count} -> {current_px_count}")
-            if px_count - current_px_count > 20 or current_px_count == 0:
+            if px_count - current_px_count > 5 or current_px_count == 0:
                 px_count = current_px_count
                 if px_count == 0:
                     break
                 continue
             else:
+                px_count = current_px_count
                 break
         itt.key_up(key)
         return px_count
@@ -106,10 +84,10 @@ class FishingTask(TaskTemplate):
         px_count = count_px_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
         while not self.need_stop():
             px_count = self._pull_in_direction('a', px_count)
-            if not self.check_target_state(IconFishingPullLine):
+            if not itt.get_img_existence(IconFishingPullLine):
                 break
             px_count = self._pull_in_direction('d', px_count)
-            if not self.check_target_state(IconFishingPullLine):
+            if not itt.get_img_existence(IconFishingPullLine):
                 break
 
     def handle_strike(self):
@@ -123,7 +101,7 @@ class FishingTask(TaskTemplate):
                 itt.right_click()
             else:
                 itt.key_press(keybind.KEYBIND_FISHING_REEL_IN)
-            if not self.check_target_state(IconFishingReelIn):
+            if not itt.get_img_existence(IconFishingReelIn):
                 break
             # time.sleep(0.1)
 
@@ -258,10 +236,9 @@ class FishingTask(TaskTemplate):
 
 if __name__ == "__main__":
     # # CV_DEBUG_MODE = True
-    # task = FishingTask()
-    # # task.task_run()
-    # task.fishing_loop()
+    task = FishingTask()
+    # task.task_run()
     from whimbox.common.utils.img_utils import IMG_RATE
     while True:
-        print(itt.get_img_existence(IconFishingNoFish, ret_mode=IMG_RATE))
         time.sleep(0.2)
+        print(task.get_current_state())

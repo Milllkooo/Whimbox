@@ -33,8 +33,9 @@ AreaBigMapMaterialTrackConfirm = Area()
 # 大世界采集、跳跃、移动、跳过等相关的UI
 AreaFPickup = Area()
 TextFPickUp = Text("拾取", cap_area = AreaFPickup)
-IconSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.80, gray_limit=(230, 255))
+IconSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.80, gray_limit=(210, 255)) 
 IconClickSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.80, gray_limit=(210, 255))
+IconSkipDialog = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.75, gray_limit=(210, 255))
 AreaMovementWalk = Area()
 IconMovementWalking = ImgIcon()
 AreaMaterialTrackNear = Area()
@@ -44,12 +45,11 @@ AreaAbilityButton = Area()
 # 钓鱼相关
 IconFishingNoFish = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, hsv_limit=([0,0,175], [20,255,255])) # 鱼掉光时候的图标
 AreaFishingDetection = Area()  # B区域（鱼进度检测区域）
-IconFishingFinish = ImgIcon(print_log=LOG_NONE, threshold=0.80)  # 收竿图标，容易和收线图标识别错，提高点阈值
-IconFishingStrike = ImgIcon(print_log=LOG_NONE, threshold=0.75) # 提竿图标
-IconFishingPullLine = ImgIcon(print_log=LOG_NONE, threshold=0.75)  # 拉扯鱼线图标1
-IconFishingPullLineAlt = ImgIcon(print_log=LOG_NONE, threshold=0.75)  # 拉扯鱼线图标2-采星
-IconFishingReelIn = ImgIcon(print_log=LOG_NONE, threshold=0.75)  # 收线图标
-IconFishingSkip = ImgIcon(print_log=LOG_NONE, threshold=0.75) # 跳过
+AreaFishingIcons = Area()
+IconFishingFinish = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.80, gray_limit=(210, 255))  # 收竿图标，容易和收线图标识别错，提高点阈值
+IconFishingStrike = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.80, gray_limit=(210, 255)) # 提竿图标
+IconFishingPullLine = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.80, gray_limit=(210, 255))  # 拉扯鱼线图标1
+IconFishingReelIn = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.80, gray_limit=(210, 255))  # 收线图标
 
 # 幻境挑战页面
 ButtonHuanjingGo = Button(print_log=LOG_WHEN_TRUE)
@@ -181,7 +181,3 @@ ButtonMonopolyLeaveGrid = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 ButtonMonopolyConfirmEvent = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 IconMonopolyTicketFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.99)
 ButtonMonopolyTaskFull = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
-
-# 后台任务
-IconBGFishingFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.75, gray_limit=(210, 255))
-IconBGSkipDialog = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.75, gray_limit=(210, 255))
