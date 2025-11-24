@@ -98,6 +98,10 @@
             "value": "e",
             "description": "摇铃"
         },
+        "ability_derivation":{
+            "value": "r",
+            "description": "能力衍生功能"
+        },
         "forward":{
             "value": "w",
             "description": "前进"

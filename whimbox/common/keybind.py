@@ -10,6 +10,7 @@ class Keybind:
         self.KEYBIND_EVENT = "k"
         self.KEYBIND_INTERACTION = "f"
         self.KEYBIND_BELL = "e"
+        self.KEYBIND_ABILITY_DERIVATION = "r"
         self.KEYBIND_FORWARD = "w"
         self.KEYBIND_JUMP = "space"
         self.KEYBIND_FALLING = "q"
@@ -34,6 +35,7 @@ class Keybind:
         self.KEYBIND_EVENT = global_config.get('Keybinds', 'event')
         self.KEYBIND_INTERACTION = global_config.get('Keybinds', 'interaction')
         self.KEYBIND_BELL = global_config.get('Keybinds', 'bell')
+        self.KEYBIND_ABILITY_DERIVATION = global_config.get('Keybinds', 'ability_derivation')
         self.KEYBIND_FORWARD = global_config.get('Keybinds', 'forward')
         self.KEYBIND_JUMP = global_config.get('Keybinds', 'jump')
         self.KEYBIND_FALLING = global_config.get('Keybinds', 'falling')

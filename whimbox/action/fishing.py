@@ -38,14 +38,27 @@ FISHING_STATE_MAPPING = [
     (IconFishingFinish, FishingState.FINISH),
     (IconFishingStrike, FishingState.STRIKE),
     (IconFishingPullLine, FishingState.PULL_LINE),
+    (IconFishingPullLineHome, FishingState.PULL_LINE),
     (IconFishingReelIn, FishingState.REEL_IN),
     (IconSkip, FishingState.SKIP),
 ]
 
+FISHING_TYPE_MIRALAND = "钓鱼"
+FISHING_TYPE_HOME = "钓陨星"
+
 class FishingTask(TaskTemplate):
     def __init__(self):
         super().__init__("fishing_task")
+        self.fishing_type = None # 大世界钓鱼or家园钓星
         self.material_count_dict = {}
+
+    def get_fishing_type(self):
+        cap = itt.capture(posi=AreaFishingIcons.position)
+        if itt.get_img_existence(IconFishingHomeFeature, cap=cap):
+            return FISHING_TYPE_HOME
+        elif itt.get_img_existence(IconFishingMiralandFeature, cap=cap):
+            return FISHING_TYPE_MIRALAND
+        return FISHING_TYPE_MIRALAND
 
     def get_current_state(self):
         """在模板区域内检测当前状态"""
@@ -84,10 +97,10 @@ class FishingTask(TaskTemplate):
         px_count = count_px_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
         while not self.need_stop():
             px_count = self._pull_in_direction('a', px_count)
-            if not itt.get_img_existence(IconFishingPullLine):
+            if self.get_current_state() != FishingState.PULL_LINE:
                 break
             px_count = self._pull_in_direction('d', px_count)
-            if not itt.get_img_existence(IconFishingPullLine):
+            if self.get_current_state() != FishingState.PULL_LINE:
                 break
 
     def handle_strike(self):
@@ -99,7 +112,7 @@ class FishingTask(TaskTemplate):
         while not self.need_stop():
             start_time = time.time()
             itt.key_press(keybind.KEYBIND_FISHING_REEL_IN)
-            if not itt.get_img_existence(IconFishingReelIn):
+            if self.get_current_state() != FishingState.REEL_IN:
                 break
             gap_time = time.time() - start_time
             if gap_time < 0.2:
@@ -123,12 +136,6 @@ class FishingTask(TaskTemplate):
             match = re.match(pattern, line)
             if match:
                 fish_name = match.group(1)
-                # fish_weight = float(match.group(2))
-                # self.log_to_gui(f"获得{fish_name}x{fish_weight}kg")
-                # if fish_name in self.material_count_dict:
-                #     self.material_count_dict[fish_name] += fish_weight
-                # else:
-                #     self.material_count_dict[fish_name] = fish_weight
                 self.log_to_gui(f"获得{fish_name}")
                 if fish_name in self.material_count_dict:
                     self.material_count_dict[fish_name] += 1
@@ -144,7 +151,11 @@ class FishingTask(TaskTemplate):
     @register_step("开始钓鱼")
     def step2(self):
         fish_time = 0
-        while fish_time < 3 and not self.need_stop():
+        while not self.need_stop():
+            if self.fishing_type == FISHING_TYPE_MIRALAND and fish_time >= 3: # 大世界钓鱼最多钓3次
+                break
+            if self.fishing_type == FISHING_TYPE_HOME and fish_time >= 5: # 家园钓星最多钓5次
+                break
             res = self.fishing_loop()
             if res == FishingResult.SUCCESS:
                 fish_time += 1
@@ -164,6 +175,11 @@ class FishingTask(TaskTemplate):
             res_str = ", ".join(res)
             self.update_task_result(message=f"获得{res_str}", data=self.material_count_dict)
 
+    def switch_fishing(self):
+        if self.fishing_type == FISHING_TYPE_MIRALAND:
+            itt.right_click()
+        elif self.fishing_type == FISHING_TYPE_HOME:
+            itt.key_press(keybind.KEYBIND_ABILITY_DERIVATION)
 
     def fishing_loop(self):
         # 等待进入钓鱼状态
@@ -174,21 +190,21 @@ class FishingTask(TaskTemplate):
                 # 因为有可能被“后台任务-自动钓鱼”调用，已经抛竿进入等待状态，就不需要再右键了
                 if not is_started:
                     is_started = True
-                    itt.right_click()
+                    self.switch_fishing()
                 else:
                     time.sleep(0.5)
             else:
                 break
-        # itt.right_click()
-        # while self.get_current_state() != FishingState.FINISH and not self.need_stop():
-        #     time.sleep(0.5)
+
+        # 判断钓鱼类型
+        self.fishing_type = self.get_fishing_type()
         # 开始钓鱼
         logger.info("进入钓鱼状态")
-        idle_timer = AdvanceTimer(10) # 10秒如果没有鱼，就说明钓鱼位置错了
+        idle_timer = AdvanceTimer(15) # 15秒如果没有鱼，就说明钓鱼位置错了
         idle_timer.start()
         itt.delay(2, comment="等待弹出鱼钓光的提示框")
         if itt.get_img_existence(IconFishingNoFish):
-            itt.right_click()
+            self.switch_fishing()
             while not ui_control.verify_page(page_main) and not self.need_stop():
                 time.sleep(0.5)
             return FishingResult.NO_FISH
@@ -196,11 +212,14 @@ class FishingTask(TaskTemplate):
         unknown_state_count = 0
         while not self.need_stop():
             if idle_timer.started() and idle_timer.reached():
-                itt.right_click()
-                while not ui_control.verify_page(page_main):
+                self.switch_fishing()
+                while not ui_control.verify_page(page_main) and not self.need_stop():
                     time.sleep(0.2)
                 return FishingResult.WRONG_POSITION
-
+    
+            # 连续出现提竿状态的次数，正常应该一次loop中只出现一次
+            # 家园钓星如果钓完了，还继续钓，就会出现连续多次提竿状态，可以作为结束的标志
+            strike_times = 0 
             state = self.get_current_state()
             logger.debug(f"当前状态: {state}")
             if state != FishingState.UNKNOWN:
@@ -209,8 +228,11 @@ class FishingTask(TaskTemplate):
                     time.sleep(0.5)
                     continue
                 elif state == FishingState.STRIKE:
+                    if strike_times > 2:
+                        return FishingResult.NO_FISH
                     idle_timer.clear()
                     self.handle_strike()
+                    strike_times += 1
                     continue
                 elif state == FishingState.PULL_LINE:
                     self.handle_pull_line()

@@ -46,9 +46,12 @@ AreaAbilityButton = Area()
 IconFishingNoFish = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, hsv_limit=([0,0,175], [20,255,255])) # 鱼掉光时候的图标
 AreaFishingDetection = Area()  # B区域（鱼进度检测区域）
 AreaFishingIcons = Area()
+IconFishingHomeFeature = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))      # 取消钓陨星
+IconFishingMiralandFeature = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 取消钓鱼
 IconFishingFinish = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 收竿图标，容易和收线图标识别错，提高点阈值
 IconFishingStrike = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255)) # 提竿图标
-IconFishingPullLine = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 拉扯鱼线图标1
+IconFishingPullLine = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 大世界拉扯鱼线图标
+IconFishingPullLineHome = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 家园拉扯鱼线图标
 IconFishingReelIn = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 收线图标
 
 # 幻境挑战页面

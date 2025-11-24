@@ -170,7 +170,7 @@ class BackgroundTask:
     
     def _detect_fishing_opportunity(self, cap) -> bool:
         """检测是否可以钓鱼"""
-        cap = crop(cap, IconFishingFinish.cap_posi)
+        cap = crop(cap, AreaFishingIcons.position)
         if itt.get_img_existence(IconFishingFinish, cap=cap):
             return True
         return False
