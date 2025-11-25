@@ -45,7 +45,7 @@ class ImgIcon(AssetBase):
             path = self.get_img_path()
 
         if threshold is None:
-            threshold = 0.95
+            threshold = 0.98
 
         self.origin_path = path
         self.raw_image = cv2.imread(self.origin_path)

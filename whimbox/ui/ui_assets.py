@@ -97,11 +97,11 @@ AreaDigMainTypeSelect = Area()
 AreaDigSubTypeSelect = Area()
 AreaDigItemSelect = Area()
 ButtonDigConfirm = Button(print_log=LOG_WHEN_TRUE)
-ButtonDigTime20h = Button(print_log=LOG_WHEN_TRUE)
+ButtonDigTime20h = Button(print_log=LOG_WHEN_TRUE, threshold=0.95)
 
 # 朝夕心愿相关
 ButtonZxxyEntrance = Button(print_log=LOG_WHEN_TRUE)
-IconZxxyFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, hsv_limit=([20, 15, 250], [30, 190, 255]))
+IconZxxyFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.95, hsv_limit=([20, 15, 250], [30, 190, 255]))
 AreaZxxyScore = Area()
 ButtonZxxyRewarded = Button(print_log=LOG_WHEN_TRUE)
 ButtonZxxyTask1 = Button()
@@ -113,8 +113,8 @@ AreaZxxyTaskText = Area()
 IconUIZxxyTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE)
 
 # 星海拾遗相关
-ButtonXhsyEntrance = Button(print_log=LOG_WHEN_TRUE)
-IconUIXhsy = ImgIcon(print_log=LOG_WHEN_TRUE)
+# ButtonXhsyEntrance = Button(print_log=LOG_WHEN_TRUE)
+# IconUIXhsy = ImgIcon(print_log=LOG_WHEN_TRUE)
 
 # 换装界面
 AreaWardrobeTab1 = Area()
@@ -141,23 +141,23 @@ AreaAbilityPlan2Button = Area()
 AreaAbilityPlan3Button = Area()
 
 # 素材相关
-IconMaterialTypeAnimal = ImgIcon()
-IconMaterialTypePlant = ImgIcon()
-IconMaterialTypeInsect = ImgIcon()
-IconMaterialTypeFish = ImgIcon()
-IconMaterialTypeMonster = ImgIcon()
-IconMaterialTypeOther = ImgIcon()
-IconMaterialTypeDig1 = ImgIcon()
+IconMaterialTypeAnimal = ImgIcon(print_log=LOG_WHEN_TRUE)
+IconMaterialTypePlant = ImgIcon(print_log=LOG_WHEN_TRUE)
+IconMaterialTypeInsect = ImgIcon(print_log=LOG_WHEN_TRUE)
+IconMaterialTypeFish = ImgIcon(print_log=LOG_WHEN_TRUE)
+IconMaterialTypeMonster = ImgIcon(print_log=LOG_WHEN_TRUE)
+IconMaterialTypeOther = ImgIcon(print_log=LOG_WHEN_TRUE)
+IconMaterialTypeDig1 = ImgIcon(print_log=LOG_WHEN_TRUE)
 
 # 拍照相关
 IconPhotoEdit = ImgIcon(print_log=LOG_WHEN_TRUE)
-IconPhotoDelete = ImgIcon()
+IconPhotoDelete = ImgIcon(print_log=LOG_WHEN_TRUE)
 ButtonPhotoDeleteConfirm = Button(print_log=LOG_WHEN_TRUE)
 
 # 大月卡，奇迹之旅
 ButtonMonthlyPassAward = Button(print_log=LOG_WHEN_TRUE)
-ButtonMonthlyPassTab1 = Button(print_log=LOG_WHEN_TRUE)
-ButtonMonthlyPassTab2 = Button(print_log=LOG_WHEN_TRUE)
+ButtonMonthlyPassTab1 = Button(print_log=LOG_WHEN_TRUE, threshold=0.95)
+ButtonMonthlyPassTab2 = Button(print_log=LOG_WHEN_TRUE, threshold=0.95)
 
 # 奇迹之冠
 AreaMiraCrownOverview = Area()

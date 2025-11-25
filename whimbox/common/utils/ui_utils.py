@@ -11,6 +11,7 @@ from whimbox.ui.ui_assets import *
 from whimbox.common.keybind import keybind
 from whimbox.common.cvars import get_current_stop_flag
 import time
+from whimbox.common.logger import logger
 
 
 def find_game_img(game_img: GameImg, cap, threshold, scale=0.5):
@@ -47,6 +48,9 @@ def find_game_img(game_img: GameImg, cap, threshold, scale=0.5):
     th, tw = template_rgb.shape[:2]
     top_left = max_loc
     bottom_right = (top_left[0] + tw, top_left[1] + th)
+
+    if max_val >= threshold:
+        logger.trace('imgname: ' + game_img.name + ' matching_rate: ' + str(max_val))
 
     if CV_DEBUG_MODE:
         # 在目标图上绘制矩形
@@ -96,6 +100,9 @@ def scroll_find_click(area: Area, target, threshold=0, hsv_limit=None, scale=0, 
                 if scale:
                     target_img = cv2.resize(target_img, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
                 rate, loc = similar_img(cap, target_img, ret_mode=IMG_RECT)
+
+            if target.is_print_log(rate >= threshold):
+                logger.trace('imgname: ' + target.name + ' matching_rate: ' + str(rate))
 
             if rate > threshold:
                 th, tw = target_img.shape[:2]
