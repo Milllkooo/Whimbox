@@ -143,35 +143,6 @@ class Track:
                 degree = calculate_posi2degree(minimap_center, track_circle[0:2])
                 return degree
         return None
-
-    def check_tracking_near(self):
-        '''判断是否已经靠近材料（已废弃，改用is_ability_active判断）'''
-        img = itt.capture(AreaMaterialTrackNear.position)
-        if CV_DEBUG_MODE:
-            img_copy = img.copy()
-        lower = [17, 140, 130]
-        upper = [20, 180, 200]
-        mask = process_with_hsv_limit(img, lower, upper)
-        circles = cv2.HoughCircles(
-            mask,
-            cv2.HOUGH_GRADIENT,
-            dp=1.2,          # 累加器分辨率（可调 1.0~1.5）
-            minDist=22,      # 圆心最小间距，建议≈ 2*minRadius - 些许
-            param1=120,      # Canny高阈值
-            param2=10,       # 累加器阈值，越小越容易出圆（可调 8~18）
-            minRadius=16,
-            maxRadius=18
-        )
-        if circles is not None:
-            if CV_DEBUG_MODE:
-                for circle in circles[0, :]:
-                    x, y, r = np.uint16(np.around(circle))
-                    cv2.circle(img_copy, (x, y), r, (0, 0, 255), 2)
-                    cv2.circle(img_copy, (x, y), 2, (0, 0, 255), 3)
-                cv2.imshow("track_near_img", img_copy)
-                cv2.waitKey(1)
-            return True
-        return False
     
     def is_ability_active(self):
         '''

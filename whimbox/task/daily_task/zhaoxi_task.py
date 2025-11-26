@@ -10,6 +10,7 @@ import time
 from whimbox.common.utils.ui_utils import wait_until_appear
 from whimbox.task.daily_task.cvar import *
 from whimbox.common.keybind import keybind
+from whimbox.common.logger import logger
 
 
 zxxy_task_info_list = [
@@ -127,6 +128,7 @@ class ZhaoxiTask(TaskTemplate):
             time.sleep(0.3)
             if not itt.get_img_existence(IconUIZxxyTaskFinished):
                 task_text = itt.ocr_single_line(AreaZxxyTaskText)
+                logger.info(f"任务文本：{task_text}")
                 for task_info in zxxy_task_info_list:
                     is_match = True
                     for key_word in task_info["key_words"]:

@@ -179,7 +179,9 @@ class FishingTask(TaskTemplate):
         if self.fishing_type == FISHING_TYPE_MIRALAND:
             itt.right_click()
         elif self.fishing_type == FISHING_TYPE_HOME:
-            itt.key_press(keybind.KEYBIND_ABILITY_DERIVATION)
+            itt.key_press(keybind.KEYBIND_ABILITY_DERIVATION_1)
+        else:
+            itt.right_click()
 
     def fishing_loop(self):
         # 等待进入钓鱼状态

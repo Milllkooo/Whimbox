@@ -245,7 +245,7 @@ class AutoPathTask(TaskTemplate):
         # 如果要转很大的角度，需要先停下来
         if delta_degree >= 45 and self.is_moving():
             self.stop_move()
-        change_view_to_angle(target_degree, offset=3, use_last_rotation = True)
+        change_view_to_angle(target_degree, offset=3, use_last_rotation=True)
 
 
     def inner_step_control_move(self):

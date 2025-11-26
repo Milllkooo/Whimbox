@@ -382,7 +382,8 @@ if __name__ == '__main__':
     minimap = MiniMap()
     minimap.map_name = MAP_NAME_MIRALAND
     # minimap.init_position((2800*2, 3920*2)) # 疯愿之子营地
-    minimap.init_position((3213*2, 2203*2)) # 花愿镇，搭配师协会
+    # minimap.init_position((3213*2, 2203*2)) # 花愿镇，搭配师协会
+    minimap.init_position((6415.12, 3999.58))
     # minimap.init_position((5650.7, 4531.5)) # 蓝龙
     # minimap.map_name = MAP_NAME_STARSEA
     # minimap.init_position((3087.6,2260.0)) # 海滩

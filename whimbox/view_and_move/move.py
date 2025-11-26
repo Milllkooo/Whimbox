@@ -12,21 +12,14 @@ from enum import Enum
 
 def get_move_mode_in_game(ret_rate=False) -> str:
     """判断当前的移动模式（目前只支持步行和跳跃）"""
-    cap = itt.capture(posi=AreaMovementWalk.position)
-    lower_white = [0, 0, 210]
-    upper_white = [180, 50, 255]
-    cap = process_with_hsv_limit(cap, lower_white, upper_white)
-    r = similar_img(cap, IconMovementWalking.image[:, :, 0])
-    if CV_DEBUG_MODE:
-        cv2.imshow('cap', cap)
-        cv2.waitKey(1)
+    r = itt.get_img_existence(IconMovementWalk, ret_mode=IMG_RATE)
     if ret_rate:
-        if r > 0.95:
+        if r > 0.90:
             return MOVE_MODE_WALK, r
         else:
             return MOVE_MODE_JUMP, r
     else:
-        if r > 0.95:
+        if r > 0.90:
             return MOVE_MODE_WALK
         else:
             return MOVE_MODE_JUMP
@@ -54,32 +47,32 @@ class JumpController(AdvanceThreading):
         return self._jump_state == JumpState.DOUBLE_JUMP
 
     def clear_jump_state(self):
-        self._jump_state = JumpState.IDLE
         self.normal_jump_timer.reset()
         self.prepare_double_jump_timer.reset()
+        self._jump_state = JumpState.IDLE
         logger.debug('clear jump state')
 
     def start_jump(self):
         if self.is_jumping():
             logger.debug('already jumping')
             return
-        self._jump_state = JumpState.NORMAL_JUMP
+        itt.key_down(keybind.KEYBIND_JUMP)
         self.normal_jump_timer.reset()
         self.normal_jump_timer.start()
-        itt.key_down(keybind.KEYBIND_JUMP)
+        self._jump_state = JumpState.NORMAL_JUMP
         logger.debug('start jump')
 
     def _prepare_double_jump(self):
-        self._jump_state = JumpState.PREPARE_DOUBLE_JUMP
+        itt.key_up(keybind.KEYBIND_JUMP)
         self.prepare_double_jump_timer.reset()
         self.prepare_double_jump_timer.start()
-        itt.key_up(keybind.KEYBIND_JUMP)
+        self._jump_state = JumpState.PREPARE_DOUBLE_JUMP
         logger.debug('prepare double jump')
 
     def _start_double_jump(self):
-        self._jump_state = JumpState.DOUBLE_JUMP
         itt.key_press(keybind.KEYBIND_JUMP)
         self.double_jump_begin_time = time.time()
+        self._jump_state = JumpState.DOUBLE_JUMP
         logger.debug('start double jump')
 
     def stop_jump(self):
@@ -192,5 +185,5 @@ if __name__ == "__main__":
     #     time.sleep(3)
 
     while True:
-        print(get_move_mode_in_game())
+        print(get_move_mode_in_game(ret_rate=True))
         time.sleep(0.3)

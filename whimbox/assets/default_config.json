@@ -94,13 +94,9 @@
             "value": "f",
             "description": "交互"
         },
-        "bell":{
-            "value": "e",
-            "description": "摇铃"
-        },
-        "ability_derivation":{
+        "ability_derivation_1":{
             "value": "r",
-            "description": "能力衍生功能"
+            "description": "家园能力衍生功能1"
         },
         "forward":{
             "value": "w",

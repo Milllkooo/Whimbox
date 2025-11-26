@@ -10,6 +10,8 @@ page_esc = TitlePage("美鸭梨")
 page_daily_task = TitlePage("奇想日历")
 page_zxxy = UIPage(check_icon=IconZxxyFeature)
 # page_xhsy = UIPage(check_icon=IconUIXhsy)
+page_dress = UIPage(check_icon=ButtonWardrobeDressDIY)
+page_ability = UIPage(check_icon=IconAbilityFeature)
 page_huanjing = TitlePage("幻境挑战")
 page_huanjing_jihua = TitlePage("素材激化幻境")
 page_huanjing_bless = TitlePage("祝福闪光幻境")
@@ -17,8 +19,6 @@ page_huanjing_monster = TitlePage("魔物试炼幻境")
 page_photo = TitlePage("大喵相机")
 page_monthly_pass = TitlePage("奇迹之旅")
 page_event = TitlePage("活动大厅")
-page_dress = UIPage(check_icon=ButtonWardrobeDressDIY)
-page_ability = UIPage(check_icon=TextWardrobeAbilityBattle)
 
 ui_pages = [
     page_main,

@@ -79,8 +79,6 @@ if __name__ == "__main__" and False:
     from whimbox.common.path_lib import *
     while True:
         img = itt.capture(AreaAbilityButton.position)
-        # img = cv2.imread(os.path.join(ROOT_PATH, "tools", "snapshot", "1759020866.2830987.png"))
-        # img = crop(img, AreaMaterialTrackNear.position)
         img_copy = img.copy()
         imgHSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)  
         # 调用回调函数，获取滑动条的值  

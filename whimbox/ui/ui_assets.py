@@ -19,7 +19,7 @@ IconUILoading = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.99)
 
 # 大地图相关
 IconUIBigmap = ImgIcon(print_log=LOG_WHEN_TRUE)
-IconBigMapMaxScale = ImgIcon(print_log=LOG_WHEN_TRUE)
+IconBigMapMaxScale = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(155, 255))
 ButtonBigMapZoom = Button(print_log=LOG_WHEN_TRUE)
 ButtonBigMapTeleport = ImgIcon(print_log=LOG_WHEN_TRUE)
 AreaBigMapRegionName = Area()
@@ -36,9 +36,7 @@ TextFPickUp = Text("拾取", cap_area = AreaFPickup)
 IconSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.80, gray_limit=(210, 255)) 
 IconClickSkip = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.80, gray_limit=(210, 255))
 IconSkipDialog = ImgIcon(print_log=LOG_NONE, threshold=0.75, gray_limit=(210, 255))
-AreaMovementWalk = Area()
-IconMovementWalking = ImgIcon()
-AreaMaterialTrackNear = Area()
+IconMovementWalk = ImgIcon(print_log=LOG_NONE, threshold=0.85, hsv_limit=([0, 0, 210], [180, 50, 255]))
 AreaMaterialGetText = Area()
 AreaAbilityButton = Area()
 
@@ -101,7 +99,7 @@ ButtonDigTime20h = Button(print_log=LOG_WHEN_TRUE, threshold=0.95)
 
 # 朝夕心愿相关
 ButtonZxxyEntrance = Button(print_log=LOG_WHEN_TRUE)
-IconZxxyFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.95, hsv_limit=([20, 15, 250], [30, 190, 255]))
+IconZxxyFeature = ImgIcon(print_log=LOG_WHEN_TRUE)
 AreaZxxyScore = Area()
 ButtonZxxyRewarded = Button(print_log=LOG_WHEN_TRUE)
 ButtonZxxyTask1 = Button()
@@ -117,15 +115,12 @@ IconUIZxxyTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE)
 # IconUIXhsy = ImgIcon(print_log=LOG_WHEN_TRUE)
 
 # 换装界面
-AreaWardrobeTab1 = Area()
-TextWardrobeDressTab = Text("换装", cap_area = AreaWardrobeTab1)
 ButtonWardrobeDressDIY = Button(print_log=LOG_WHEN_TRUE)
 
 # 能力配置界面
 AreaWardrobeTab3 = Area()
 TextWardrobeAbilityTab = Text("能力配置", cap_area = AreaWardrobeTab3)
-AreaWardrobeAbilityBattleText = Area()
-TextWardrobeAbilityBattle = Text("净化", cap_area = AreaWardrobeAbilityBattleText)
+IconAbilityFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.70, gray_limit=(180, 255))
 IconAbilityFloat = ImgIcon()    # 泡泡套跳跃
 IconAbilityWing = ImgIcon()    # 飞鸟套跳跃
 IconAbilityAnimal = ImgIcon()    # 清洁

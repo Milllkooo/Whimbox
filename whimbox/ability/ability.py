@@ -46,7 +46,7 @@ class AbilityManager:
         upper_white = [180, 60, 255]
         img = process_with_hsv_limit(cap, lower_white, upper_white)
         for icon in ability_hsv_icons:
-            resize_icon = cv2.resize(icon.image, None, fx=0.63, fy=0.63, interpolation=cv2.INTER_LINEAR)
+            resize_icon = cv2.resize(icon.image, None, fx=0.73, fy=0.73, interpolation=cv2.INTER_LINEAR)
             rate = similar_img(img, resize_icon[:, :, 0], ret_mode=IMG_RATE)
             if rate > 0.8:
                 return icon_name_to_ability_name.get(icon.name, None)
@@ -232,8 +232,8 @@ ability_manager = AbilityManager()
 
 if __name__ == "__main__":
     # CV_DEBUG_MODE = True
-    ability_manager.change_ability(ABILITY_NAME_FISH)
-    # print(ability_manager.get_current_ability())
+    # ability_manager.change_ability(ABILITY_NAME_INSECT)
+    print(ability_manager.get_current_ability())
     # ability_manager._check_jump_ability()
     # ability_manager._check_ability_keymap()
     # print(ability_manager.ability_keymap)

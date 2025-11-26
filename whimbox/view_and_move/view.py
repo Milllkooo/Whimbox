@@ -53,7 +53,7 @@ def calibrate_view_rotation_ratio(offset=5):
     while not stop_flag.is_set():
         cangle = get_safe_rotation(offset=offset)
         direct_cview(90)
-        time.sleep(0.2)
+        time.sleep(0.3)
         tangle = get_safe_rotation(offset=offset)
         dangle = calculate_delta_angle(cangle, tangle)
         if abs(90-dangle) < offset:
@@ -63,7 +63,7 @@ def calibrate_view_rotation_ratio(offset=5):
         config["view_rotation_ratio"] = 90 / dangle * config["view_rotation_ratio"]
 
 
-def change_view_to_angle(tangle, offset:float=5, use_last_rotation = False):
+def change_view_to_angle(tangle, offset:float=5, use_last_rotation=False):
     """转动视角到指定角度"""
     if use_last_rotation:
         cangle = get_safe_rotation(last_angle=nikki_map.rotation, offset=offset)
