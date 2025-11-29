@@ -145,6 +145,8 @@ class ZhaoxiTask(TaskTemplate):
         unfinished_task_list = []
         button_list = [ButtonZxxyTask1, ButtonZxxyTask2, ButtonZxxyTask3, ButtonZxxyTask4, ButtonZxxyTask5]
         for i in range(5):
+            if self.need_stop():
+                break
             unfinished_task = check_task(button_list[i])
             if unfinished_task == None:
                 continue
