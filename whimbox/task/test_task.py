@@ -24,6 +24,7 @@ if __name__ == "__main__":
     # cap = cv2.imread(os.path.join(ROOT_PATH, "..", "tools", "snapshot", "1763953735.083236.png"))
     # cap = crop(cap, IconBGSkipDialog.bbg_posi)
     # print(itt.get_img_existence(IconBGSkipDialog, cap=cap, ret_mode=IMG_RATE, show_res=True))
-    while True:
-        print(itt.get_img_existence(ButtonZxxyRewarded, ret_mode=IMG_RATE, show_res=True))
-        time.sleep(0.5)
+    # while True:
+    #     print(itt.get_img_existence(ButtonZxxyRewarded, ret_mode=IMG_RATE, show_res=True))
+    #     time.sleep(0.5)
+    itt.key_press("F1")

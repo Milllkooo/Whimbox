@@ -31,7 +31,7 @@ class AllInOneTask(TaskTemplate):
         task_result = zhaoxi_task.task_run()
         self.zhaoxi_todo_list = task_result.data
         if task_result.status == STATE_TYPE_SUCCESS:
-            if len(self.zhaoxi_todo_list) == 0:
+            if self.zhaoxi_todo_list and len(self.zhaoxi_todo_list) == 0:
                 self.task_result_list['zhaoxi_task'] = True
                 return "step4"
             self.log_to_gui(task_result.message)
