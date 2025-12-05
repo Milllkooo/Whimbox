@@ -25,7 +25,7 @@ def run_app():
     try:
         logger.info(f"奇想盒版本号: {version("whimbox")}")
     except PackageNotFoundError:
-        logger.info(f"奇想盒版本号: 未知")
+        logger.info(f"奇想盒版本号: dev")
 
     if not os.path.exists(SCRIPT_PATH):
         os.makedirs(SCRIPT_PATH, exist_ok=True)

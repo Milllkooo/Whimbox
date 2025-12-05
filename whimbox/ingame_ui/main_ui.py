@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from pynput import keyboard
 import sys
+from importlib.metadata import version, PackageNotFoundError
 
 from whimbox.common.handle_lib import HANDLE_OBJ
 from whimbox.common.logger import logger
@@ -105,6 +106,7 @@ class IngameUI(QWidget):
         
         # 标题栏
         title_layout = QHBoxLayout()
+        title_layout.setAlignment(Qt.AlignVCenter)  # 垂直居中对齐
         self.title_label = QLabel("⚪ 📦 奇想盒 [按 / 激活窗口]")
         self.title_label.setStyleSheet("""
             QLabel {
@@ -114,6 +116,27 @@ class IngameUI(QWidget):
                 border: none; 
             }
         """)
+        
+        # 版本号标签
+        try:
+            app_version = version("whimbox")
+        except PackageNotFoundError:
+            app_version = "dev"
+        
+        version_label = QLabel(app_version)
+        version_label.setStyleSheet("""
+            QLabel {
+                background-color: #E3F2FD;
+                color: #1976D2;
+                font-size: 12px;
+                font-weight: bold;
+                padding: 2px 6px;
+                border-radius: 8px;
+                border: 1px solid #2196F3;
+                margin-top: 3px;
+            }
+        """)
+        version_label.setFixedHeight(20)
         
         settings_button = QPushButton("⚙️")
         settings_button.setFixedSize(25, 25)
@@ -161,6 +184,7 @@ class IngameUI(QWidget):
         """)
         
         title_layout.addWidget(self.title_label)
+        title_layout.addWidget(version_label)
         title_layout.addStretch()
         title_layout.addWidget(settings_button)
         title_layout.addWidget(minimize_button)
