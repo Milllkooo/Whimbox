@@ -94,6 +94,8 @@ class Track:
         lower = [13, 90, 160]
         upper = [15, 200, 255]
         minimap_hsv = process_with_hsv_limit(minimap_img, lower, upper)
+        # 在小地图中心绘制一个圆，来遮住箭头
+        cv2.circle(minimap_hsv, (MINIMAP_RADIUS, MINIMAP_RADIUS), 10, (255, 255, 255), -1)
         minimap_blur = cv2.GaussianBlur(minimap_hsv, (3, 3), 1)
         if CV_DEBUG_MODE:
             cv2.imshow("minimap_blur", minimap_blur)
@@ -104,10 +106,10 @@ class Track:
             cv2.HOUGH_GRADIENT,
             dp=1,          # 累加器分辨率（可调 1.0~1.5）
             minDist=10,      # 圆心最小间距，建议≈ 2*minRadius - 些许
-            param1=100,      # Canny高阈值
+            param1=60,      # Canny高阈值
             param2=8,       # 累加器阈值，越小越容易出圆（可调 8~18）
             minRadius=14,
-            maxRadius=16
+            maxRadius=18
         )
         
         if circles is not None:
@@ -169,5 +171,8 @@ if __name__ == "__main__":
     #     print(material_track.get_material_track_degree())
     #     time.sleep(0.2)
     while True:
-        material_track.get_material_track_degree()
+        res = material_track.get_material_track_degree()
+        if not res:
+            input("no material near")
+        # material_track.is_ability_active()
         time.sleep(0.2)

@@ -184,6 +184,8 @@ class AbilityManager:
 
     def change_ability(self, ability_name: str):
         # 如果当前能力已经符合，就直接返回
+        if self.current_ability == ability_name:
+            return True
         self.current_ability = self.get_current_ability()
         if self.current_ability == ability_name:
             return True

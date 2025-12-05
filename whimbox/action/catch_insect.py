@@ -17,7 +17,9 @@ if __name__ == "__main__":
     from whimbox.map.map import nikki_map
     from whimbox.view_and_move.view import calibrate_view_rotation_ratio
     nikki_map.reinit_smallmap()
+    itt.key_press("esc")
+    time.sleep(0.5)
     calibrate_view_rotation_ratio()
-    task = CatchInsectTask("发卡蚱蜢", 3)
+    task = CatchInsectTask("发卡蚱蜢", 1)
     # task.task_run()
     task.step3()

@@ -42,32 +42,33 @@ class MaterialTrackBaseTask(TaskTemplate):
 
     @register_step("开始前往采集")
     def step3(self):
-        ability_active_times = 0
-        material_track_failed_times = 0
         timer = AdvanceTimer(self.time_limit)
         timer.start()
         while not timer.reached() and not self.need_stop() \
         and self.material_count_dict[self.material_name] < self.expected_count:
+            material_track_failed_times = 0
+            ability_active_times = 0
             no_material_near = False
-            itt.right_down()
             while not timer.reached() and not self.need_stop():
+                itt.right_down()
                 # 通过能力图标是否发光，来判断是否可采集
                 if not material_track.is_ability_active():
                     ability_active_times = 0
                     degree = material_track.get_material_track_degree()
                     if degree is None:
                         # 容易出现短暂识别失败的情况，所以需要连续几次失败，才认为附近真的没有材料了
+                        logger.debug(f"材料追踪失败，连续{material_track_failed_times}次")
                         material_track_failed_times += 1
+                        time.sleep(0.1)
                         if material_track_failed_times > 5:
                             no_material_near = True
                             break
-                        else:
-                            continue
                     else:
                         material_track_failed_times = 0
-                    change_view_to_angle(degree, offset=3, use_last_rotation = True)
-                    itt.key_down(keybind.KEYBIND_FORWARD)
+                        change_view_to_angle(degree, offset=3, use_last_rotation=True)
+                        itt.key_down(keybind.KEYBIND_FORWARD)
                 else:
+                    material_track_failed_times = 0
                     # 能力图标开始发光，就暂停前进，避免走过头
                     itt.key_up(keybind.KEYBIND_FORWARD)
                     # 当能力按钮连续亮起2次后，才开始采集

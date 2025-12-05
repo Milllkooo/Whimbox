@@ -14,6 +14,8 @@ from whimbox.action.clean_animal import CleanAnimalTask
 from whimbox.action.fishing import FishingTask
 from whimbox.task.navigation_task.common import path_manager
 from whimbox.map.convert import convert_GameLoc_to_PngMapPx
+from whimbox.ui.ui import ui_control
+from whimbox.ui.page_assets import page_main
 
 
 class AutoPathTask(TaskTemplate):
@@ -239,8 +241,10 @@ class AutoPathTask(TaskTemplate):
                 self.change_to_walk()
                 nikki_map.bigmap_tp(self.target_point.position, self.path_info.map)
                 self.curr_position = nikki_map.get_position()
-                # 校准视角旋转比例
-                calibrate_view_rotation_ratio()
+            else:
+                ui_control.ensure_page(page_main)
+            # 校准视角旋转比例
+            calibrate_view_rotation_ratio()
         return is_end
 
 
@@ -307,6 +311,6 @@ class AutoPathTask(TaskTemplate):
 
 
 if __name__ == "__main__":
-    task = AutoPathTask(path_name="example3_星海测试")
+    task = AutoPathTask(path_name="朝夕心愿_捕虫")
     task_result = task.task_run()
     print(task_result.to_dict())

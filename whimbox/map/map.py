@@ -78,6 +78,7 @@ class Map(MiniMap, BigMap):
 
         if not self.small_map_init_flag:
             self.reinit_smallmap()
+            ui_control.ensure_page(page_main)
             self.small_map_init_flag = True
             
         self._upd_smallmap()

@@ -27,7 +27,7 @@ GAMELOC_TO_PNGMAP_OFFSET_DICT = {
 }
 
 # 预计最大移动速度
-MOVE_SPEED = 22
+MOVE_SPEED = 30
 
 # Magic numbers for 1920x1080 desktop
 MINIMAP_CENTER = (79 + 102, 20 + 102)
