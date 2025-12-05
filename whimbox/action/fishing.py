@@ -202,7 +202,7 @@ class FishingTask(TaskTemplate):
         self.fishing_type = self.get_fishing_type()
         # 开始钓鱼
         logger.info("进入钓鱼状态")
-        idle_timer = AdvanceTimer(15) # 15秒如果没有鱼，就说明钓鱼位置错了
+        idle_timer = AdvanceTimer(30) # 30秒如果没有鱼，就说明钓鱼位置错了
         idle_timer.start()
         itt.delay(2, comment="等待弹出鱼钓光的提示框")
         if itt.get_img_existence(IconFishingNoFish):
