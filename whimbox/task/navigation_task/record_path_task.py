@@ -16,6 +16,7 @@ from whimbox.view_and_move.move import *
 from whimbox.view_and_move.view import *
 from whimbox.common.utils.utils import save_json
 from whimbox.map.convert import convert_PngMapPx_to_GameLoc
+from whimbox.common.scripts_manager import *
 
 
 class RecordPathTask(TaskTemplate):
