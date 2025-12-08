@@ -6,8 +6,7 @@ import os
 
 from whimbox.common.logger import logger
 from whimbox.common.handle_lib import HANDLE_OBJ
-from whimbox.common.path_lib import SCRIPT_PATH
-from whimbox.task.navigation_task.common import path_manager
+from whimbox.common.scripts_manager import scripts_manager
 
 
 class PathSelectionDialog(QDialog):
@@ -391,13 +390,13 @@ class PathSelectionDialog(QDialog):
     
     def open_path_folder(self):
         """打开路线文件夹"""
-        res, msg = path_manager.open_path_folder()
+        res, msg = scripts_manager.open_path_folder()
         if not res:
             QMessageBox.warning(self, "提示", msg)
     
     def reload_paths(self):
         """刷新路径列表"""
-        path_manager.init_path_dict()
+        scripts_manager.init_scripts_dict()
         self.load_paths()
         self.reset_filters()
 
@@ -410,7 +409,7 @@ class PathSelectionDialog(QDialog):
             count = self.filter_count if self.filter_count and self.filter_count > 0 else None
             
             # 查询路径
-            paths = path_manager.query_path(target=target, type=path_type, count=count)
+            paths = scripts_manager.query_path(target=target, type=path_type, count=count)
             
             # 清空表格
             self.path_list.setRowCount(0)
@@ -565,7 +564,7 @@ class PathSelectionDialog(QDialog):
             return
         
         # 调用 PathManager 的删除方法
-        deleted_count = path_manager.delete_path(path_name)
+        deleted_count = scripts_manager.delete_path(path_name)
         
         if deleted_count > 0:
             QMessageBox.information(self, "成功", f"已删除路线「{path_name}」")

@@ -1,5 +1,5 @@
 import whimbox.task.daily_task as daily_task
-from whimbox.task.navigation_task.common import path_manager
+from whimbox.common.scripts_manager import scripts_manager
 from whimbox.task.navigation_task.auto_path_task import AutoPathTask
 from whimbox.task.navigation_task.record_path_task import RecordPathTask
 from whimbox.task.photo_task.daily_photo_task import DailyPhotoTask
@@ -143,7 +143,7 @@ async def navigation_task(target=None, type=None, count=None) -> dict:
         (target=发卡蚱蜢, count=1)
         (type=钓鱼, count=3)
     """
-    path_record = path_manager.query_path(target=target, type=type, count=count, return_one=True)
+    path_record = scripts_manager.query_path(target=target, type=type, count=count, return_one=True)
     if path_record is None:
         return {
             "status": STATE_TYPE_ERROR,
@@ -165,7 +165,7 @@ async def load_path(path_name: str) -> dict:
     Returns:
         dict: 包含操作状态的字典，包含status和message字段
     """
-    path_record = path_manager.query_path(path_name=path_name)
+    path_record = scripts_manager.query_path(path_name=path_name)
     if path_record is None:
         return {
             "status": STATE_TYPE_ERROR,
@@ -193,7 +193,7 @@ async def open_path_folder() -> dict:
     """
     打开路线文件夹
     """
-    res, msg = path_manager.open_path_folder()
+    res, msg = scripts_manager.open_path_folder()
     return {
         "status": STATE_TYPE_SUCCESS if res else STATE_TYPE_ERROR,
         "message": msg

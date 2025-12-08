@@ -44,6 +44,7 @@ class AllInOneTask(TaskTemplate):
         task_dict = {
             DAILY_TASK_PICKUP: AutoPathTask(path_name="朝夕心愿_采集", excepted_num=5),
             DAILY_TASK_CATCH_INSECT: AutoPathTask(path_name="朝夕心愿_捕虫", excepted_num=3),
+            DAILY_TASK_MINIGAME: AutoPathTask(path_name="朝夕心愿_小游戏"),
             DAILY_TASK_GET_BLESS: daily_task.BlessTask(),
             DAILY_TASK_JIHUA: daily_task.JihuaTask(),
             DAILY_TASK_MONSTER: daily_task.MonsterTask(),

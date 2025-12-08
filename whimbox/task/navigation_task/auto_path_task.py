@@ -11,8 +11,9 @@ from whimbox.ability.ability import ability_manager
 from whimbox.action.pickup import PickupTask
 from whimbox.action.catch_insect import CatchInsectTask
 from whimbox.action.clean_animal import CleanAnimalTask
+from whimbox.task.minigame_task.minigame_task import MinigameTask
 from whimbox.action.fishing import FishingTask
-from whimbox.task.navigation_task.common import path_manager
+from whimbox.common.scripts_manager import *
 from whimbox.map.convert import convert_GameLoc_to_PngMapPx
 from whimbox.ui.ui import ui_control
 from whimbox.ui.page_assets import page_main
@@ -27,7 +28,7 @@ class AutoPathTask(TaskTemplate):
             self.path_info = path_record.info
             self.path_points = copy.deepcopy(path_record.points)
         elif path_name is not None:
-            path_record = path_manager.query_path(path_name=path_name)
+            path_record = scripts_manager.query_path(path_name=path_name)
             if path_record is None:
                 raise ValueError(f"路线{path_name}不存在")
             self.path_info = path_record.info
@@ -220,6 +221,9 @@ class AutoPathTask(TaskTemplate):
                         time.sleep(float(wait_time))
                     elif self.target_point.action == ACTION_KEY_CLICK:
                         itt.key_press(self.target_point.action_params)
+                    elif self.target_point.action == ACTION_MINIGAME:
+                        task = MinigameTask(self.target_point.action_params)
+                        task.task_run()
                     
                 # 当行动模式切换时停一下，避免因为状态切换时图标显示比较乱而错判
                 self.need_move_mode = self.target_point.move_mode
@@ -311,6 +315,6 @@ class AutoPathTask(TaskTemplate):
 
 
 if __name__ == "__main__":
-    task = AutoPathTask(path_name="朝夕心愿_捕虫")
+    task = AutoPathTask(path_name="朝夕心愿_小游戏")
     task_result = task.task_run()
     print(task_result.to_dict())

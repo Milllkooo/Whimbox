@@ -231,6 +231,16 @@ def skip_to_page_main():
             itt.key_press(keybind.KEYBIND_INTERACTION)
         else:
             break
+
+def skip_dialog():
+    stop_flag = get_current_stop_flag()
+    while not stop_flag.is_set():
+        time.sleep(0.5)
+        if itt.get_img_existence(IconSkipDialog):
+            itt.key_press(keybind.KEYBIND_INTERACTION)
+        else:
+            break
+        
         
             
 if __name__ == "__main__":

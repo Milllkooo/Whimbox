@@ -62,8 +62,8 @@
   "AreaEscEntrances": {
     "rel_path": "imgs\\Windows\\UI\\AreaEscEntrances.jpg"
   },
-  "AreaFPickup": {
-    "rel_path": "imgs\\Windows\\General\\AreaFPickup.jpg"
+  "AreaPickup": {
+    "rel_path": "imgs\\Windows\\General\\AreaPickup.png"
   },
   "AreaFishingDetection": {
     "rel_path": "imgs\\Windows\\Fishing\\AreaFishingDetection.jpg"

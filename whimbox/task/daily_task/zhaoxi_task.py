@@ -29,13 +29,13 @@ zxxy_task_info_list = [
     {
         "key_words": ["植物"],
         "score": 200,
-        "priority": 5,
+        "priority": 4,
         "task_name": DAILY_TASK_PICKUP
     },
     {
         "key_words": ["昆虫"],
         "score": 200,
-        "priority": 5,
+        "priority": 4,
         "task_name": DAILY_TASK_CATCH_INSECT
     },
     {
@@ -47,8 +47,8 @@ zxxy_task_info_list = [
     {
         "key_words": ["小游戏"],
         "score": 200,
-        "priority": 0,
-        "task_name": DAILY_TASK_MINI_GAME
+        "priority": 4,
+        "task_name": DAILY_TASK_MINIGAME
     },
     {
         "key_words": ["活跃能量"],
