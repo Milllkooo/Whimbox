@@ -380,6 +380,7 @@ class Map(MiniMap, BigMap):
             time.sleep(0.5)
         # itt.wait_until_stable(threshold=0.9)
         self.init_position(tp_posi) 
+        itt.delay(0.5, comment="等待小地图彻底加载完毕")
         return tp_posi
 
 nikki_map = Map()

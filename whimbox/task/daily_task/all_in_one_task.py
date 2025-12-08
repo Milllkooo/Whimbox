@@ -88,7 +88,7 @@ class AllInOneTask(TaskTemplate):
         zhaoxi_task = daily_task.ZhaoxiTask()
         task_result = zhaoxi_task.task_run()
         self.zhaoxi_todo_list = task_result.data
-        if len(self.zhaoxi_todo_list) == 0:
+        if self.zhaoxi_todo_list and len(self.zhaoxi_todo_list) == 0:
             self.task_result_list['zhaoxi_task'] = True
         else:
             self.task_result_list['zhaoxi_task'] = False
