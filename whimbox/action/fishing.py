@@ -212,6 +212,7 @@ class FishingTask(TaskTemplate):
             return FishingResult.NO_FISH
         
         unknown_state_count = 0
+        strike_times = 0 
         while not self.need_stop():
             if idle_timer.started() and idle_timer.reached():
                 self.switch_fishing()
@@ -221,7 +222,6 @@ class FishingTask(TaskTemplate):
     
             # 连续出现提竿状态的次数，正常应该一次loop中只出现一次
             # 家园钓星如果钓完了，还继续钓，就会出现连续多次提竿状态，可以作为结束的标志
-            strike_times = 0 
             state = self.get_current_state()
             logger.debug(f"当前状态: {state}")
             if state != FishingState.UNKNOWN:
@@ -230,7 +230,7 @@ class FishingTask(TaskTemplate):
                     time.sleep(0.5)
                     continue
                 elif state == FishingState.STRIKE:
-                    if strike_times > 2:
+                    if strike_times > 3:
                         return FishingResult.NO_FISH
                     idle_timer.clear()
                     self.handle_strike()
