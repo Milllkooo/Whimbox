@@ -11,8 +11,9 @@ from whimbox.common.handle_lib import HANDLE_OBJ
 from whimbox.common.logger import logger
 from whimbox.common.utils.utils import get_active_window_process_name
 from whimbox.common.cvars import PROCESS_NAME
+from whimbox.config.config import global_config
 
-from whimbox.ingame_ui.components import CollapsedChatWidget, SettingsDialog, ChatView, PathSelectionDialog, FunctionView
+from whimbox.ingame_ui.components import SettingsDialog, ChatView, PathSelectionDialog, FunctionView
 from whimbox.mcp_agent import mcp_agent
 from whimbox.ingame_ui.workers.call_worker import TaskCallWorker
 
@@ -27,9 +28,9 @@ class IngameUI(QWidget):
         self.focus_on_game = True
         self.current_view = 'chat'  # 'function' 或 'chat'
         self.waiting_for_task_stop = False  # 等待任务停止标志
+        self.is_minimized = False  # 窗口最小化状态
         
         # UI组件
-        self.collapsed_widget = None
         self.expanded_widget = None
         self.chat_view = None  # ChatView组件
         self.function_view = None  # FunctionView组件
@@ -38,6 +39,14 @@ class IngameUI(QWidget):
         self.path_dialog = None
         self.task_worker = None  # 任务worker
         self.title_label = None  # 标题标签（用于焦点状态显示）
+        
+        # 拖动相关变量
+        self.dragging = False
+        self.drag_position = QPoint()
+        # 从配置文件加载UI窗口的屏幕位置
+        pos_x = global_config.get_int("General", "ui_position_x", 10)
+        pos_y = global_config.get_int("General", "ui_position_y", 10)
+        self.saved_position = QPoint(pos_x, pos_y)
         
         # 初始化UI
         self.init_ui()
@@ -49,12 +58,14 @@ class IngameUI(QWidget):
 
         # 窗口设置
         self.setWindowTitle("奇想盒")
-        self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
+        self.setWindowIcon(QIcon("icon.ico"))
+        self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         hwnd = int(self.winId())
         win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE,
                                win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE) | win32con.WS_EX_TRANSPARENT)
-        self.last_bbox = 0
+        self.position_window()
+        self.acquire_focus()
         
         # 键盘监听
         self.listener = keyboard.Listener(on_press=self.on_key_press)
@@ -70,10 +81,6 @@ class IngameUI(QWidget):
     
     def init_ui(self):
         """初始化UI组件"""
-        # 创建收缩状态组件
-        self.collapsed_widget = CollapsedChatWidget(self)
-        self.collapsed_widget.clicked.connect(self.show_expanded)
-        
         # 创建展开状态组件
         self.create_expanded_widget()
         
@@ -103,6 +110,33 @@ class IngameUI(QWidget):
         layout = QVBoxLayout(self.expanded_widget)
         layout.setContentsMargins(8, 8, 8, 8)
         layout.setSpacing(4)
+        
+        # 创建拖动横条容器（用于居中）
+        drag_bar_container = QHBoxLayout()
+        drag_bar_container.setContentsMargins(0, 0, 0, 0)
+        drag_bar_container.addStretch()
+        
+        # 创建拖动横条
+        drag_bar = QLabel()
+        drag_bar.setFixedSize(200, 8)
+        drag_bar.setCursor(Qt.SizeAllCursor)
+        drag_bar.setStyleSheet("""
+            QLabel {
+                background-color: white;
+                border-radius: 4px;
+                border: 1px solid #BDBDBD;
+            }
+            QLabel:hover {
+                background-color: #E3F2FD;
+                border: 1px solid #2196F3;
+            }
+        """)
+        drag_bar.mousePressEvent = self.drag_bar_mouse_press
+        drag_bar.mouseMoveEvent = self.drag_bar_mouse_move
+        drag_bar.mouseReleaseEvent = self.drag_bar_mouse_release
+        
+        drag_bar_container.addWidget(drag_bar)
+        drag_bar_container.addStretch()
         
         # 标题栏
         title_layout = QHBoxLayout()
@@ -155,7 +189,7 @@ class IngameUI(QWidget):
         
         minimize_button = QPushButton("➖")
         minimize_button.setFixedSize(25, 25)
-        minimize_button.clicked.connect(self.collapse_chat)
+        minimize_button.clicked.connect(self.toggle_minimize)
         minimize_button.setStyleSheet("""
             QPushButton {
                 background-color: #FFF9C4;
@@ -229,6 +263,7 @@ class IngameUI(QWidget):
         self.chat_view.release_focus.connect(self.on_agent_task_release_focus)
         
         # 组装布局
+        layout.addLayout(drag_bar_container)
         layout.addLayout(title_layout)
         layout.addLayout(button_layout)
         layout.addWidget(self.function_view, 1)
@@ -265,6 +300,7 @@ class IngameUI(QWidget):
     
     def on_function_clicked(self, config: dict):
         """统一处理功能按钮点击"""
+        self.give_back_focus()
         shape_ok, width, height = HANDLE_OBJ.check_shape()
         logger.info(f"分辨率: {width}x{height}")
         if not shape_ok:
@@ -384,21 +420,9 @@ class IngameUI(QWidget):
             # 正常完成，只获取焦点（不展开，因为用户可能在聊天界面）
             self.acquire_focus()
     
-    
-    def show_collapsed(self):
-        """显示收缩状态"""
-        self.is_expanded = False
-        if self.expanded_widget:
-            self.expanded_widget.hide()
-        if self.collapsed_widget:
-            self.collapsed_widget.show()
-        self.setGeometry(0, 0, 128, 128)  # 设置小窗口大小
-    
     def show_expanded(self):
         """显示展开状态"""
         self.is_expanded = True
-        if self.collapsed_widget:
-            self.collapsed_widget.hide()
         if self.expanded_widget:
             self.expanded_widget.show()
         self.setGeometry(0, 0, 520, 620)  # 设置大窗口大小
@@ -413,12 +437,19 @@ class IngameUI(QWidget):
         # 延迟设置焦点，确保窗口完全展开
         QTimer.singleShot(100, lambda: self.chat_view.set_focus_to_input() if self.chat_view else None)
     
-    def collapse_chat(self):
-        """收缩聊天界面"""
-        logger.info("Collapsing chat interface")
-        self.show_collapsed()
-        self.position_window()
-        self.give_back_focus()
+    def toggle_minimize(self):
+        """切换窗口最小化状态"""
+        if self.is_minimized or self.windowState() & Qt.WindowMinimized:
+            # 窗口已最小化，恢复窗口
+            self.setWindowState(Qt.WindowActive)
+            self.showNormal()
+            self.is_minimized = False
+            logger.info("Window restored from taskbar")
+        else:
+            # 窗口未最小化，最小化窗口
+            self.showMinimized()
+            self.is_minimized = True
+            logger.info("Window minimized to taskbar")
     
     def close_application(self):
         """关闭应用程序"""
@@ -492,28 +523,7 @@ class IngameUI(QWidget):
         self.update_focus_visual(False, title_text)
 
     def position_window(self):
-        """根据游戏窗口位置调整聊天窗口位置"""
-        if HANDLE_OBJ.get_handle():
-            try:
-                win_bbox = win32gui.GetWindowRect(HANDLE_OBJ.get_handle())
-                
-                if self.is_expanded:
-                    # 展开状态：显示在游戏窗口左下角
-                    chat_x = win_bbox[0] + 10
-                    chat_y = win_bbox[3] - 610
-                else:
-                    # 收缩状态：显示在游戏窗口左上角
-                    chat_x = win_bbox[0] + 10
-                    chat_y = win_bbox[3] - 610
-                
-                self.move(chat_x, chat_y)
-            except Exception as e:
-                logger.error(f"Failed to position window: {e}")
-                # 默认位置
-                self.move(100, 100)
-        else:
-            # 没有游戏窗口时的默认位置
-            self.move(100, 100)
+        self.move(self.saved_position)
 
     def on_slash_pressed(self):
         """处理斜杠键按下事件"""
@@ -542,38 +552,78 @@ class IngameUI(QWidget):
         """处理ESC键按下事件"""
         if win32gui.GetForegroundWindow() != int(self.winId()):
             return
-        if self.is_expanded:
-            self.collapse_chat()
+        self.toggle_minimize()
     
     def update_ui_position(self):
-        """定时更新，处理窗口隐藏和位置"""
-        if not HANDLE_OBJ.is_alive():
-            sys.exit(0)
+        """定时更新，处理窗口隐藏"""
+        # if not HANDLE_OBJ.is_alive():
+        #     sys.exit(0)
 
         active_process_name = get_active_window_process_name()
-        if (not active_process_name == PROCESS_NAME) and (not active_process_name == 'python.exe'):
-            self.hide()
-            if self.settings_dialog:
-                self.settings_dialog.reject()
-            if self.path_dialog:
-                self.path_dialog.reject()
-            return
-        else:
-            if not self.isVisible():
-                self.show()
+        # if (not active_process_name == PROCESS_NAME) and (not active_process_name == 'python.exe'):
+        #     self.hide()
+        #     if self.settings_dialog:
+        #         self.settings_dialog.reject()
+        #     if self.path_dialog:
+        #         self.path_dialog.reject()
+        #     return
+        # else:
+        #     if not self.isVisible():
+        #         self.show()
         
         if self.isVisible():
-            win_bbox = win32gui.GetWindowRect(HANDLE_OBJ.get_handle())
-            if self.last_bbox != win_bbox:
-                self.position_window()
-                self.last_bbox = win_bbox
             if active_process_name == PROCESS_NAME and not self.focus_on_game:
                 self.give_back_focus()
+            elif active_process_name != PROCESS_NAME and self.focus_on_game:
+                self.acquire_focus()
     
     def update_message(self, message: str, type="update_ai_message"):
         """更新聊天消息"""
         if self.chat_view:
             self.chat_view.ui_update_signal.emit(type, message)
+    
+    def drag_bar_mouse_press(self, event):
+        """拖动横条按下事件"""
+        if event.button() == Qt.LeftButton:
+            self.dragging = True
+            self.drag_position = event.globalPos() - self.frameGeometry().topLeft()
+            event.accept()
+    
+    def drag_bar_mouse_move(self, event):
+        """拖动横条移动事件"""
+        if self.dragging and event.buttons() == Qt.LeftButton:
+            # 计算新位置（基于屏幕坐标）
+            new_pos = event.globalPos() - self.drag_position
+            self.move(new_pos)
+            # 更新保存的位置
+            self.saved_position = new_pos
+            event.accept()
+    
+    def drag_bar_mouse_release(self, event):
+        """拖动横条释放事件"""
+        if event.button() == Qt.LeftButton:
+            self.dragging = False
+            # 保存位置到配置文件
+            if self.saved_position:
+                global_config.set("General", "ui_position_x", self.saved_position.x())
+                global_config.set("General", "ui_position_y", self.saved_position.y())
+                global_config.save()
+                logger.info(f"UI position saved: ({self.saved_position.x()}, {self.saved_position.y()})")
+            event.accept()
+    
+    def changeEvent(self, event):
+        """处理窗口状态变化事件"""
+        if event.type() == QEvent.WindowStateChange:
+            if self.windowState() & Qt.WindowMinimized:
+                # 窗口被最小化
+                self.is_minimized = True
+                logger.info("Window minimized")
+            else:
+                # 窗口被恢复
+                if self.is_minimized:
+                    self.is_minimized = False
+                    logger.info("Window restored")
+        super().changeEvent(event)
 
 
     # def log_poster(self, log_str: str):

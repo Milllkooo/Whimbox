@@ -1,5 +1,5 @@
 import psutil
-import win32gui, win32process
+import win32gui, win32process, win32con
 from whimbox.common.cvars import PROCESS_NAME
 
 def _get_handle():
@@ -37,6 +37,9 @@ class handle_obj():
         
     def set_foreground(self):
         if self.handle:
+            # 如果窗口被最小化，先恢复显示
+            if win32gui.IsIconic(self.handle):
+                win32gui.ShowWindow(self.handle, win32con.SW_RESTORE)
             win32gui.SetForegroundWindow(self.handle)
     
     def is_alive(self):
@@ -52,7 +55,9 @@ class handle_obj():
     def check_shape(self):
         if self.handle:
             _, _, width, height = win32gui.GetClientRect(self.handle)
-            if width/height == 1920/1080:
+            if height == 0:
+                return False, 0, 0
+            elif width/height == 1920/1080:
                 if height < 1080 or height > 1440:
                     return False, width, height
                 else:

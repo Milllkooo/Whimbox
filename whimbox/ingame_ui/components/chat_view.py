@@ -231,6 +231,7 @@ class ChatView(QWidget):
     
     def send_message(self):
         """发送消息并处理"""
+        HANDLE_OBJ.set_foreground()
         shape_ok, width, height = HANDLE_OBJ.check_shape()
         logger.info(f"分辨率: {width}x{height}")
         if not shape_ok:

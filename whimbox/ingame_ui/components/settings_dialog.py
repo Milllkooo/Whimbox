@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-from whimbox.common.handle_lib import HANDLE_OBJ
 from whimbox.common.logger import logger
 from whimbox.config.default_config import DEFAULT_CONFIG
 from whimbox.config.config import global_config
@@ -409,31 +408,9 @@ class SettingsDialog(QDialog):
         self.save_button.setText("保存")
     
     def show_centered(self):
-        """在游戏窗口中央显示对话框"""
-        if HANDLE_OBJ.get_handle():
-            try:
-                # 获取游戏窗口的位置和大小
-                game_rect = win32gui.GetWindowRect(HANDLE_OBJ.get_handle())
-                game_x, game_y, game_right, game_bottom = game_rect
-                game_width = game_right - game_x
-                game_height = game_bottom - game_y
-                
-                # 计算对话框居中位置
-                dialog_x = game_x + (game_width - self.width()) // 2
-                dialog_y = game_y + (game_height - self.height()) // 2
-                
-                self.move(dialog_x, dialog_y)
-            except Exception as e:
-                logger.error(f"Failed to center dialog: {e}")
-                # 如果失败，使用屏幕居中
-                screen = QApplication.desktop().screenGeometry()
-                self.move((screen.width() - self.width()) // 2,
-                         (screen.height() - self.height()) // 2)
-        else:
-            # 没有游戏窗口时使用屏幕居中
-            screen = QApplication.desktop().screenGeometry()
-            self.move((screen.width() - self.width()) // 2,
-                     (screen.height() - self.height()) // 2)
+        screen = QApplication.desktop().screenGeometry()
+        self.move((screen.width() - self.width()) // 2,
+                    (screen.height() - self.height()) // 2)
         
         self.show()
         self.raise_()

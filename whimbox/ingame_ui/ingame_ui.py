@@ -2,7 +2,7 @@
 游戏内UI模块 - 重构版本
 
 这个模块提供了一个简洁的入口点，将原来的大文件拆分为多个组件：
-- components/: UI组件（ChatMessage, ChatMessageWidget, CollapsedChatWidget, AIStatusBar）
+- components/: UI组件（ChatMessage, ChatMessageWidget, AIStatusBar）
 - workers/: 工作线程（QueryWorker）
 - main_ui.py: 主UI类（IngameUI）
 """
