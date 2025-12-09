@@ -6,7 +6,6 @@ from PyQt5.QtGui import *
 from pynput import keyboard
 import sys
 from importlib.metadata import version, PackageNotFoundError
-from pathlib import Path
 
 from whimbox.common.handle_lib import HANDLE_OBJ
 from whimbox.common.logger import logger
@@ -58,10 +57,10 @@ class IngameUI(QWidget):
 
         # 窗口设置
         self.setWindowTitle("奇想盒")
-        # 获取打包后的图标路径
-        icon_path = Path(__file__).parent.parent / "assets" / "icon.ico"
-        if icon_path.exists():
-            self.setWindowIcon(QIcon(str(icon_path)))
+        # # 获取打包后的图标路径
+        # icon_path = Path(__file__).parent.parent / "assets" / "icon.ico"
+        # if icon_path.exists():
+        #     self.setWindowIcon(QIcon(str(icon_path)))
         self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         hwnd = int(self.winId())
