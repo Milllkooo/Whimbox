@@ -58,16 +58,16 @@ def is_admin():
         return False
 
 
-def get_active_window_process_name():
-    try:
-        pid = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
-        name = psutil.Process(pid[-1]).name()
-        if name:
-            return name
-        else:
-            return "unknown"
-    except:
-        pass
+# def get_active_window_process_name():
+#     try:
+#         pid = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
+#         name = psutil.Process(pid[-1]).name()
+#         if name:
+#             return name
+#         else:
+#             return "unknown"
+#     except:
+#         pass
 
 
 def verify_path(root):

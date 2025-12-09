@@ -12,7 +12,6 @@ from whimbox.common.timer_module import TimeoutTimer, AdvanceTimer
 from whimbox.common.cvars import *
 from whimbox.common.path_lib import ROOT_PATH
 from whimbox.common.logger import logger, get_logger_format_date
-from whimbox.common.utils.utils import get_active_window_process_name
 from whimbox.common.utils.img_utils import crop, process_with_hsv_limit, similar_img, add_padding
 from whimbox.config.config import global_config
 from whimbox.ui.ui_assets import IconShopFeature, IconGachaFeature
@@ -23,31 +22,6 @@ if ocr_type == 'rapid':
 else:
     raise ValueError(f"ocr配置错误：{ocr_type}")
 
-def before_operation(print_log=False):
-    def outwrapper(func):
-        def wrapper(*args, **kwargs):
-            if print_log:
-                func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-                func_name_2 = inspect.getframeinfo(inspect.currentframe().f_back.f_back)[2]
-                logger.trace(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
-            
-            if not itt._can_interact(func.__name__):
-                raise Exception("中断操作：误入商城和抽卡界面")
-
-            winname = get_active_window_process_name()
-            if winname != PROCESS_NAME:
-                stop_flag = get_current_stop_flag()
-                while True:
-                    if stop_flag.is_set():
-                        return None
-                    if get_active_window_process_name() == PROCESS_NAME:
-                        logger.info("恢复操作")
-                        break
-                    logger.info(f"当前窗口焦点为{winname}不是游戏窗口，操作暂停 {str(5 - (time.time()%5))} 秒")
-                    time.sleep(5 - (time.time()%5))
-            return func(*args, **kwargs)
-        return wrapper
-    return outwrapper
 
 GetDC = ctypes.windll.user32.GetDC
 CreateCompatibleDC = ctypes.windll.gdi32.CreateCompatibleDC
@@ -68,10 +42,8 @@ class InteractionBGD:
     thanks for https://zhuanlan.zhihu.com/p/361569101
     """
 
-    RECAPTURE_LIMIT = 0.5 # Screenshot Cache Maximum Interval
-    
-
-    def __init__(self):
+    def __init__(self, hwnd_handler):
+        self.hwnd_handler = hwnd_handler
         logger.info("InteractionBGD created")
         self.WHEEL_DELTA = 120
         self.DEFAULT_DELAY_TIME = 0.05
@@ -79,9 +51,9 @@ class InteractionBGD:
         self.capture_obj = None
         self.operation_lock = threading.Lock()
         import whimbox.interaction.interaction_normal
-        self.itt_exec = whimbox.interaction.interaction_normal.InteractionNormal()
+        self.itt_exec = whimbox.interaction.interaction_normal.InteractionNormal(self.hwnd_handler)
         from whimbox.interaction.capture import PrintWindowCapture
-        self.capture_obj = PrintWindowCapture()
+        self.capture_obj = PrintWindowCapture(self.hwnd_handler)
 
 
     def capture(self, posi=None, jpgmode=NORMAL_CHANNELS):
@@ -323,6 +295,33 @@ class InteractionBGD:
                 return False
         return True
 
+    @staticmethod
+    def before_operation(print_log=False):
+        """装饰器方法：在操作前进行检查"""
+        def outwrapper(func):
+            def wrapper(self, *args, **kwargs):
+                if print_log:
+                    func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+                    func_name_2 = inspect.getframeinfo(inspect.currentframe().f_back.f_back)[2]
+                    logger.trace(f" operation: {func.__name__} | args: {args} | {kwargs} | function name: {func_name} & {func_name_2}")
+                
+                if not self._can_interact(func.__name__):
+                    raise Exception("中断操作：误入商城和抽卡界面")
+                
+                if not self.hwnd_handler.is_foreground():
+                    stop_flag = get_current_stop_flag()
+                    while True:
+                        if stop_flag.is_set():
+                            return None
+                        if self.hwnd_handler.is_foreground():
+                            logger.info("恢复操作")
+                            break
+                        logger.info(f"前台窗口不是目标窗口，操作暂停 {str(5 - (time.time()%5))} 秒")
+                        time.sleep(5 - (time.time()%5))
+                return func(self, *args, **kwargs)
+            return wrapper
+        return outwrapper
+
     @before_operation()
     def left_click(self):
         """左键点击"""
@@ -476,7 +475,8 @@ class InteractionBGD:
         logger.warning(f"Snapshot saved to {img_path}")
         cv2.imwrite(img_path, img)        
 
-itt = InteractionBGD()
+from whimbox.common.handle_lib import HANDLE_OBJ
+itt = InteractionBGD(HANDLE_OBJ)
 
 
 if __name__ == '__main__':

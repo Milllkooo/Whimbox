@@ -2,39 +2,53 @@ import psutil
 import win32gui, win32process, win32con
 from whimbox.common.cvars import PROCESS_NAME
 
-def _get_handle():
+def get_hwnd_for_pid(pid):
+    hwnds = []
+
+    def callback(hwnd, hwnds):
+        _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
+        # 检查是否属于目标进程，且窗口是可见并且不是子窗口
+        if found_pid == pid and win32gui.IsWindowVisible(hwnd) and win32gui.GetParent(hwnd) == 0:
+            hwnds.append(hwnd)
+        return True
+
+    win32gui.EnumWindows(callback, hwnds)
+    if hwnds:
+        return hwnds[0]
+    else:
+        return 0
+
+def _get_handle(process_name=None, pid=None):
     """获得游戏窗口句柄"""
-    
-    def get_hwnds_for_pid(pid):
-        hwnds = []
+    if pid is not None:
+        hwnd = get_hwnd_for_pid(pid)
+        return hwnd
+    elif process_name is not None:
+        for proc in psutil.process_iter(['pid', 'name']):
+            if proc.info['name'] == process_name:
+                pid = proc.info['pid']
+                hwnd = get_hwnd_for_pid(pid)
+                return hwnd
+        return 0
 
-        def callback(hwnd, hwnds):
-            _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
-            # 检查是否属于目标进程，且窗口是可见并且不是子窗口
-            if found_pid == pid and win32gui.IsWindowVisible(hwnd) and win32gui.GetParent(hwnd) == 0:
-                hwnds.append(hwnd)
-            return True
-
-        win32gui.EnumWindows(callback, hwnds)
-        return hwnds
-    
-    for proc in psutil.process_iter(['pid', 'name']):
-        if proc.info['name'] == PROCESS_NAME:
-            hwnds = get_hwnds_for_pid(proc.info['pid'])
-            if hwnds:
-                return hwnds[0]
-    return 0
-
-class handle_obj():
-    def __init__(self) -> None:
-        self.handle = _get_handle()
+class ProcessHandler():
+    def __init__(self, process_name=None, pid=None) -> None:
+        self.process_name = process_name
+        self.pid = pid
+        if self.process_name is not None:
+            self.handle = _get_handle(self.process_name)
+        elif self.pid is not None:
+            self.handle = _get_handle(self.pid)
 
     def get_handle(self):
         return self.handle
 
     def refresh_handle(self):
-        self.handle = _get_handle()
-        
+        self.handle = _get_handle(self.process_name, self.pid)
+    
+    def is_foreground(self):
+        return win32gui.GetForegroundWindow() == self.handle
+
     def set_foreground(self):
         if self.handle:
             # 如果窗口被最小化，先恢复显示
@@ -67,7 +81,7 @@ class handle_obj():
         return False, 0, 0
             
 
-HANDLE_OBJ = handle_obj()
+HANDLE_OBJ = ProcessHandler(PROCESS_NAME)
 
 if __name__ == '__main__':
     pass

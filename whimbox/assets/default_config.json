@@ -21,6 +21,12 @@
             "description": "UI窗口在屏幕上的绝对垂直位置（像素）"
         }
     },
+    "Path":{
+        "launcher_path": {
+            "value": "",
+            "description": "叠纸启动器路径(launcher.exe的完整路径)"
+        }
+    },
     "BackgroundTask": {
         "auto_fishing": {
             "value": "false",

@@ -9,8 +9,6 @@ from importlib.metadata import version, PackageNotFoundError
 
 from whimbox.common.handle_lib import HANDLE_OBJ
 from whimbox.common.logger import logger
-from whimbox.common.utils.utils import get_active_window_process_name
-from whimbox.common.cvars import PROCESS_NAME
 from whimbox.config.config import global_config
 
 from whimbox.ingame_ui.components import SettingsDialog, ChatView, PathSelectionDialog, FunctionView
@@ -556,25 +554,10 @@ class IngameUI(QWidget):
     
     def update_ui_position(self):
         """定时更新，处理窗口隐藏"""
-        # if not HANDLE_OBJ.is_alive():
-        #     sys.exit(0)
-
-        active_process_name = get_active_window_process_name()
-        # if (not active_process_name == PROCESS_NAME) and (not active_process_name == 'python.exe'):
-        #     self.hide()
-        #     if self.settings_dialog:
-        #         self.settings_dialog.reject()
-        #     if self.path_dialog:
-        #         self.path_dialog.reject()
-        #     return
-        # else:
-        #     if not self.isVisible():
-        #         self.show()
-        
         if self.isVisible():
-            if active_process_name == PROCESS_NAME and not self.focus_on_game:
+            if HANDLE_OBJ.is_foreground() and not self.focus_on_game:
                 self.give_back_focus()
-            elif active_process_name != PROCESS_NAME and self.focus_on_game:
+            elif not HANDLE_OBJ.is_foreground() and self.focus_on_game:
                 self.acquire_focus()
     
     def update_message(self, message: str, type="update_ai_message"):

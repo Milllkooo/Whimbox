@@ -70,6 +70,7 @@ class BackgroundTaskManager:
         # 后台任务实例
         self.background_task = None
         self.background_thread = None
+        self.is_game_started = False
         
         # 功能配置（默认全部关闭，设置不同的执行间隔）
         self.feature_configs = {
@@ -175,9 +176,22 @@ class BackgroundTaskManager:
         """检查后台任务是否在运行"""
         return self.background_task is not None and self.background_task.is_running()
 
-
-# 全局后台任务管理器实例
-background_manager = BackgroundTaskManager()
+    def init_background_task(self):
+        """初始化后台任务"""
+        try:
+            # 检查是否有启用的功能
+            any_enabled = any(
+                self.is_feature_enabled(f) 
+                for f in BackgroundFeature
+            )
+            
+            if any_enabled:
+                logger.info("检测到有启用的后台功能，自动启动后台任务")
+                self.start_background_task()
+            else:
+                logger.info("未检测到启用的后台功能")
+        except Exception as e:
+            logger.error(f"初始化后台任务失败: {e}")
 
 
 class BackgroundTask:
@@ -213,12 +227,14 @@ class BackgroundTask:
         while not self.stop_event.is_set():
             if not HANDLE_OBJ.is_alive():
                 time.sleep(0.5)
+                HANDLE_OBJ.refresh_handle()
                 continue
             shape_ok, _, _ = HANDLE_OBJ.check_shape()
             if not shape_ok:
                 time.sleep(0.5)
                 continue
             break
+        self.manager.is_game_started = True
         logger.info("后台小工具开始运行")
         
         try:
@@ -341,6 +357,10 @@ class BackgroundTask:
             return True
         return False
 
+
+# 全局后台任务管理器实例
+background_manager = BackgroundTaskManager()
+background_manager.init_background_task()
 
 if __name__ == "__main__":
     # 测试代码

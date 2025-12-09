@@ -15,26 +15,6 @@ from starlette.responses import JSONResponse
 mcp = FastMCP('whimbox_server')
 
 
-def init_background_task():
-    """初始化后台任务 - 在 MCP server 启动时调用"""
-    from whimbox.task.background_task import background_manager, BackgroundFeature
-    
-    try:
-        # 检查是否有启用的功能
-        any_enabled = any(
-            background_manager.is_feature_enabled(f) 
-            for f in BackgroundFeature
-        )
-        
-        if any_enabled:
-            logger.info("MCP server 启动时检测到有启用的后台功能，自动启动后台任务")
-            background_manager.start_background_task()
-        else:
-            logger.info("MCP server 启动时未检测到启用的后台功能")
-    except Exception as e:
-        logger.error(f"初始化后台任务失败: {e}")
-
-
 @mcp.tool()
 async def jihua_task(target_material=None, cost_material=None) -> dict:
     """
@@ -260,10 +240,6 @@ def get_available_port(max_attempts: int = 100) -> int:
 def start_mcp_server():
     logger.debug("开始初始化MCP服务器")
     get_available_port()
-    
-    # 初始化后台任务
-    init_background_task()
-
     mcp.run(
         show_banner=False,
         transport="streamable-http",

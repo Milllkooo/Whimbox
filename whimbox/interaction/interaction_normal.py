@@ -10,7 +10,8 @@ from whimbox.common.base_threading import ProcessThreading
 
 class InteractionNormal(InteractionTemplate):
 
-    def __init__(self):
+    def __init__(self, hwnd_handler):
+        self.hwnd_handler = hwnd_handler
         self.WM_MOUSEMOVE = 0x0200
         self.WM_LBUTTONDOWN = 0x0201
         self.WM_LBUTTONUP = 0x202
@@ -121,7 +122,7 @@ class InteractionNormal(InteractionTemplate):
             # abs_x = int(x * 65536 / win32api.GetSystemMetrics(win32con.SM_CXSCREEN))
             # abs_y = int(y * 65536 / win32api.GetSystemMetrics(win32con.SM_CYSCREEN))
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE|win32con.MOUSEEVENTF_ABSOLUTE, abs_x, abs_y)
-            screen_x, screen_y = win32gui.ClientToScreen(HANDLE_OBJ.get_handle(), (x, y))
+            screen_x, screen_y = win32gui.ClientToScreen(self.hwnd_handler.get_handle(), (x, y))
             win32api.SetCursorPos((screen_x, screen_y))
 
 KEY_DOWN = 'KeyDown'
