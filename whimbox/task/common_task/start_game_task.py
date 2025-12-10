@@ -6,6 +6,7 @@ from whimbox.common.handle_lib import ProcessHandler
 from whimbox.interaction.interaction_core import InteractionBGD
 from whimbox.api.ocr_rapid import ocr
 from whimbox.common.handle_lib import HANDLE_OBJ
+from whimbox.ui.ui import ui_control
 from whimbox.ui.ui_assets import *
 from whimbox.interaction.interaction_core import itt
 from whimbox.task.background_task.background_task import background_manager
@@ -22,7 +23,7 @@ class StartGameTask(TaskTemplate):
         # 判断游戏是否已经在运行
         if HANDLE_OBJ.get_handle():
             self.update_task_result(status=STATE_TYPE_SUCCESS, message="游戏已经在运行，无需自动启动")
-            return STEP_NAME_FINISH
+            return
         
         # 判断启动器是否已经在运行
         launcher_handle = ProcessHandler(process_name="xstarter.exe")
@@ -103,7 +104,7 @@ class StartGameTask(TaskTemplate):
                     if retry_time <= 0:
                         self.task_stop(f"当前游戏分辨率为{width}x{height}，请先将游戏的显示模式设置为窗口模式，分辨率设置为1920x1080或2560x1440")
                         return
-        if itt.get_img_existence(IconPageMainFeature):
+        if ui_control.is_valid_page():
             self.update_task_result(status=STATE_TYPE_SUCCESS, message="成功进入游戏")
             return
         # 检测是否在登录界面了
@@ -111,6 +112,8 @@ class StartGameTask(TaskTemplate):
             time.sleep(1)
             if itt.get_img_existence(IconPageLoginFeature):
                 break
+            else:
+                itt.key_press('esc')
         # 不停点击，直到进入loading界面
         while not self.need_stop():
             time.sleep(1)
