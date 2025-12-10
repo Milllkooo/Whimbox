@@ -181,6 +181,76 @@
         "track": true,
         "jihua": true
     },
+    "袋袋果": {
+        "game_img": "T_Icon_item_INS0022",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "结结蕨": {
+        "game_img": "T_Icon_item_INS0048",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "垂穗魔果": {
+        "game_img": "T_Icon_item_INS0055",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "草棘果": {
+        "game_img": "T_Icon_item_INS0047",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "流金蜜": {
+        "game_img": "T_Icon_item_INT0005F",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "针蕊水仙": {
+        "game_img": "T_Icon_item_INS0051",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "蓝风铃": {
+        "game_img": "T_Icon_item_INS0050",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "蜜妆粉": {
+        "game_img": "T_Icon_item_INS0123R2",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "珠贝花": {
+        "game_img": "T_Icon_item_INS0014",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "小野菊": {
+        "game_img": "T_Icon_item_INS0029R2",
+        "type": "plant",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
 
     "笔刷鱼": {
         "game_img": "T_Icon_item_AN0024",
@@ -303,6 +373,62 @@
     },
     "云尾锦鲤": {
         "game_img": "T_Icon_item_ANW0051R2",
+        "type": "fish",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "恋恋左心鱼": {
+        "game_img": "T_Icon_item_ANW0041",
+        "type": "fish",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "恋恋右心鱼": {
+        "game_img": "T_Icon_item_ANW0038",
+        "type": "fish",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "晕妆鱼": {
+        "game_img": "T_Icon_item_AN0057",
+        "type": "fish",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "裁尺鱼": {
+        "game_img": "T_Icon_item_AN0171",
+        "type": "fish",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "骨盔鱼": {
+        "game_img": "T_Icon_item_AN0161",
+        "type": "fish",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "星绸鱼": {
+        "game_img": "T_Icon_item_AN0173",
+        "type": "fish",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "斓焰鱼": {
+        "game_img": "T_Icon_item_AN0172",
+        "type": "fish",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "彩翎鱼": {
+        "game_img": "T_Icon_item_AN0160",
         "type": "fish",
         "dig": true,
         "track": true,
@@ -498,6 +624,132 @@
         "track": true,
         "jihua": true
     },
+    "板刷狸绒": {
+        "game_img": "T_Icon_item_AN0163",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "盗面毛团": {
+        "game_img": "T_Icon_item_AN0177",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "扣扣毛球": {
+        "game_img": "T_Icon_item_AN0178.png",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "行鹭羽": {
+        "game_img": "T_Icon_item_AN0219",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "草裙毛团": {
+        "game_img": "T_Icon_item_AN0153",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "绒领毛团": {
+        "game_img": "T_Icon_item_AN0151",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "王子鹰羽": {
+        "game_img": "T_Icon_item_AN0149",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "荧夜鬃": {
+        "game_img": "T_Icon_item_AN0221",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "咕咕之羽": {
+        "game_img": "T_Icon_item_AN0162",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "草蓬团绒": {
+        "game_img": "T_Icon_item_AN0237",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "巨兽鬃绒": {
+        "game_img": "T_Icon_item_AN0138Head",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "巨兽掌绒": {
+        "game_img": "T_Icon_item_AN0138Claw",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "巨兽背绒": {
+        "game_img": "T_Icon_item_AN0138Back",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "春兽茸团": {
+        "game_img": "T_Icon_item_AN0208",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "东桠绒花": {
+        "game_img": "T_Icon_item_AN0138R8",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "蜜妆兔绒": {
+        "game_img": "T_Icon_item_ANQ0053R2",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "沙沙毛团": {
+        "game_img": "T_Icon_item_ANQ0044R2",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
+    "巨兽细绒": {
+        "game_img": "T_Icon_item_AN0138R6",
+        "type": "animal",
+        "dig": false,
+        "track": true,
+        "jihua": true
+    },
 
     "发卡蚱蜢":{
         "game_img": "T_Icon_item_AN0068",
@@ -625,6 +877,70 @@
         "track": true,
         "jihua": true
     },
+    "发圈蛞蝓": {
+        "game_img": "T_Icon_item_AN0140",
+        "type": "insect",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "木夹跳甲": {
+        "game_img": "T_Icon_item_AN0174",
+        "type": "insect",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "朝朝蝶": {
+        "game_img": "T_Icon_item_AN0158",
+        "type": "insect",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "暮暮蝶": {
+        "game_img": "T_Icon_item_AN0159",
+        "type": "insect",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "裁衣甲": {
+        "game_img": "T_Icon_item_AN0150",
+        "type": "insect",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "陶罐茧": {
+        "game_img": "T_Icon_item_AN0165",
+        "type": "insect",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "青青釉蝉": {
+        "game_img": "T_Icon_item_AN0166",
+        "type": "insect",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "花纹围巾蚯蚓": {
+        "game_img": "T_Icon_item_AN0078R2",
+        "type": "insect",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+    "探险家蜜蜂": {
+        "game_img": "T_Icon_item_ANW0034R2",
+        "type": "insect",
+        "dig": true,
+        "track": true,
+        "jihua": true
+    },
+
     
     "纯真丝线": {
         "game_img": "T_UI_icon_004",
