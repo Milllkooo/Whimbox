@@ -27,4 +27,4 @@ if __name__ == "__main__":
     # while True:
     #     print(itt.get_img_existence(ButtonZxxyRewarded, ret_mode=IMG_RATE, show_res=True))
     #     time.sleep(0.5)
-    itt.key_press("F1")
+    itt.key_press("shift")

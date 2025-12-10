@@ -90,11 +90,19 @@ class InteractionNormal(InteractionTemplate):
 
     def key_down(self, key):
         vk_code = self.get_virtual_keycode(key)
-        win32api.keybd_event(vk_code, 0, 0, 0)
+        if key == 'shift':
+            sc =  win32api.MapVirtualKey(win32con.VK_SHIFT, 0)
+        else:
+            sc = 0
+        win32api.keybd_event(vk_code, sc, 0, 0)
     
     def key_up(self, key):
         vk_code = self.get_virtual_keycode(key)
-        win32api.keybd_event(vk_code, 0, win32con.KEYEVENTF_KEYUP, 0)
+        if key == 'shift':
+            sc =  win32api.MapVirtualKey(win32con.VK_SHIFT, 0)
+        else:
+            sc = 0
+        win32api.keybd_event(vk_code, sc, win32con.KEYEVENTF_KEYUP, 0)
     
     def key_press(self, key):
         self.key_down(key)
