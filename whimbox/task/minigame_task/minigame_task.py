@@ -21,6 +21,7 @@ class MinigameTask(TaskTemplate):
 
     @register_step("与NPC对话开始小游戏")
     def step1(self):
+        itt.delay(1, comment="等待对话交互按钮出现")
         itt.key_press(keybind.KEYBIND_INTERACTION)
         wait_until_appear(IconSkipDialog, 5)
         if itt.get_img_existence(IconPageMainFeature):
@@ -56,8 +57,8 @@ class MinigameTask(TaskTemplate):
                 return 'step4'
             else:
                 self.retry_times += 1
-                self.retry_delay += 0.1
-                self.log_to_gui(f"小游戏失败了，增加0.1秒延迟再试一遍")
+                self.retry_delay -= 0.2
+                self.log_to_gui(f"小游戏失败了，提前0.2秒再试一遍")
                 itt.appear_then_click(ButtonMinigameRetry)
                 time.sleep(0.5)
                 wait_until_appear_then_click(ButtonMinigameRetryOk)

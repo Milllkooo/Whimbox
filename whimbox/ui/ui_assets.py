@@ -40,7 +40,7 @@ IconPickupFeature = ImgIcon(print_log=LOG_NONE, threshold=0.75, gray_limit=(210,
 IconSkip = ImgIcon(print_log=LOG_NONE, threshold=0.75, gray_limit=(210, 255))
 IconClickSkip = ImgIcon(print_log=LOG_ALL, threshold=0.80, gray_limit=(210, 255))
 AreaDialogSelection = Area()
-IconSkipDialog = ImgIcon(print_log=LOG_NONE, threshold=0.75, gray_limit=(210, 255))
+IconSkipDialog = ImgIcon(print_log=LOG_NONE, threshold=0.73, gray_limit=(210, 255))
 IconMovementWalk = ImgIcon(print_log=LOG_NONE, threshold=0.85, hsv_limit=([0, 0, 210], [180, 50, 255]))
 AreaMaterialGetText = Area()
 AreaAbilityButton = Area()
