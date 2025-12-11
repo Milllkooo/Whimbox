@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "whimbox"
-version = "1.3.4"
+version = "1.3.5"
 description = "奇想盒-AI游戏助手"
 readme = "README.md"
 requires-python = "==3.12.8"
@@ -31,6 +31,7 @@ dependencies = [
     "langchain-openai==1.0.1",
     "langchain-anthropic==1.0.0",
     "langchain-deepseek==1.0.0",
+    "langchain-google-genai==4.0.0",
     "loguru==0.7.3",
     "onnxruntime==1.19.0",
     "PyQt5==5.15.11",
