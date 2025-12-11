@@ -32,6 +32,20 @@
             "args": ["init"]
         },
         {
+            "name": "Run Whimbox OneDragon",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/whimbox/main.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "justMyCode": true,
+            "purpose": ["debug-in-terminal"],
+            "args": ["startOneDragon"]
+        },
+        {
             "name": "Python: Current File",
             "type": "debugpy",
             "request": "launch",
