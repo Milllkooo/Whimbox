@@ -107,12 +107,10 @@ class JihuaTask(TaskTemplate):
         if wait_until_appear(IconSkip, retry_time=5):
             itt.delay(0.5, comment="以防万一，这里也加个延迟")
             itt.key_press(keybind.KEYBIND_INTERACTION)
-            if wait_until_appear(IconClickSkip):
-                itt.delay(1, comment="不加延迟，有些电脑就是不行")
-                itt.key_press(keybind.KEYBIND_INTERACTION)
+            if skip_get_award():
                 self.update_task_result(message="激化完成")
                 return
-        raise Exception("卡在激化完成的时候了？！")
+        raise Exception("领取奖励失败")
 
     @register_step("退出激化幻境")
     def step9(self):

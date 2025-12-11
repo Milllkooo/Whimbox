@@ -17,11 +17,13 @@ class MinigameTask(TaskTemplate):
         self.max_retry_times = 2
         self.retry_times = 0
         self.macro_name = macro_name
+        self.retry_delay = 0
 
     @register_step("与NPC对话开始小游戏")
     def step1(self):
+        itt.delay(1, comment="等待对话交互按钮出现")
         itt.key_press(keybind.KEYBIND_INTERACTION)
-        itt.delay(1, comment="等待对话出现")
+        wait_until_appear(IconSkipDialog, 5)
         if itt.get_img_existence(IconPageMainFeature):
             raise Exception("未进入NPC对话")
         skip_dialog()
@@ -43,7 +45,7 @@ class MinigameTask(TaskTemplate):
         def check_stop_func():
             return not itt.get_img_existence(IconPageMainFeature)
 
-        task = RunMacroTask(self.macro_name, check_stop_func=check_stop_func)
+        task = RunMacroTask(self.macro_name, delay=self.retry_delay, check_stop_func=check_stop_func)
         task.task_run()
     
     @ register_step("检查是否失败")
@@ -55,7 +57,8 @@ class MinigameTask(TaskTemplate):
                 return 'step4'
             else:
                 self.retry_times += 1
-                self.log_to_gui(f"小游戏失败了，再试一遍")
+                self.retry_delay -= 0.2
+                self.log_to_gui(f"小游戏失败了，提前0.2秒再试一遍")
                 itt.appear_then_click(ButtonMinigameRetry)
                 time.sleep(0.5)
                 wait_until_appear_then_click(ButtonMinigameRetryOk)
@@ -68,14 +71,15 @@ class MinigameTask(TaskTemplate):
     def step4(self):
         wait_until_appear(IconSkipDialog, 10)
         skip_dialog()
-        if wait_until_appear(IconClickSkip):
-            itt.key_press(keybind.KEYBIND_INTERACTION)
+        if skip_get_award():
+            self.update_task_result(message="成功领取小游戏奖励")
+        else:
+            raise Exception("领取小游戏奖励失败")
         skip_dialog()
         if not scroll_find_click(AreaDialogSelection, "谢谢你", str_match_mode=1):
             raise Exception("未找到对话选项：不了")
         skip_dialog()
 
-
 if __name__ == "__main__":
-    task = MinigameTask()
+    task = MinigameTask("朝夕心愿_小游戏_穿梭大冒险_宏")
     task.task_run()

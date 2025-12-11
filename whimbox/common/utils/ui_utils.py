@@ -239,8 +239,20 @@ def skip_dialog():
         if itt.get_img_existence(IconSkipDialog):
             itt.key_press(keybind.KEYBIND_INTERACTION)
         else:
-            break
-        
+            # 防止遇到什么奇怪的情况，退出前再做一次检查
+            time.sleep(0.5)
+            if not itt.get_img_existence(IconSkipDialog):
+                break
+            else:
+                itt.key_press(keybind.KEYBIND_INTERACTION)
+
+def skip_get_award():
+    if wait_until_appear(IconClickSkip):
+        itt.delay(1, comment="不加延迟，有些电脑就是不行")
+        itt.key_press(keybind.KEYBIND_INTERACTION)
+        return True
+    else:
+        return False
         
             
 if __name__ == "__main__":

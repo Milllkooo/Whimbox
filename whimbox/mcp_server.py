@@ -24,12 +24,13 @@ def check_game_ok(func):
                 "status": STATE_TYPE_ERROR,
                 "message": "游戏未启动，请先启动游戏"
             }
-        shape_ok, _, _ = HANDLE_OBJ.check_shape()
+        shape_ok, width, height = HANDLE_OBJ.check_shape()
         if not shape_ok:
             return {
                 "status": STATE_TYPE_ERROR,
                 "message": "请先将游戏的显示模式设置为窗口模式，分辨率设置为1920x1080或2560x1440"
             }
+        logger.info(f"游戏分辨率正常：{width}x{height}")
         return await func(**kwargs)
     return wrapper
 

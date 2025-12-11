@@ -45,7 +45,7 @@ class MacroSelectionDialog(QDialog):
         title_label = QLabel("🎬 宏选择")
         title_label.setStyleSheet("""
             QLabel {
-                font-size: 18px;
+                font-size: 9pt;
                 font-weight: bold;
                 color: #2196F3;
                 padding: 5px 0;
@@ -59,7 +59,7 @@ class MacroSelectionDialog(QDialog):
         filter_row1.setContentsMargins(0, 8, 0, 4)
         
         # 标签样式
-        label_style = "color: #424242; font-size: 16px; font-weight: bold;"
+        label_style = "color: #424242; font-size: 8pt; font-weight: bold;"
         
         # 宏名称
         name_container = QHBoxLayout()
@@ -74,7 +74,7 @@ class MacroSelectionDialog(QDialog):
                 padding: 8px;
                 border: 1px solid #BDBDBD;
                 border-radius: 4px;
-                font-size: 16px;
+                font-size: 8pt;
                 background-color: white;
             }
             QLineEdit:focus {
@@ -102,7 +102,7 @@ class MacroSelectionDialog(QDialog):
                 color: white;
                 border: none;
                 border-radius: 6px;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -123,7 +123,7 @@ class MacroSelectionDialog(QDialog):
                 color: white;
                 border: none;
                 border-radius: 6px;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -144,7 +144,7 @@ class MacroSelectionDialog(QDialog):
                 color: white;
                 border: none;
                 border-radius: 6px;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -182,7 +182,7 @@ class MacroSelectionDialog(QDialog):
                 border: 2px solid #E0E0E0;
                 border-radius: 8px;
                 background-color: white;
-                font-size: 16px;
+                font-size: 8pt;
                 gridline-color: #DEDEDE;
                 outline: none;
             }
@@ -206,7 +206,7 @@ class MacroSelectionDialog(QDialog):
                 color: white;
                 padding: 4px;
                 border: none;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
             }
             QScrollBar:vertical {
@@ -244,7 +244,7 @@ class MacroSelectionDialog(QDialog):
                 border: none;
                 border-radius: 8px;
                 padding: 10px 20px;
-                font-size: 14px;
+                font-size: 7pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -271,7 +271,7 @@ class MacroSelectionDialog(QDialog):
                 border: none;
                 border-radius: 8px;
                 padding: 10px 20px;
-                font-size: 14px;
+                font-size: 7pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -296,7 +296,7 @@ class MacroSelectionDialog(QDialog):
                 border: none;
                 border-radius: 8px;
                 padding: 10px 20px;
-                font-size: 14px;
+                font-size: 7pt;
                 font-weight: bold;
             }
             QPushButton:hover {

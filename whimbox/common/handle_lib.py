@@ -48,6 +48,9 @@ class ProcessHandler():
     
     def is_foreground(self):
         return win32gui.GetForegroundWindow() == self.handle
+    
+    def is_minimized(self):
+        return win32gui.IsIconic(self.handle)
 
     def set_foreground(self):
         if self.is_alive():

@@ -4,13 +4,13 @@ from whimbox.config.config import global_config
 from whimbox.common.path_lib import find_game_launcher_folder
 from whimbox.common.handle_lib import ProcessHandler
 from whimbox.interaction.interaction_core import InteractionBGD
-from whimbox.api.ocr_rapid import ocr
 from whimbox.common.handle_lib import HANDLE_OBJ
 from whimbox.ui.ui import ui_control
 from whimbox.ui.ui_assets import *
 from whimbox.interaction.interaction_core import itt
 from whimbox.task.background_task.background_task import background_manager
 from whimbox.common.logger import logger
+from whimbox.common.utils.posi_utils import area_center
 
 import os, time
 
@@ -22,7 +22,7 @@ class StartGameTask(TaskTemplate):
     def step1(self):
         # 判断游戏是否已经在运行
         if HANDLE_OBJ.get_handle():
-            self.update_task_result(status=STATE_TYPE_SUCCESS, message="游戏已经在运行，无需自动启动")
+            # self.update_task_result(status=STATE_TYPE_SUCCESS, message="游戏已经在运行，无需自动启动")
             return
         
         # 判断启动器是否已经在运行
@@ -75,44 +75,75 @@ class StartGameTask(TaskTemplate):
         self.log_to_gui("叠纸启动器打开了")
         launcher_handle.set_foreground()
         launcher_itt = InteractionBGD(launcher_handle)
-        retry_time = 3
+        retry_time = 10
         while not self.need_stop() and retry_time > 0:
             time.sleep(1)
-            if launcher_itt.appear_then_click(TextLaunchButton):
+            text = launcher_itt.ocr_single_line(AreaLaunchButton)
+            if text == "":
+                retry_time -= 1
+                continue
+            else:
+                if text != "启动游戏":
+                    # 点击更新，直到按钮变成“启动游戏”
+                    self.log_to_gui("更新游戏中……")
+                    launcher_itt.move_and_click(AreaLaunchButton.center_position())
+                    while not self.need_stop():
+                        time.sleep(1)
+                        text = launcher_itt.ocr_single_line(AreaLaunchButton)
+                        if text == "启动游戏":
+                            break
+                launcher_itt.move_and_click(AreaLaunchButton.center_position())
                 self.log_to_gui("点击启动游戏按钮成功")
                 break
-            retry_time -= 1
         if retry_time <= 0:
             self.task_stop("未找到启动游戏按钮")
             return
 
-    @register_step("进入游戏")
+    @register_step("等待游戏窗口出现，等待分辨率恢复正常")
     def step2(self):
-        # 等待游戏窗口出现
-        self.log_to_gui("等待游戏窗口出现，等待分辨率恢复正常")
-        retry_time = 10
+        retry_time = 20
         while not self.need_stop():
-            time.sleep(5)
             if background_manager.is_game_started:
                 retry_time -= 1
+                if not HANDLE_OBJ.is_alive():
+                    HANDLE_OBJ.refresh_handle()
                 shape_ok, width, height = HANDLE_OBJ.check_shape()
-                if shape_ok:
+                if shape_ok or (width > 0 and height > 0 and width/height == 1920/1080): # 条件放宽，有些电脑不进入游戏不会恢复分辨率
                     HANDLE_OBJ.set_foreground()
                     break
                 else:
-                    if retry_time == 8:
+                    if retry_time == 24:
                         self.log_to_gui(f"当前游戏分辨率为{width}x{height}，请等待分辨率恢复正常，或手动设置游戏的显示模式设置为窗口模式，分辨率设置为1920x1080或2560x1440")
                     if retry_time <= 0:
                         self.task_stop(f"当前游戏分辨率为{width}x{height}，请先将游戏的显示模式设置为窗口模式，分辨率设置为1920x1080或2560x1440")
                         return
+            time.sleep(5)
+
+    @register_step("进入游戏")
+    def step3(self):
+        # 检测是否已经进入游戏
         if ui_control.is_valid_page():
             self.update_task_result(status=STATE_TYPE_SUCCESS, message="成功进入游戏")
-            return
-        # 检测是否在登录界面了
+            return STEP_NAME_FINISH
+
+        def click_box(box, parent_area):
+            offset = (parent_area.position[0], parent_area.position[1])
+            center = area_center(box)
+            center = (center[0] + offset[0], center[1] + offset[1])
+            itt.move_and_click(center)
+
+        # 检测是否在登录界面
         while not self.need_stop():
             time.sleep(1)
-            if itt.get_img_existence(IconPageLoginFeature):
+            text_box_dict = itt.ocr_and_detect_posi(AreaLoginOCR)
+            if "点击进入游戏" in text_box_dict:
+                click_box(text_box_dict["点击进入游戏"], AreaLoginOCR)
                 break
+            if "确认" in text_box_dict and "退出游戏" not in text_box_dict and "账号登出" not in text_box_dict:
+                self.log_to_gui("发现新版本，开始更新")
+                click_box(text_box_dict["确认"], AreaLoginOCR)
+                time.sleep(10)
+                return "step2"
             else:
                 itt.key_press('esc')
         # 不停点击，直到进入loading界面
@@ -121,19 +152,21 @@ class StartGameTask(TaskTemplate):
             itt.move_and_click((100, 100))
             if itt.get_img_existence(IconUILoading):
                 break
-        self.log_to_gui("加载游戏中……")
+    
+    @register_step("加载游戏中……")
+    def step4(self):
         while not self.need_stop():
             time.sleep(1)
             if not itt.get_img_existence(IconUILoading):
+                self.log_to_gui("加载完成")
                 break
-        self.log_to_gui("加载完成")
         # 不停点击，尝试点掉月卡界面，直到出现主界面
         while not self.need_stop():
             time.sleep(1)
             itt.move_and_click((1920/2, 1080/2))
             if itt.get_img_existence(IconPageMainFeature):
+                self.update_task_result(status=STATE_TYPE_SUCCESS, message="成功进入游戏")
                 break
-        self.update_task_result(status=STATE_TYPE_SUCCESS, message="成功进入游戏")
 
     def handle_finally(self):
         pass

@@ -7,7 +7,7 @@ from whimbox.ui.ui import ui_control
 from whimbox.ui.page_assets import *
 from whimbox.interaction.interaction_core import itt
 import time
-from whimbox.common.utils.ui_utils import wait_until_appear
+from whimbox.common.utils.ui_utils import *
 from whimbox.task.daily_task.cvar import *
 from whimbox.common.keybind import keybind
 from whimbox.common.logger import logger
@@ -47,13 +47,13 @@ zxxy_task_info_list = [
     {
         "key_words": ["昆虫"],
         "score": 200,
-        "priority": 4,
+        "priority": 3,
         "task_name": DAILY_TASK_CATCH_INSECT
     },
     {
         "key_words": ["小游戏"],
         "score": 200,
-        "priority": 4,
+        "priority": 2,
         "task_name": DAILY_TASK_MINIGAME
     },
     {
@@ -164,7 +164,7 @@ class ZhaoxiTask(TaskTemplate):
         if DAILY_TASK_COST_ENERGY in unfinished_task_list:
             unfinished_task_list.remove(DAILY_TASK_COST_ENERGY)
             self.todo_list.append(DAILY_TASK_COST_ENERGY)
-            temp_score += 150
+            temp_score += 200
         # 然后根据分数和优先级完成其他任务
         for task in unfinished_task_list:
             if task['priority'] == 0:
@@ -189,10 +189,10 @@ class ZhaoxiTask(TaskTemplate):
     def step4(self):
         if not itt.get_img_existence(ButtonZxxyRewarded):
             itt.move_and_click(ButtonZxxyRewarded.click_position())
-            if wait_until_appear(IconClickSkip):
-                itt.delay(1, comment="不加延迟，有些电脑就是不行")
-                itt.key_press(keybind.KEYBIND_INTERACTION)
-            self.update_task_result(message="成功领取朝夕心愿奖励", data=self.todo_list)
+            if skip_get_award():
+                self.update_task_result(message="成功领取朝夕心愿奖励", data=self.todo_list)
+            else:
+                raise Exception("领取奖励失败")
         else:
             self.update_task_result(message="朝夕心愿奖励已被领取过，无需再次领取", data=self.todo_list)
 

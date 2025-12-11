@@ -77,7 +77,7 @@ class ChatMessageWidget(QWidget):
             QLabel {{
                 background-color: {avatar_bg};
                 border-radius: 14px;
-                font-size: 16px;
+                font-size: 8pt;
                 border: 1px solid #E0E0E0;
             }}
         """)
@@ -92,7 +92,7 @@ class ChatMessageWidget(QWidget):
             QLabel {
                 background-color: transparent;
                 color: #757575; 
-                font-size: 10px; 
+                font-size: 5pt; 
                 border: none;
             }
         """)
@@ -120,7 +120,7 @@ class ChatMessageWidget(QWidget):
         self.content_label.setStyleSheet(f"""
             QLabel {{
                 color: {text_color};
-                font-size: 16px;
+                font-size: 8pt;
                 padding: 4px 8px;
                 background-color: {msg_bg};
                 border-radius: 8px;

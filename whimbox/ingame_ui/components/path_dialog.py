@@ -48,7 +48,7 @@ class PathSelectionDialog(QDialog):
         title_label = QLabel("🗺️ 自动跑图路线选择")
         title_label.setStyleSheet("""
             QLabel {
-                font-size: 18px;
+                font-size: 9pt;
                 font-weight: bold;
                 color: #2196F3;
                 padding: 5px 0;
@@ -62,7 +62,7 @@ class PathSelectionDialog(QDialog):
         filter_row1.setContentsMargins(0, 8, 0, 4)
         
         # 标签样式
-        label_style = "color: #424242; font-size: 16px; font-weight: bold;"
+        label_style = "color: #424242; font-size: 8pt; font-weight: bold;"
         
         # 目标素材
         target_container = QHBoxLayout()
@@ -77,7 +77,7 @@ class PathSelectionDialog(QDialog):
                 padding: 8px;
                 border: 1px solid #BDBDBD;
                 border-radius: 4px;
-                font-size: 16px;
+                font-size: 8pt;
                 background-color: white;
             }
             QLineEdit:focus {
@@ -101,7 +101,7 @@ class PathSelectionDialog(QDialog):
                 padding: 8px;
                 border: 1px solid #BDBDBD;
                 border-radius: 4px;
-                font-size: 16px;
+                font-size: 8pt;
                 background-color: white;
             }
             QComboBox:focus {
@@ -130,7 +130,7 @@ class PathSelectionDialog(QDialog):
                 padding: 8px;
                 border: 1px solid #BDBDBD;
                 border-radius: 4px;
-                font-size: 16px;
+                font-size: 8pt;
                 background-color: white;
             }
             QSpinBox:focus {
@@ -158,7 +158,7 @@ class PathSelectionDialog(QDialog):
                 color: white;
                 border: none;
                 border-radius: 6px;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -179,7 +179,7 @@ class PathSelectionDialog(QDialog):
                 color: white;
                 border: none;
                 border-radius: 6px;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -200,7 +200,7 @@ class PathSelectionDialog(QDialog):
                 color: white;
                 border: none;
                 border-radius: 6px;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -249,7 +249,7 @@ class PathSelectionDialog(QDialog):
                 border: 2px solid #E0E0E0;
                 border-radius: 8px;
                 background-color: white;
-                font-size: 16px;
+                font-size: 8pt;
                 gridline-color: #DEDEDE;
                 outline: none;
             }
@@ -273,7 +273,7 @@ class PathSelectionDialog(QDialog):
                 color: white;
                 padding: 4px;
                 border: none;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
             }
             QScrollBar:vertical {
@@ -311,7 +311,7 @@ class PathSelectionDialog(QDialog):
                 border: none;
                 border-radius: 8px;
                 padding: 10px 20px;
-                font-size: 14px;
+                font-size: 7pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -338,7 +338,7 @@ class PathSelectionDialog(QDialog):
                 border: none;
                 border-radius: 8px;
                 padding: 10px 20px;
-                font-size: 14px;
+                font-size: 7pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -363,7 +363,7 @@ class PathSelectionDialog(QDialog):
                 border: none;
                 border-radius: 8px;
                 padding: 10px 20px;
-                font-size: 14px;
+                font-size: 7pt;
                 font-weight: bold;
             }
             QPushButton:hover {

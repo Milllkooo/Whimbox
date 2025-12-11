@@ -54,10 +54,10 @@ class BlessTask(TaskTemplate):
 
     @register_step("等待挑战完成")
     def step5(self):
-        if wait_until_appear(IconClickSkip):
-            itt.delay(1, comment="不加延迟，有些电脑就是不行")
-            itt.key_press(keybind.KEYBIND_INTERACTION)
+        if skip_get_award():
             self.update_task_result(message="祝福闪光幻境完成")
+        else:
+            raise Exception("领取奖励失败")
     
 
     @register_step("退出闪光幻境")

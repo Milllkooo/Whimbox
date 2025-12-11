@@ -27,9 +27,9 @@ class AIStatusBar(QWidget):
         self.time_label = QLabel("00:00")
         
         # 设置样式
-        self.status_icon.setStyleSheet("font-size: 12px;")
-        self.status_text.setStyleSheet("color: #666; font-size: 12px;")
-        self.time_label.setStyleSheet("color: #999; font-size: 12px;")
+        self.status_icon.setStyleSheet("font-size: 6pt;")
+        self.status_text.setStyleSheet("color: #666; font-size: 6pt;")
+        self.time_label.setStyleSheet("color: #999; font-size: 6pt;")
         
         layout.addWidget(self.time_label)
         layout.addWidget(self.status_icon)
