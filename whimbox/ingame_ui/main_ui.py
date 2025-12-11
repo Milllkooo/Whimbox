@@ -165,7 +165,7 @@ class IngameUI(QWidget):
         self.title_label.setStyleSheet("""
             QLabel {
                 background-color: transparent;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold; 
                 border: none; 
             }
@@ -182,7 +182,7 @@ class IngameUI(QWidget):
             QLabel {
                 background-color: #E3F2FD;
                 color: #1976D2;
-                font-size: 12px;
+                font-size: 6pt;
                 font-weight: bold;
                 padding: 2px 6px;
                 border-radius: 8px;
@@ -199,7 +199,7 @@ class IngameUI(QWidget):
             QPushButton {
                 background-color: #E3F2FD;
                 border: 2px solid #2196F3;
-                font-size: 12px;
+                font-size: 6pt;
                 border-radius: 12px;
             }
             QPushButton:hover {
@@ -214,7 +214,7 @@ class IngameUI(QWidget):
             QPushButton {
                 background-color: #FFF9C4;
                 border: 2px solid #FBC02D;
-                font-size: 12px;
+                font-size: 6pt;
                 border-radius: 12px;
             }
             QPushButton:hover {
@@ -229,7 +229,7 @@ class IngameUI(QWidget):
             QPushButton {
                 background-color: #FFEBEE;
                 border: 2px solid #F44336;
-                font-size: 12px;
+                font-size: 6pt;
                 border-radius: 12px;
             }
             QPushButton:hover {
@@ -258,7 +258,7 @@ class IngameUI(QWidget):
                 color: white;
                 border: none;
                 border-radius: 8px;
-                font-size: 14px;
+                font-size: 7pt;
                 font-weight: bold;
                 padding: 8px 16px;
             }

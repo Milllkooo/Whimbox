@@ -148,7 +148,7 @@ class FunctionView(QWidget):
                 color: white;
                 border: none;
                 border-radius: 8px;
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
                 padding: 12px 24px;
             }
@@ -192,7 +192,7 @@ class FunctionView(QWidget):
         title = QLabel("自动小功能")
         title.setStyleSheet("""
             QLabel {
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
                 color: #000000;
                 border: none;
@@ -205,7 +205,7 @@ class FunctionView(QWidget):
         self.background_status_label = QLabel("●")
         self.background_status_label.setStyleSheet("""
             QLabel {
-                font-size: 20px;
+                font-size: 10pt;
                 color: #999;
                 border: none;
                 background-color: transparent;
@@ -251,7 +251,7 @@ class FunctionView(QWidget):
         checkbox = QCheckBox(label)
         checkbox.setStyleSheet("""
             QCheckBox {
-                font-size: 16px;
+                font-size: 8pt;
                 color: #000000;
                 border: none;
                 spacing: 6px;
@@ -304,7 +304,7 @@ class FunctionView(QWidget):
         if running:
             self.background_status_label.setStyleSheet("""
                 QLabel {
-                    font-size: 20px;
+                    font-size: 10pt;
                     color: #4CAF50;
                     border: none;
                     background-color: transparent;
@@ -313,7 +313,7 @@ class FunctionView(QWidget):
         else:
             self.background_status_label.setStyleSheet("""
                 QLabel {
-                    font-size: 20px;
+                    font-size: 10pt;
                     color: #999;
                     border: none;
                     background-color: transparent;

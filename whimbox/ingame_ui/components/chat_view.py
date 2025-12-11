@@ -104,7 +104,7 @@ class ChatView(QWidget):
                 border: 1px solid #E0E0E0;
                 border-radius: 16px;
                 padding: 8px 16px;
-                font-size: 16px;
+                font-size: 8pt;
             }
             QLineEdit:focus {
                 border: 2px solid #2196F3;
@@ -121,7 +121,7 @@ class ChatView(QWidget):
                 border: none;
                 border-radius: 16px;
                 padding: 8px 16px;
-                font-size: 16px;
+                font-size: 8pt;
             }
             QPushButton:hover {
                 background-color: #1976D2;

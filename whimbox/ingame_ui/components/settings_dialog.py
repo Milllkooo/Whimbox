@@ -93,7 +93,7 @@ class SettingsDialog(QDialog):
         title_label = QLabel("⚙️ 设置")
         title_label.setStyleSheet("""
             QLabel {
-                font-size: 18px;
+                font-size: 9pt;
                 font-weight: bold;
                 color: #2196F3;
                 padding: 5px 0;
@@ -156,7 +156,7 @@ class SettingsDialog(QDialog):
                 border: none;
                 border-radius: 8px;
                 padding: 10px 20px;
-                font-size: 14px;
+                font-size: 7pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -181,7 +181,7 @@ class SettingsDialog(QDialog):
                 border: none;
                 border-radius: 8px;
                 padding: 10px 20px;
-                font-size: 14px;
+                font-size: 7pt;
                 font-weight: bold;
             }
             QPushButton:hover {
@@ -229,7 +229,7 @@ class SettingsDialog(QDialog):
         group_box = QGroupBox(cn_name)
         group_box.setStyleSheet("""
             QGroupBox {
-                font-size: 16px;
+                font-size: 8pt;
                 font-weight: bold;
                 color: #424242;
                 border: 2px solid #E0E0E0;
@@ -271,7 +271,7 @@ class SettingsDialog(QDialog):
         label.setStyleSheet("""
             QLabel {
                 color: #666666;
-                font-size: 16px;
+                font-size: 8pt;
             }
         """)
         item_layout.addWidget(label)
@@ -286,7 +286,7 @@ class SettingsDialog(QDialog):
             input_widget.setChecked(is_checked)
             input_widget.setStyleSheet("""
                 QCheckBox {
-                    font-size: 16px;
+                    font-size: 8pt;
                     spacing: 5px;
                 }
                 QCheckBox::indicator {
@@ -308,7 +308,7 @@ class SettingsDialog(QDialog):
                     padding: 5px;
                     border: 1px solid #BDBDBD;
                     border-radius: 4px;
-                    font-size: 16px;
+                    font-size: 8pt;
                     background-color: white;
                 }
                 QLineEdit:focus {
@@ -324,7 +324,7 @@ class SettingsDialog(QDialog):
                     padding: 5px;
                     border: 1px solid #BDBDBD;
                     border-radius: 4px;
-                    font-size: 16px;
+                    font-size: 8pt;
                     background-color: white;
                 }
                 QLineEdit:focus {
@@ -368,7 +368,7 @@ class SettingsDialog(QDialog):
                     border: 1px solid #BDBDBD;
                     border-radius: 4px;
                     padding: 5px;
-                    font-size: 16px;
+                    font-size: 8pt;
                 }
                 QListView::item {
                     padding: 5px;
