@@ -107,7 +107,7 @@ class StartGameTask(TaskTemplate):
             if background_manager.is_game_started:
                 retry_time -= 1
                 shape_ok, width, height = HANDLE_OBJ.check_shape()
-                if shape_ok:
+                if shape_ok or width/height == 1920/1080: # 条件放宽，有些电脑不进入游戏不会恢复分辨率
                     HANDLE_OBJ.set_foreground()
                     break
                 else:
