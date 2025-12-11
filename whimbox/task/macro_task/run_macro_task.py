@@ -11,10 +11,10 @@ from whimbox.common.scripts_manager import *
 class RunMacroTask(TaskTemplate):
     """运行宏记录的任务"""
     
-    def __init__(self, macro_filename: str, check_stop_func=None):
+    def __init__(self, macro_filename: str, delay=0, check_stop_func=None):
         super().__init__("run_macro_task")
         self.check_stop_func = check_stop_func
-        
+        self.delay = delay
         self.macro_record = scripts_manager.query_macro(macro_filename)
         if self.macro_record is None:
             raise ValueError(f"宏\"{macro_filename}\"不存在")
@@ -80,7 +80,7 @@ class RunMacroTask(TaskTemplate):
     @register_step(state_msg="执行宏操作")
     def execute_macro(self):
         """执行宏操作"""
-        offset = self.macro_record.info.offset
+        offset = self.macro_record.info.offset + self.delay
         start_time = time.time()
         last_timestamp = 0.0
         

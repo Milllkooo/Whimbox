@@ -17,17 +17,20 @@ class MinigameTask(TaskTemplate):
         self.max_retry_times = 2
         self.retry_times = 0
         self.macro_name = macro_name
+        self.retry_delay = 0
 
     @register_step("与NPC对话开始小游戏")
     def step1(self):
         itt.key_press(keybind.KEYBIND_INTERACTION)
-        itt.delay(1, comment="等待对话出现")
+        wait_until_appear(IconSkipDialog, 5)
         if itt.get_img_existence(IconPageMainFeature):
             raise Exception("未进入NPC对话")
         skip_dialog()
+        itt.delay(0.5, comment="等待对话选项出现")
         if not scroll_find_click(AreaDialogSelection, "开始游戏", str_match_mode=1):
             raise Exception("未找到对话选项：开始游戏")
         skip_dialog()
+        itt.delay(0.5, comment="等待对话选项出现")
         if not scroll_find_click(AreaDialogSelection, "没问题", str_match_mode=1):
             raise Exception("未找到对话选项：支付噗灵")
         skip_dialog()
@@ -43,7 +46,7 @@ class MinigameTask(TaskTemplate):
         def check_stop_func():
             return not itt.get_img_existence(IconPageMainFeature)
 
-        task = RunMacroTask(self.macro_name, check_stop_func=check_stop_func)
+        task = RunMacroTask(self.macro_name, delay=self.retry_delay, check_stop_func=check_stop_func)
         task.task_run()
     
     @ register_step("检查是否失败")
@@ -55,7 +58,8 @@ class MinigameTask(TaskTemplate):
                 return 'step4'
             else:
                 self.retry_times += 1
-                self.log_to_gui(f"小游戏失败了，再试一遍")
+                self.retry_delay += 0.1
+                self.log_to_gui(f"小游戏失败了，增加0.1秒延迟再试一遍")
                 itt.appear_then_click(ButtonMinigameRetry)
                 time.sleep(0.5)
                 wait_until_appear_then_click(ButtonMinigameRetryOk)
@@ -77,5 +81,5 @@ class MinigameTask(TaskTemplate):
 
 
 if __name__ == "__main__":
-    task = MinigameTask()
+    task = MinigameTask("朝夕心愿_小游戏_穿梭大冒险_宏")
     task.task_run()
