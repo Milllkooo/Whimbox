@@ -611,9 +611,8 @@ class IngameUI(QWidget):
         if self.isVisible():
             if HANDLE_OBJ.is_foreground() and not self.focus_on_game:
                 self.give_back_focus()
-            # 如果游戏是从运行状态被关闭，就一起退出奇想盒
-            if background_manager.is_game_started and not HANDLE_OBJ.is_alive():
-                exit(0)
+            elif not HANDLE_OBJ.is_foreground() and self.focus_on_game:
+                self.acquire_focus()
     
     def update_message(self, message: str, type="update_ai_message"):
         """更新聊天消息"""

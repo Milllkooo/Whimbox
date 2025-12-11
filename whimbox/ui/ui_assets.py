@@ -13,9 +13,9 @@ AreaUITime = Area()
 AreaEscEntrances = Area()
 IconGachaFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
 IconShopFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
-IconPageLoginFeature = ImgIcon(print_log=LOG_ALL, threshold=0.90, hsv_limit=([0, 0, 220], [20, 45, 255]))
+# IconPageLoginFeature = ImgIcon(print_log=LOG_ALL, threshold=0.90, hsv_limit=([0, 0, 220], [179, 50, 255]))
+AreaLoginOCR = Area()
 AreaLaunchButton = Area()
-TextLaunchButton = Text("启动游戏", cap_area = AreaLaunchButton)
 
 # loading界面
 IconUILoading = ImgIcon(print_log=LOG_NONE, threshold=0.99)
