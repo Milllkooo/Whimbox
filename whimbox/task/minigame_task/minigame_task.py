@@ -70,14 +70,14 @@ class MinigameTask(TaskTemplate):
     def step4(self):
         wait_until_appear(IconSkipDialog, 10)
         skip_dialog()
-        if wait_until_appear(IconClickSkip):
-            itt.delay(1, comment="不加延迟，有些电脑就是不行")
-            itt.key_press(keybind.KEYBIND_INTERACTION)
+        if skip_get_award():
+            self.update_task_result(message="成功领取小游戏奖励")
+        else:
+            raise Exception("领取小游戏奖励失败")
         skip_dialog()
         if not scroll_find_click(AreaDialogSelection, "谢谢你", str_match_mode=1):
             raise Exception("未找到对话选项：不了")
         skip_dialog()
-
 
 if __name__ == "__main__":
     task = MinigameTask("朝夕心愿_小游戏_穿梭大冒险_宏")

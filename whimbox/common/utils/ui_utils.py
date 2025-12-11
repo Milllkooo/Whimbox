@@ -245,7 +245,14 @@ def skip_dialog():
                 break
             else:
                 itt.key_press(keybind.KEYBIND_INTERACTION)
-        
+
+def skip_get_award():
+    if wait_until_appear(IconClickSkip):
+        itt.delay(1, comment="不加延迟，有些电脑就是不行")
+        itt.key_press(keybind.KEYBIND_INTERACTION)
+        return True
+    else:
+        return False
         
             
 if __name__ == "__main__":

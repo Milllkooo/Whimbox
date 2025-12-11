@@ -50,11 +50,10 @@ class MonsterTask(TaskTemplate):
 
     @register_step("等待挑战完成")
     def step4(self):
-        if wait_until_appear(IconClickSkip):
-            itt.delay(1, comment="不加延迟，有些电脑就是不行")
-            itt.key_press(keybind.KEYBIND_INTERACTION)
+        if skip_get_award():
             self.update_task_result(message="魔物试炼幻境完成")
-    
+        else:
+            raise Exception("领取奖励失败")
 
     @register_step("退出魔物试炼幻境")
     def step5(self):

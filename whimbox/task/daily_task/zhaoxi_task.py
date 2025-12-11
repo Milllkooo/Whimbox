@@ -7,7 +7,7 @@ from whimbox.ui.ui import ui_control
 from whimbox.ui.page_assets import *
 from whimbox.interaction.interaction_core import itt
 import time
-from whimbox.common.utils.ui_utils import wait_until_appear
+from whimbox.common.utils.ui_utils import *
 from whimbox.task.daily_task.cvar import *
 from whimbox.common.keybind import keybind
 from whimbox.common.logger import logger
@@ -189,10 +189,10 @@ class ZhaoxiTask(TaskTemplate):
     def step4(self):
         if not itt.get_img_existence(ButtonZxxyRewarded):
             itt.move_and_click(ButtonZxxyRewarded.click_position())
-            if wait_until_appear(IconClickSkip):
-                itt.delay(1, comment="不加延迟，有些电脑就是不行")
-                itt.key_press(keybind.KEYBIND_INTERACTION)
-            self.update_task_result(message="成功领取朝夕心愿奖励", data=self.todo_list)
+            if skip_get_award():
+                self.update_task_result(message="成功领取朝夕心愿奖励", data=self.todo_list)
+            else:
+                raise Exception("领取奖励失败")
         else:
             self.update_task_result(message="朝夕心愿奖励已被领取过，无需再次领取", data=self.todo_list)
 
