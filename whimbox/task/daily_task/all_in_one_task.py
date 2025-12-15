@@ -106,10 +106,10 @@ class AllInOneTask(TaskTemplate):
             self.task_result_list['energy_cost_task'] = False
         
         # 如果之前朝夕心愿已经都完成了，就直接去奇迹之旅
-        if len(self.zhaoxi_todo_list) == 0:
-            return "step6"
+        if not self.zhaoxi_todo_list:
+            return "step7"
         else:
-            return "step5"
+            return "step6"
     
     @register_step("获取朝夕心愿奖励")
     def step6(self):
