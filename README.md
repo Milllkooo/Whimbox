@@ -1,7 +1,8 @@
 ![logo](/docs/logo.png)
 ~~不会画画，先放个红温星在这里凑合一下~~
 # Whimbox · 奇想盒
-Whimbox，基于大语言模型和图像识别技术的AI智能体，辅助你游玩无限暖暖！
+Whimbox，基于大语言模型和图像识别技术的AI智能体，辅助你游玩无限暖暖！\
+想了解更多？请前往[奇想盒主页](https://nikkigallery.vip/whimbox/)
 
 ## 如何运行
 （启动器已经上线，也可以通过启动器一键运行，[启动器项目地址](https://github.com/nikkigallery/WhimboxLauncher)）
@@ -11,54 +12,40 @@ Whimbox，基于大语言模型和图像识别技术的AI智能体，辅助你�
 ```shell
 pip install whimbox-x.x.x-py3-none-any.whl
 ```
-2. 运行如下命令，初始化项目，会自动创建configs，scripts文件夹
-```
+4. 运行如下命令，初始化项目，会自动创建configs，scripts文件夹
+```shell
 whimbox init
 ```
-3. 修改`configs/congfig.json`中的Agent配置，为自己的大模型接口
-```json
-    "Agent": {
-        "model": {
-            "value": "Qwen/Qwen3-30B-A3B-Instruct-2507",
-            "description": "模型名称"
-        },
-        "model_provider": {
-            "value": "openai",
-            "description": "模型提供商"
-        },
-        "base_url": {
-            "value": "https://api.siliconflow.cn/v1/",
-            "description": "模型API地址"
-        },
-        "api_key": {
-            "value": "",
-            "description": "模型API密钥"
-        }
-    },
-```
-4. 将 [跑图路线仓库](https://github.com/nikkigallery/WhimboxScripts) 中的路线脚本下载下来，放到`scripts`目录里
-5. 打开游戏，将游戏的分辨率设置为标准的16:9，比如：1920x1080、2560x1440（4k分辨率有些功能无法使用）
-6. 用管理员权限运行如下命令，启动奇想盒
+5. 将 [跑图路线仓库](https://github.com/nikkigallery/WhimboxScripts) 中的路线脚本下载下来，放到`scripts`目录里
+6. 打开游戏，将游戏的分辨率设置为标准的16:9，比如：1920x1080、2560x1440（4k分辨率有些功能无法使用）
+7. 用管理员权限运行如下命令，启动奇想盒
 ```shell
+# 完整启动奇想盒
 whimbox
+# 或仅运行一条龙
+whimbox startOneDragon
 ```
-7. 程序运行后请稍等片刻。在游戏界面的左侧看到窗口后，按`/`打开对话框，按`esc`关闭对话框
+更多使用教程请看[奇想盒使用文档](https://docs.qq.com/doc/DRUJnU0ZPY0VHQ3lD)
 
 ## 已有功能
 * 每日任务
     * 美鸭梨挖掘
     * 素材激化幻境
     * 闪光祝福幻境
+    * 周本
     * 检查朝夕心愿
     * 领取大月卡
     * 朝夕心愿一条龙
+* 自动小功能
+    * 自动对话、自动采集、自动钓鱼、自动清洁跳过
 * 自动跑图
     * 跑图路线录制、编辑
     * 自动跑图（暂时只支持大世界和星海）
     * 自动采集、捕虫、清洁、钓鱼
+* 录制宏
+    * 录制操作和播放操作（不支持视角转动的操作）
 * AI对话
     * 通过自然语言编排以上所有功能
-    * 随时中断任务
 
 ## 未来计划
 1. 框架完善：回退机制。
@@ -105,7 +92,7 @@ Whinbox/
 ├── configs/                      # 配置文件（首次运行会自动生成）
 │   ├── config.json               # 项目的配置文件
 │   └── prompt.txt                # 大模型提示词
-├── scripts/                      # 自动跑图的脚本仓库（首次运行会自动生成）
+├── scripts/                      # 自动跑图和宏的脚本仓库（首次运行会自动生成）
 ├── logs/                         # 日志文件
 └── build.bat                     # 一键打包
 ```
