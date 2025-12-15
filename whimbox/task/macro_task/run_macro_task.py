@@ -17,7 +17,7 @@ class RunMacroTask(TaskTemplate):
         self.delay = delay
         self.macro_record = scripts_manager.query_macro(macro_filename)
         if self.macro_record is None:
-            raise ValueError(f"宏\"{macro_filename}\"不存在")
+            raise ValueError(f"宏\"{macro_filename}\"不存在，请先下载该宏")
         self.current_step_index = 0
         self.pressing_keys = set()
     

@@ -136,6 +136,7 @@ class StartGameTask(TaskTemplate):
         while not self.need_stop():
             time.sleep(1)
             text_box_dict = itt.ocr_and_detect_posi(AreaLoginOCR)
+            logger.info(f"登录界面文字: {text_box_dict.keys()}")
             if "点击进入游戏" in text_box_dict:
                 click_box(text_box_dict["点击进入游戏"], AreaLoginOCR)
                 break
