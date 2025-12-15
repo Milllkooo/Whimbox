@@ -91,6 +91,9 @@ ButtonJihuaFinallyConfirm = Button(print_log=LOG_WHEN_TRUE)
 # 魔物试炼幻境相关
 # 基本可以复用祝福闪光幻境
 
+# 每周幻境相关
+AreaWeeklyCountText = Area()
+
 # 美鸭梨挖掘相关
 ButtonDigGather = Button(print_log=LOG_WHEN_TRUE)
 ButtonDigGatherConfirm = Button(print_log=LOG_WHEN_TRUE)

@@ -15,6 +15,7 @@ class AllInOneTask(TaskTemplate):
         self.zhaoxi_todo_list = []
         self.task_result_list = {
             'dig_task': False,
+            'weekly_realm_task': False,
             'zhaoxi_task': False,
             'monthly_pass_task': False,
             'energy_cost_task': False,
@@ -36,6 +37,12 @@ class AllInOneTask(TaskTemplate):
         dig_task = daily_task.DigTaskV2()
         task_result = dig_task.task_run()
         self.task_result_list['dig_task'] = task_result.data
+
+    @register_step("检查周本进度")
+    def step2(self):
+        weekly_realm_task = daily_task.WeeklyRealmTask()
+        task_result = weekly_realm_task.task_run()
+        self.task_result_list['weekly_realm_task'] = task_result.data
 
     @register_step("检查朝夕心愿进度")
     def step2(self):

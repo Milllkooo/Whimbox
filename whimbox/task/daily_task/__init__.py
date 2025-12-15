@@ -5,3 +5,4 @@ from .bless_task import BlessTask
 from .monster_task import MonsterTask
 from .all_in_one_task import AllInOneTask
 from .monthly_pass_task import MonthlyPassTask
+from .weekly_realm_task import WeeklyRealmTask

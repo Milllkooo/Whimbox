@@ -16,6 +16,7 @@ page_huanjing = TitlePage("幻境挑战")
 page_huanjing_jihua = TitlePage("素材激化幻境")
 page_huanjing_bless = TitlePage("祝福闪光幻境")
 page_huanjing_monster = TitlePage("魔物试炼幻境")
+page_huanjing_weekly = TitlePage("心之突破幻境")
 page_photo = TitlePage("大喵相机")
 page_monthly_pass = TitlePage("奇迹之旅")
 page_event = TitlePage("活动大厅")
@@ -31,6 +32,7 @@ ui_pages = [
     page_huanjing_jihua,
     page_huanjing_bless,
     page_huanjing_monster,
+    page_huanjing_weekly,
     page_photo,
     page_monthly_pass,
     page_event,
@@ -59,10 +61,12 @@ page_huanjing.link('esc', page_daily_task)
 page_huanjing.link(TextHuanjingJihuaEntrace, page_huanjing_jihua)
 page_huanjing.link(TextHuanjingBlessEntrace, page_huanjing_bless)
 page_huanjing.link(TextHuanjingMonsterEntrace, page_huanjing_monster)
+page_huanjing.link(TextHuanjingBossEntrace, page_huanjing_weekly)
 
 page_huanjing_jihua.link('esc', page_huanjing)
 page_huanjing_bless.link('esc', page_huanjing)
 page_huanjing_monster.link('esc', page_huanjing)
+page_huanjing_weekly.link('esc', page_huanjing)
 
 page_zxxy.link("esc", page_daily_task)
 
