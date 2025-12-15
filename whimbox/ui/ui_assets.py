@@ -76,7 +76,8 @@ AreaBlessHuanjingDifficulty3 = Area()
 TextBlessHuanjingDifficulty3 = Text("困难", cap_area = AreaBlessHuanjingDifficulty3)
 ButtonBlessHuanjingQuickPlay = Button(print_log=LOG_WHEN_TRUE)
 ButtonBlessHuanjingNumMax = Button(print_log=LOG_WHEN_TRUE)
-ButtonBlessHuanjingConfirm = Button(print_log=LOG_WHEN_TRUE)
+ButtonHuanjingConfirm = Button(print_log=LOG_ALL, threshold=0.99)
+ButtonHuanjingCancel = Button(print_log=LOG_ALL, threshold=0.99)
 
 # 素材激化幻境相关
 ButtonJihuaInnerGo = Button(print_log=LOG_WHEN_TRUE)
@@ -86,7 +87,7 @@ AreaJihuaTargetSelect = Area()
 AreaJihuaCostSelect = Area()
 ButtonJihuaNumMax = Button(print_log=LOG_WHEN_TRUE)
 ButtonJihuaNumConfirm = Button(print_log=LOG_WHEN_TRUE)
-ButtonJihuaFinallyConfirm = Button(print_log=LOG_WHEN_TRUE)
+ButtonJihuaFinallyConfirm = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 
 # 魔物试炼幻境相关
 # 基本可以复用祝福闪光幻境

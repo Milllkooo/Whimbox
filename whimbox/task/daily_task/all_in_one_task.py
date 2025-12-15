@@ -125,6 +125,10 @@ class AllInOneTask(TaskTemplate):
             msg += "美鸭梨挖掘成功,"
         else:
             msg += "美鸭梨挖掘还无法收获,"
+        if self.task_result_list['weekly_realm_task']:
+            msg += "每周幻境已完成,"
+        else:
+            msg += "每周幻境未完成,"
         if self.task_result_list['zhaoxi_task']:
             msg += "朝夕心愿已完成,"
         else:

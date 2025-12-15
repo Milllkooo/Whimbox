@@ -99,7 +99,8 @@ class JihuaTask(TaskTemplate):
     @register_step("确认开始激化")
     def step7(self):
         if not wait_until_appear_then_click(ButtonJihuaFinallyConfirm):
-            raise Exception("确认激化按钮不见了")
+            self.log_to_gui("体力不够了，无法激化", is_error=True)
+            return "step9"
         
 
     @register_step("等待激化完成")
