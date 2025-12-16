@@ -254,7 +254,7 @@ class FishingTask(TaskTemplate):
                     self.handle_skip()
                     break
                 else:
-                    time.sleep(0.05)
+                    time.sleep(0.1)
 
         return FishingResult.SUCCESS
 
