@@ -73,6 +73,7 @@ class StartGameTask(TaskTemplate):
 
         # 点击启动游戏按钮
         self.log_to_gui("叠纸启动器打开了")
+        time.sleep(1) #稍等片刻，避免用户误操作
         launcher_handle.set_foreground()
         launcher_itt = InteractionBGD(launcher_handle)
         retry_time = 10
