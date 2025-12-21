@@ -124,7 +124,7 @@ class ZhaoxiTask(TaskTemplate):
     def step3(self):
 
         def check_task(task_btn: Button):
-            itt.move_and_click(task_btn.click_position())
+            task_btn.click()
             time.sleep(0.3)
             if not itt.get_img_existence(IconUIZxxyTaskFinished):
                 task_text = itt.ocr_single_line(AreaZxxyTaskText)
@@ -188,7 +188,7 @@ class ZhaoxiTask(TaskTemplate):
     @register_step("领取奖励")
     def step4(self):
         if not itt.get_img_existence(ButtonZxxyRewarded):
-            itt.move_and_click(ButtonZxxyRewarded.click_position())
+            ButtonZxxyRewarded.click()
             if skip_get_award():
                 self.update_task_result(message="成功领取朝夕心愿奖励", data=self.todo_list)
             else:

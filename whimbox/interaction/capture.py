@@ -32,7 +32,10 @@ class Capture():
             if img.shape == (1080,1920,4):
                 return img
             else:
-                return cv2.resize(img, (1920, 1080), interpolation=cv2.INTER_NEAREST)
+                new_width = 1920
+                new_height = int(1920 / self.resolution[1] * self.resolution[0])
+                new_img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_NEAREST)
+                return new_img
         else:
             self.resolution = None
             return None
@@ -43,12 +46,7 @@ class Capture():
         """
     
     def _check_shape(self, img:np.ndarray):
-        if img is None:
-            return False
-        if img.shape == [1080,1920,4]:
-            return True
-        else:
-            return False
+        return True
         
     def capture(self, force=False) -> np.ndarray:
         """
@@ -89,7 +87,9 @@ class PrintWindowCapture(Capture):
         self.max_fps = 30
 
     def _check_shape(self, img:np.ndarray):
-        if img.shape[2] == 4 and img.shape[1]/img.shape[0] == 1920/1080:
+        if img.shape[2] == 4 and img.shape[1] > 1900 and 1.55<img.shape[1]/img.shape[0]<1.80:
+            # 支持16:9和16:10分辨率
+            # 有些用户在特定显示器和缩放下会生成奇怪的1920x1081分辨率，增加宽容度
             return True
         else:
             logger.info("游戏分辨率异常: "+str(img.shape))

@@ -3,7 +3,6 @@ import numpy as np
 import traceback
 from copy import deepcopy
 
-from whimbox.common.timer_module import Timer
 from whimbox.common.utils.asset_utils import *
 from whimbox.common.cvars import *
 from whimbox.common.utils.img_utils import crop, process_with_hsv_limit
@@ -20,21 +19,19 @@ class ImgIcon(AssetBase):
                  threshold=None,
                  hsv_limit=None,
                  gray_limit=None,
-                 win_text = None,
-                 offset = 0,
-                 print_log = LOG_ALL if DEBUG_MODE else LOG_WHEN_TRUE):
+                 print_log = LOG_ALL if DEBUG_MODE else LOG_WHEN_TRUE,
+                 anchor=ANCHOR_TOP_LEFT):
         """创建一个img对象，用于图片识别等。
 
         Args:
             path (str): 图片路径。
             name (str): 图片名称。默认为图片名。
             is_bbg (bool, optional): 是否为黑色背景图片. Defaults to True.
-            bbg_posi (list/None, optional): 黑色背景的图片坐标，默认自动识别坐标. Defaults to None.
-            cap_posi (list/str, optional): 截图坐标。注意：可以填入'bbg'字符串关键字，使用bbg坐标; 可以填入'all'字符串关键字，截图全屏. Defaults to None.
+            bbg_posi (AnchorPosi/None, optional): 黑色背景的图片坐标，默认自动识别坐标. Defaults to None.
+            cap_posi (AnchorPosi/str, optional): 截图坐标。注意：可以填入'bbg'字符串关键字，使用bbg坐标; 可以填入'all'字符串关键字，截图全屏. Defaults to None.
             threshold (float|tuple(float, float), optional): 匹配阈值. var1>var2. Defaults to 0.91.
-            win_text (str, optional): 匹配时图片内应该包含的文字. Defaults to None.
-            offset (int, optional): 截图范围偏移. Defaults to 0.
             print_log (int, optional): 打印日志模式. Defaults to LOG_NONE.
+            anchor (str, optional): 相对位置锚点. Defaults to ANCHOR_TOP_LEFT.
         """
         if name is None:
             super().__init__(get_name(traceback.extract_stack()[-2]))
@@ -56,7 +53,7 @@ class ImgIcon(AssetBase):
                 is_bbg = False        
         self.is_bbg = is_bbg
         if self.is_bbg and bbg_posi is None:
-            self.bbg_posi = asset_get_bbox(self.raw_image)
+            self.bbg_posi = asset_get_bbox(self.raw_image, anchor=anchor)
         else:
             self.bbg_posi = bbg_posi
         if cap_posi == 'bbg':
@@ -64,24 +61,19 @@ class ImgIcon(AssetBase):
         elif cap_posi == None and is_bbg == True:
             self.cap_posi = self.bbg_posi
         elif cap_posi == 'all':
-            self.cap_posi = [0, 0, 1920, 1080]
+            self.cap_posi = AnchorPosi(0, 0, 1920, 1080)
         else:
             self.cap_posi = cap_posi    
         
         if self.cap_posi == None:
-            self.cap_posi = [0, 0, 1080, 1920]
+            self.cap_posi = AnchorPosi(0, 0, 1080, 1920)
         
         self.threshold = threshold
         self.hsv_limit = hsv_limit
         self.gray_limit = gray_limit
-        self.win_text = win_text
-        self.offset = offset
         self.print_log = print_log
             
-        if self.offset != 0:
-            self.cap_posi = list(np.array(self.cap_posi) + np.array([-self.offset, -self.offset, self.offset, self.offset]))
-            
-        self.cap_center_position_xy = [(self.cap_posi[0]+self.cap_posi[2])/2, (self.cap_posi[1]+self.cap_posi[3])/2]
+        self.cap_center_position_xy = self.cap_posi.get_center()
         
         
         if self.is_bbg:

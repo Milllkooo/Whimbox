@@ -2,11 +2,10 @@ import os
 import numpy as np
 
 from whimbox.common.errors import *
-from whimbox.common.logger import logger
 from whimbox.common.utils.utils import load_json
 from whimbox.common.path_lib import ASSETS_PATH
 from whimbox.common.cvars import *
-from whimbox.common.utils.img_utils import image_channel
+from whimbox.common.utils.posi_utils import area_center
 
 ASSETS_INDEX_JSON = load_json("imgs_index.json", f"{ASSETS_PATH}/imgs")
 
@@ -15,22 +14,56 @@ def get_name(x):
     # = traceback.extract_stack()[-2]
     return text[:text.find('=')].strip()
 
+class AnchorPosi():
+    def __init__(self, x1, y1, x2, y2, anchor=ANCHOR_TOP_LEFT, expand=False):
+        self.x1 = int(x1)
+        self.y1 = int(y1)
+        self.x2 = int(x2)
+        self.y2 = int(y2)
+        self.anchor = anchor
+        self.expand = expand
+    
+    def get_center(self):
+        return [(self.x1 + self.x2) / 2, (self.y1 + self.y2) / 2]
+    
+    def trans_inner_box_posi(self, target_box_posi):
+        if isinstance(target_box_posi, AnchorPosi):
+            return AnchorPosi(self.x1 + target_box_posi.x1, self.y1 + target_box_posi.y1, self.x1 + target_box_posi.x2, self.y1 + target_box_posi.y2)
+        else:
+            return AnchorPosi(self.x1 + target_box_posi[0], self.y1 + target_box_posi[1], self.x1 + target_box_posi[2], self.y1 + target_box_posi[3])
+    
+    def trans_inner_point_posi(self, target_point_posi):
+        return (self.x1 + target_point_posi[0], self.y1 + target_point_posi[1])
+    
+    def click(self, target_box=None, offset=(0, 0)):
+        from whimbox.interaction.interaction_core import itt
+        if target_box is None:
+            center = self.get_center()
+        else:
+            center = area_center(target_box)
+            center = self.trans_inner_point_posi(center)
+        center = (center[0] + offset[0], center[1] + offset[1])
+        itt.move_and_click(center, anchor=self.anchor)
 
-def asset_get_bbox(image, black_offset=15):
+
+def asset_get_bbox(image, anchor=ANCHOR_TOP_LEFT, expand=False, black_offset=15) -> AnchorPosi:
     """
     A numpy implementation of the getbbox() in pillow.完全低于阈值返回None
     Args:
         image (np.ndarray): Screenshot.
+        anchor (str): 锚点类型. Defaults to ANCHOR_TOP_LEFT.
+        expand (bool): 是否在垂直方向上扩展. Defaults to False.
     Returns:
-        tuple: (upper_left_x, upper_left_y, bottom_right_x, bottom_right_y)
+        AnchorPosi: AnchorPosi object
     """
-    if image_channel(image) == 3:
+    channel = image.shape[2] if len(image.shape) == 3 else 0
+    if channel == 3:
         image = np.max(image, axis=2)
     x = np.where(np.max(image, axis=0) > black_offset)[0]
     y = np.where(np.max(image, axis=1) > black_offset)[0]
     if x.size == 0 or y.size == 0:
         return None
-    return (x[0], y[0], x[-1] + 1, y[-1] + 1)
+    return AnchorPosi(x[0], y[0], x[-1] + 1, y[-1] + 1, anchor, expand)
 
 
 class AssetBase():

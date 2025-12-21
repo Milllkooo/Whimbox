@@ -20,7 +20,7 @@ class DailyPhotoTask(TaskTemplate):
     def step3(self):
         if wait_until_appear(IconPhotoEdit, retry_time=10):
             self.update_task_result(message="每日任务拍照完成")
-            itt.move_and_click(IconPhotoDelete.cap_center_position_xy)
+            ButtonPhotoDelete.click()
             if wait_until_appear_then_click(ButtonPhotoDeleteConfirm):
                 return
         else:

@@ -4,9 +4,7 @@ import win32api, win32con, win32gui
 
 from whimbox.interaction.interaction_template import InteractionTemplate
 from whimbox.interaction.vkcode import VK_CODE
-from whimbox.common.handle_lib import HANDLE_OBJ
-from whimbox.common.logger import logger
-from whimbox.common.base_threading import ProcessThreading
+from whimbox.common.cvars import *
 
 class InteractionNormal(InteractionTemplate):
 
@@ -109,27 +107,34 @@ class InteractionNormal(InteractionTemplate):
         time.sleep(0.1)
         self.key_up(key)
     
-    def move_to(self, x: int, y: int, resolution=None, relative=False):
+    def move_to(self, x: int, y: int, resolution=None, anchor=ANCHOR_TOP_LEFT, relative=False):
         x = int(x)
         y = int(y)
+        standard_w = 1920
+        standard_h = 1080
 
         if resolution is not None:
-            x = int(x * resolution[0] / 1080)
-            y = int(y * resolution[1] / 1920)
+            scale = resolution[1] / standard_w
+        else:
+            scale = 1
 
         if relative:
+            x = int(x * scale)
+            y = int(y * scale)
             win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
         else:
-            # wx, wy, w, h = win32gui.GetWindowRect(HANDLE_OBJ.get_handle())
-            # if isBorderlessWindow:
-            #     x += wx
-            #     y += wy
-            # else:
-            #     x = x + wx + 11
-            #     y = y + wy + 44
-            # abs_x = int(x * 65536 / win32api.GetSystemMetrics(win32con.SM_CXSCREEN))
-            # abs_y = int(y * 65536 / win32api.GetSystemMetrics(win32con.SM_CYSCREEN))
-            # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE|win32con.MOUSEEVENTF_ABSOLUTE, abs_x, abs_y)
+            actual_h = int(resolution[0] / scale)
+            if "TOP" in anchor:
+                pass
+            elif "BOTTOM" in anchor:
+                y += actual_h - standard_h
+            elif "CENTER" in anchor:
+                y += (actual_h - standard_h) / 2
+            else:
+                pass
+
+            x = int(x * scale)
+            y = int(y * scale)
             screen_x, screen_y = win32gui.ClientToScreen(self.hwnd_handler.get_handle(), (x, y))
             win32api.SetCursorPos((screen_x, screen_y))
 

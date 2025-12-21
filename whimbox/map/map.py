@@ -188,7 +188,8 @@ class Map(MiniMap, BigMap):
     def get_bigmap_posi(self, is_upd=True) -> t.Tuple[float, float]:
         self.maximize_bigmap_scale()
         if is_upd:
-            self.update_bigmap(itt.capture())
+            area = AnchorPosi(0, 0, 1920, 1080)
+            self.update_bigmap(itt.capture(anchor_posi=area))
         logger.debug(f"bigmap px posi: {self.bigmap_position}")
         return self.bigmap_position
 
@@ -198,15 +199,6 @@ class Map(MiniMap, BigMap):
         Args:
             target_posi (_type_): png map上的目标坐标 
             float_posi (int, optional): 如果点到了什么东东导致移动失败，自动增加该值. Defaults to 0.
-
-        Returns:
-            _type_: _description_
-        """
-
-        """需要处理的异常：
-
-        1. 点击到某个东西弹出右侧弹框
-        2. 点击到一坨按键弹出一坨东西
         
         警告：此函数为内部函数，不要在外部调用。如果一定要调用应先设置地图缩放。
         
@@ -282,24 +274,18 @@ class Map(MiniMap, BigMap):
 
     def _switch_to_area(self, tp_province, tp_region):
 
-        def click_box(box, parent_area):
-            offset = (parent_area.position[0], parent_area.position[1])
-            center = area_center(box)
-            center = (center[0] + offset[0], center[1] + offset[1])
-            itt.move_and_click(center)
-
         def expand_province_dropdown(tp_province, first_region, text_box_dict):
             # 如果识别出“纪念山地”，说明心愿原野下拉框已展开
             if not first_region in text_box_dict:
                 box = text_box_dict[tp_province]
-                click_box(box, AreaBigMapRegionSelect)
+                AreaBigMapRegionSelect.click(target_box=box)
                 time.sleep(0.5)
 
         # 判断当前区域是否是目标区域
         current_region, _ = self.update_region_and_map_name()
         if current_region != tp_region:
             # 不是目标区域，就进行区域选择
-            itt.move_and_click(AreaBigMapRegionName.center_position())
+            AreaBigMapRegionName.click()
             time.sleep(0.5)
             text_box_dict = itt.ocr_and_detect_posi(AreaBigMapRegionSelect)
             if tp_province not in text_box_dict or tp_province == "星海":
@@ -355,7 +341,7 @@ class Map(MiniMap, BigMap):
         itt.wait_until_stable()
         button_text = itt.ocr_single_line(AreaBigMapTeleportButton)
         if button_text == "传送":
-            itt.move_and_click(AreaBigMapTeleportButton.center_position())
+            AreaBigMapTeleportButton.click()
         elif button_text == "追踪":
             raise BigMapTPError("流转之柱未解锁")
         else:
@@ -366,7 +352,7 @@ class Map(MiniMap, BigMap):
                 itt.wait_until_stable()
                 button_text = itt.ocr_single_line(AreaBigMapTeleportButton)
                 if button_text == "传送":
-                    itt.move_and_click(AreaBigMapTeleportButton.center_position())
+                    AreaBigMapTeleportButton.click()
                 elif button_text == "追踪":
                     raise BigMapTPError("流转之柱未解锁")
                 else:

@@ -7,6 +7,7 @@ from typing import Union, Tuple
 from whimbox.common.cvars import *
 from whimbox.common.utils.posi_utils import euclidean_distance_plist
 from whimbox.common.errors import FunctionModeError
+from whimbox.common.utils.asset_utils import AnchorPosi
 
 
 def load_image(file, area=None):
@@ -43,21 +44,102 @@ def save_image(image, file):
     Image.fromarray(image).save(file)
 
 
-def crop(image, area, copy=True):
+def crop(image, anchor_posi: AnchorPosi, copy=True, base_resolution=(1920, 1080)):
     """
     Crop image like pillow, when using opencv / numpy.
     Provides a black background if cropping outside of image.
+    
+    Supports multi-resolution adaptation using anchor-based positioning.
+    Area coordinates are based on base_resolution (default 1920x1080).
 
     Args:
-        image (np.ndarray):
-        area:
-        copy (bool):
+        image (np.ndarray): Input image
+        area (tuple): Crop area (x1, y1, x2, y2) based on base_resolution
+        copy (bool): Whether to copy the result
+        anchor (str): Anchor point for resolution adaptation. Options:
+            - 'TOP_LEFT': Top-left corner (default)
+            - 'TOP_RIGHT': Top-right corner
+            - 'BOTTOM_LEFT': Bottom-left corner
+            - 'BOTTOM_RIGHT': Bottom-right corner
+            - 'CENTER': Center of screen
+            - 'TOP_CENTER': Top-center
+            - 'BOTTOM_CENTER': Bottom-center
+            - 'LEFT_CENTER': Left-center
+            - 'RIGHT_CENTER': Right-center
+            - 'NONE': No adaptation, use area coordinates directly
+        base_resolution (tuple): Base resolution (width, height) for area coordinates
 
     Returns:
-        np.ndarray:
+        np.ndarray: Cropped image
     """
-    x1, y1, x2, y2 = map(int, map(round, area))
     h, w = image.shape[:2]
+    base_w, base_h = base_resolution
+
+    x1, y1, x2, y2 = anchor_posi.x1, anchor_posi.y1, anchor_posi.x2, anchor_posi.y2
+    anchor = anchor_posi.anchor
+    expand = anchor_posi.expand
+    # 如果锚点为NONE，或者是标准1920x1080，或者是用于手动截取(image宽度小于1920)，则不进行适应
+    if anchor == ANCHOR_NONE or (w == base_w and h == base_h) or w < base_w:
+        pass
+    else:
+        if anchor == ANCHOR_TOP_LEFT:
+            # No offset needed, coordinates stay the same
+            offset_x, offset_y = 0, 0
+            if expand:
+                y2 += h - base_h
+        elif anchor == ANCHOR_TOP_RIGHT:
+            # Offset from right edge
+            offset_x = w - base_w
+            offset_y = 0
+            if expand:
+                y2 += h - base_h
+        elif anchor == ANCHOR_BOTTOM_LEFT:
+            # Offset from bottom edge
+            offset_x = 0
+            offset_y = h - base_h
+        elif anchor == ANCHOR_BOTTOM_RIGHT:
+            # Offset from bottom-right corner
+            offset_x = w - base_w
+            offset_y = h - base_h
+        elif anchor == ANCHOR_CENTER:
+            # Offset from center
+            offset_x = (w - base_w) // 2
+            offset_y = (h - base_h) // 2
+            if expand:
+                y1 -= (h-base_h)//2
+                y2 += (h-base_h)//2
+        elif anchor == ANCHOR_TOP_CENTER:
+            # Offset from top-center
+            offset_x = (w - base_w) // 2
+            offset_y = 0
+        elif anchor == ANCHOR_BOTTOM_CENTER:
+            # Offset from bottom-center
+            offset_x = (w - base_w) // 2
+            offset_y = h - base_h
+        elif anchor == ANCHOR_LEFT_CENTER:
+            # Offset from left-center
+            offset_x = 0
+            offset_y = (h - base_h) // 2
+            if expand:
+                y1 -= (h-base_h)//2
+                y2 += (h-base_h)//2
+        elif anchor == ANCHOR_RIGHT_CENTER:
+            # Offset from right-center
+            offset_x = w - base_w
+            offset_y = (h - base_h) // 2
+            if expand:
+                y1 -= (h-base_h)//2
+                y2 += (h-base_h)//2
+        else:
+            raise ValueError(f"Unknown anchor type: {anchor}")
+        
+        # Apply offset to area coordinates
+        x1 = int(round(x1 + offset_x))
+        y1 = int(round(y1 + offset_y))
+        x2 = int(round(x2 + offset_x))
+        y2 = int(round(y2 + offset_y))
+    
+    # Original cropping logic
     border = np.maximum((0 - y1, y2 - h, 0 - x1, x2 - w), 0)
     x1, y1, x2, y2 = np.maximum((x1, y1, x2, y2), 0)
     image = image[y1:y2, x1:x2]

@@ -15,6 +15,7 @@ from whimbox.common.logger import logger, get_logger_format_date
 from whimbox.common.utils.img_utils import crop, process_with_hsv_limit, similar_img, add_padding
 from whimbox.config.config import global_config
 from whimbox.ui.ui_assets import IconShopFeature, IconGachaFeature
+from whimbox.common.utils.asset_utils import AnchorPosi
 
 ocr_type = global_config.get('General', 'ocr')
 if ocr_type == 'rapid':
@@ -56,11 +57,11 @@ class InteractionBGD:
         self.capture_obj = PrintWindowCapture(self.hwnd_handler)
 
 
-    def capture(self, posi=None, jpgmode=NORMAL_CHANNELS):
+    def capture(self, anchor_posi: AnchorPosi=None, jpgmode=NORMAL_CHANNELS):
         """窗口客户区截图
 
         Args:
-            posi ( [x1,y1,x2,y2] ): 截图区域的坐标, y2>y1,x2>x1. 全屏截图时为None。
+            posi ( AnchorPosi ): 截图区域的坐标, y2>y1,x2>x1. 全屏截图时为None。
             jpgmode(int): 
                 0:return jpg (3 channels, delete the alpha channel)
                 1:return nikki background channel, background color is black
@@ -71,8 +72,8 @@ class InteractionBGD:
         """
 
         ret = self.capture_obj.capture()
-        if posi is not None:
-            ret = crop(ret, posi)
+        if anchor_posi is not None:
+            ret = crop(ret, anchor_posi)
         if ret.shape[2]==3:
             pass
         elif jpgmode == NORMAL_CHANNELS:
@@ -83,7 +84,7 @@ class InteractionBGD:
 
 
     def ocr_single_line(self, area: posi_manager.Area, padding=50, hsv_limit=None) -> str:
-        cap = self.capture(posi = area.position)
+        cap = self.capture(anchor_posi = area.position)
         if hsv_limit:
             cap = process_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
         if padding:
@@ -92,7 +93,7 @@ class InteractionBGD:
         return res
 
     def ocr_multiple_lines(self, area: posi_manager.Area, padding=50, hsv_limit=None) -> list:
-        cap = self.capture(posi = area.position)
+        cap = self.capture(anchor_posi = area.position)
         if hsv_limit:
             cap = process_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
         if padding:
@@ -101,7 +102,7 @@ class InteractionBGD:
         return res
 
     def ocr_and_detect_posi(self, area: posi_manager.Area, padding=50, hsv_limit=None):
-        cap = self.capture(posi=area.position)
+        cap = self.capture(anchor_posi=area.position)
         if hsv_limit:
             cap = process_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
         if padding:
@@ -144,19 +145,13 @@ class InteractionBGD:
         """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if cap is None:
-            cap = self.capture(posi=imgicon.cap_posi)
+            cap = self.capture(anchor_posi=imgicon.cap_posi)
         if imgicon.hsv_limit is not None:
             cap = process_with_hsv_limit(cap, imgicon.hsv_limit[0], imgicon.hsv_limit[1])
         elif imgicon.gray_limit is not None:
             cap = cv2.cvtColor(cap, cv2.COLOR_BGRA2GRAY)
             _, cap = cv2.threshold(cap, imgicon.gray_limit[0], imgicon.gray_limit[1], cv2.THRESH_BINARY)
         matching_rate = similar_img(cap, imgicon.image, is_gray=is_gray, is_show_res=show_res)
-        
-        if matching_rate >= imgicon.threshold:
-            if imgicon.win_text != None:
-                re_text = ocr.get_all_texts(cap, mode=1)
-                if imgicon.win_text not in re_text:
-                    matching_rate = 0
 
         if imgicon.is_print_log(matching_rate >= imgicon.threshold):
             logger.trace(
@@ -181,7 +176,7 @@ class InteractionBGD:
 
     def get_text_existence(self, textobj: text_manager.TextTemplate, ret_mode=IMG_BOOL, cap=None):
         if cap == None:
-            cap = self.capture(posi = textobj.cap_area.position)
+            cap = self.capture(anchor_posi=textobj.cap_area.position)
         cap = add_padding(cap, 50)
         res = ocr.get_all_texts(cap)
         is_exist = textobj.match_results(res)
@@ -220,16 +215,18 @@ class InteractionBGD:
 
         if isinstance(inputvar, img_manager.ImgIcon):
             match_position = self.get_img_existence(inputvar, is_gray=is_gray, ret_mode=IMG_POSI)
+            anchor = inputvar.cap_posi.anchor
             
         elif isinstance(inputvar, text_manager.TextTemplate):
             match_position = self.get_text_existence(inputvar, ret_mode=IMG_POSI)
+            anchor = inputvar.cap_area.anchor
         
         if match_position:
             logger.trace(f"appear then click: True: {inputvar.name} func: {upper_func_name}")
             if key_name == "left_mouse":
-                self.move_and_click(match_position)
+                self.move_and_click(match_position, anchor=anchor)
             elif key_name == "right_mouse":
-                self.move_and_click(match_position, type='right')
+                self.move_and_click(match_position, anchor=anchor, type='right')
             else:
                 self.key_press(key_name)
             return True
@@ -426,7 +423,7 @@ class InteractionBGD:
         self.operation_lock.release()
 
     @before_operation(print_log=False)
-    def move_to(self, position, relative=False):
+    def move_to(self, position, anchor=ANCHOR_TOP_LEFT, relative=False):
         """移动鼠标到坐标
 
         Args:
@@ -438,12 +435,13 @@ class InteractionBGD:
             int(position[0]), 
             int(position[1]),
             resolution=self.capture_obj.resolution,
+            anchor=anchor,
             relative=relative)
         self.operation_lock.release()
 
 
     @before_operation()
-    def move_and_click(self, position, type='left', delay = 0.3):
+    def move_and_click(self, position, anchor=ANCHOR_TOP_LEFT, type='left', delay=0.3):
         """移动鼠标到坐标并点击
 
         Args:
@@ -456,6 +454,7 @@ class InteractionBGD:
             int(position[0]), 
             int(position[1]), 
             resolution=self.capture_obj.resolution,
+            anchor=anchor,
             relative=False)
         time.sleep(delay)
         

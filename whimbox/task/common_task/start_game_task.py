@@ -109,7 +109,7 @@ class StartGameTask(TaskTemplate):
                 if not HANDLE_OBJ.is_alive():
                     HANDLE_OBJ.refresh_handle()
                 shape_ok, width, height = HANDLE_OBJ.check_shape()
-                if shape_ok or (width > 0 and height > 0 and width/height == 1920/1080): # 条件放宽，有些电脑不进入游戏不会恢复分辨率
+                if shape_ok:
                     break
                 else:
                     if retry_time == 24:
@@ -127,23 +127,17 @@ class StartGameTask(TaskTemplate):
             self.update_task_result(status=STATE_TYPE_SUCCESS, message="成功进入游戏")
             return STEP_NAME_FINISH
 
-        def click_box(box, parent_area):
-            offset = (parent_area.position[0], parent_area.position[1])
-            center = area_center(box)
-            center = (center[0] + offset[0], center[1] + offset[1])
-            itt.move_and_click(center)
-
         # 检测是否在登录界面
         while not self.need_stop():
             time.sleep(1)
             text_box_dict = itt.ocr_and_detect_posi(AreaLoginOCR)
             logger.info(f"登录界面文字: {text_box_dict.keys()}")
             if "点击进入游戏" in text_box_dict:
-                click_box(text_box_dict["点击进入游戏"], AreaLoginOCR)
+                AreaLoginOCR.click(target_box=text_box_dict["点击进入游戏"])
                 break
             if "确认" in text_box_dict and "退出游戏" not in text_box_dict and "账号登出" not in text_box_dict:
                 self.log_to_gui("发现新版本，开始更新")
-                click_box(text_box_dict["确认"], AreaLoginOCR)
+                AreaLoginOCR.click(target_box=text_box_dict["确认"])
                 time.sleep(10)
                 return "step2"
             else:

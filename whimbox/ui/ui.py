@@ -129,9 +129,15 @@ class UI():
                 if isinstance(button, str):
                     itt.key_press(button)
                 elif isinstance(button, Button):
-                    itt.appear_then_click(button)
+                    if not itt.appear_then_click(button):
+                        logger.warning(f"未找到按钮：{button.name}")
+                        success = False
+                        break
                 elif isinstance(button, Text):
-                    itt.appear_then_click(button)
+                    if not itt.appear_then_click(button):
+                        logger.warning(f"未找到按钮：{button.text}")
+                        success = False
+                        break
                 
                 # itt.delay(1, comment="goto_page is waiting for page transition")
                 logger.info("waiting for page transition")

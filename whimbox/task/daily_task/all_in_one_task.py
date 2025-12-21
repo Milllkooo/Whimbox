@@ -155,6 +155,7 @@ class AllInOneTask(TaskTemplate):
 
 if __name__ == "__main__":
     task = AllInOneTask()
-    result = task.task_run()
-    print(result.to_dict())
+    # result = task.task_run()
+    # print(result.to_dict())
+    task.step3()
         

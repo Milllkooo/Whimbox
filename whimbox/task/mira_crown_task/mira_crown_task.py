@@ -26,7 +26,7 @@ class MiraCrownTask(TaskTemplate):
                 star_num = int(text.split("/")[0])
                 if star_num < 24:
                     self.log_to_gui(f"奇迹之冠进度为{text}")
-                    itt.move_and_click(AreaMiraCrownOverview.position)
+                    AreaMiraCrownOverview.click()
                     itt.delay(1, comment="等待奇迹之冠页面加载")
                 else:
                     ui_control.goto_page(page_main)

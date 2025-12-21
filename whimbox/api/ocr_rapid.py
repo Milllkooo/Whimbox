@@ -101,5 +101,5 @@ ocr = RapidOcr()
 if __name__ == '__main__':
     from whimbox.interaction.interaction_core import itt
     from whimbox.ui.ui_assets import *
-    img = itt.capture(AreaBlessHuanjingLevelsSelect.position)
+    img = itt.capture(anchor_posi=AreaBlessHuanjingLevelsSelect.position)
     print(ocr.detect_and_ocr(img, show_res=True))

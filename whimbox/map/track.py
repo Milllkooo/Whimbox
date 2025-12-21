@@ -74,7 +74,7 @@ class Track:
         time.sleep(0.2) # 等待一会，避免识别到上一个素材的追踪按钮
         button_text = itt.ocr_single_line(AreaBigMapMaterialTrackConfirm, padding=50)
         if button_text == "精确追踪":
-            itt.move_and_click(AreaBigMapMaterialTrackConfirm.center_position())
+            AreaBigMapMaterialTrackConfirm.click()
             itt.wait_until_stable()
             self.tracking_material = material_name
             ui_control.goto_page(page_main)
@@ -150,7 +150,7 @@ class Track:
         '''
         判断能力是否激活，通过判断能力按钮外圈是否发光，来判断是否可以使用能力了
         '''
-        img = itt.capture(AreaAbilityButton.position)
+        img = itt.capture(anchor_posi=AreaAbilityButton.position)
         lower = [0, 80, 200]
         upper = [30, 110, 255]
         px_count = count_px_with_hsv_limit(img, lower, upper)

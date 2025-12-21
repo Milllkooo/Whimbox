@@ -39,7 +39,9 @@ def gen_arrows_map(arrow: MapAsset):
     arrows = {}
     for degree in range(0, 360):
         rotated = rotate_bound(arrow.img, degree)
-        rotated = crop(rotated, area=get_bbox(rotated, threshold=15))
+        area = get_bbox(rotated, threshold=15)
+        area = AnchorPosi(area[0], area[1], area[2], area[3])
+        rotated = crop(rotated, area=area)
         rotated = color_similarity_2d(rotated, color=(255,255,255))
         arrows[degree] = rotated
     return arrows

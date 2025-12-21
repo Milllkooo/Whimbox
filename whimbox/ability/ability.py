@@ -41,7 +41,7 @@ class AbilityManager:
         self.battle_ability = None
 
     def get_current_ability(self):
-        cap = itt.capture(posi=AreaAbilityButton.position)
+        cap = itt.capture(anchor_posi=AreaAbilityButton.position)
         lower_white = [0, 0, 230]
         upper_white = [180, 60, 255]
         img = process_with_hsv_limit(cap, lower_white, upper_white)
@@ -54,6 +54,7 @@ class AbilityManager:
 
     def _get_ability_hsv_icon(self, center, cap):
         area = area_offset((-ability_icon_radius, -ability_icon_radius, ability_icon_radius, ability_icon_radius), offset=center)
+        area = AnchorPosi(area[0], area[1], area[2], area[3], anchor=ANCHOR_CENTER)
         img = crop(cap, area)
         lower_white = [0, 0, 230]
         upper_white = [180, 60, 255]
@@ -96,14 +97,14 @@ class AbilityManager:
 
     def _change_ability_plan(self, ability_plan: int):
         # 切换能力配置方案，需要已经在能力配置界面
-        itt.move_and_click(AreaAbilityPlanChangeButton.center_position())
+        AreaAbilityPlanChangeButton.click()
         time.sleep(0.2)
         if ability_plan == 1:
-            itt.move_and_click(AreaAbilityPlan1Button.center_position())
+            AreaAbilityPlan1Button.click()
         elif ability_plan == 2:
-            itt.move_and_click(AreaAbilityPlan2Button.center_position())
+            AreaAbilityPlan2Button.click()
         elif ability_plan == 3:
-            itt.move_and_click(AreaAbilityPlan3Button.center_position())
+            AreaAbilityPlan3Button.click()
         else:
             raise(f'能力方案只能是123')
     
@@ -146,7 +147,7 @@ class AbilityManager:
             target_ability_icon_center = jump_ability_center
         else:
             target_ability_icon_center = ability_icon_centers[ability_index]
-        itt.move_and_click(target_ability_icon_center)
+        itt.move_and_click(target_ability_icon_center, anchor=ANCHOR_CENTER)
         time.sleep(0.2)
         # 一直向上滚到头，直到画面不再变化
         scroll_to_top(AreaAbilityChange)

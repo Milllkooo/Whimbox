@@ -117,7 +117,7 @@ class DigTask(TaskTemplate):
             if wait_until_appear(ButtonDigConfirm):
                 if wait_until_appear_then_click(ButtonDigTime20h):
                     time.sleep(0.2)
-                    itt.move_and_click(ButtonDigConfirm.click_position())
+                    ButtonDigConfirm.click()
                     time.sleep(0.2)
                     self.log_to_gui(f"确认挖掘：{item_name}")
                     return

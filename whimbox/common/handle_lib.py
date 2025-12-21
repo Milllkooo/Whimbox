@@ -70,13 +70,13 @@ class ProcessHandler():
     def check_shape(self):
         if self.is_alive():
             _, _, width, height = win32gui.GetClientRect(self.handle)
-            if height == 0:
+            if width < 1900:
+                # 仅支持大于1920分辨率，太小的画面缩放后特征识别容易出错
                 return False, 0, 0
-            elif width/height == 1920/1080:
-                if height < 1080 or height > 1440:
-                    return False, width, height
-                else:
-                    return True, width, height
+            elif 1.55 < width/height < 1.80:
+                # 支持16:9和16:10分辨率
+                # 有些用户在特定显示器和缩放下会生成奇怪的1920x1081分辨率，增加宽容度
+                return True, width, height
             else:
                 return False, width, height
         return False, 0, 0

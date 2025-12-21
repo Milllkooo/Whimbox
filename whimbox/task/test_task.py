@@ -1,6 +1,8 @@
+from whimbox.common.utils.ui_utils import back_to_page_main
 from whimbox.task.task_template import TaskTemplate, register_step
 import time
 from whimbox.common.logger import logger
+from whimbox.ui.ui import ui_control
 
 class TestTask(TaskTemplate):
     def __init__(self):
@@ -21,10 +23,15 @@ if __name__ == "__main__":
     from whimbox.common.utils.img_utils import *
     from whimbox.ui.ui_assets import *
     from whimbox.common.cvars import IMG_RATE
-    # cap = cv2.imread(os.path.join(ROOT_PATH, "..", "tools", "snapshot", "1763953735.083236.png"))
+    from whimbox.common.utils import ui_utils
+    from whimbox.ui.page_assets import *
+    # cap = cv2.imread(os.path.join(ROOT_PATH, "..", "tools", "snapshot", "B4339894C4FFFC0E093FDA54C0CBBDBF.png"))
     # cap = crop(cap, IconBGSkipDialog.bbg_posi)
     # print(itt.get_img_existence(IconBGSkipDialog, cap=cap, ret_mode=IMG_RATE, show_res=True))
     while True:
-        print(itt.get_img_existence(ButtonJihuaFinallyConfirm, ret_mode=IMG_RATE, show_res=True))
+        print(itt.get_img_existence(ButtonHuanjingGo, ret_mode=IMG_RATE, show_res=True))
+        # cv2.imshow("cap", itt.capture(AreaBlessHuanjingDifficulty3.position))
+        # cv2.waitKey(1)
         time.sleep(0.5)
+    # ui_control.goto_page(page_huanjing_bless)
 

@@ -1,105 +1,106 @@
 from whimbox.ui.template.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHEN_FALSE, ImgIcon
 from whimbox.ui.template.button_manager import Button
-from whimbox.ui.template.posi_manager import PosiTemplate, Area
-from whimbox.ui.template.text_manager import TextTemplate, Text
+from whimbox.ui.template.posi_manager import Area
+from whimbox.ui.template.text_manager import Text
+from whimbox.common.cvars import *
 
 # 很多界面左上角都有的文字标题区域
-AreaPageTitleFeature = Area()
+AreaPageTitleFeature = Area(anchor=ANCHOR_TOP_LEFT)
 
 # 主界面、esc菜单、抽卡、商城相关
-IconPageMainFeature = ImgIcon(print_log=LOG_NONE, threshold=0.90, gray_limit=(230, 255))
-IconDungeonFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(230, 255))
-AreaUITime = Area()
-AreaEscEntrances = Area()
-IconGachaFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
-IconShopFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99)
+IconPageMainFeature = ImgIcon(print_log=LOG_NONE, threshold=0.90, gray_limit=(230, 255), anchor=ANCHOR_BOTTOM_LEFT)
+IconDungeonFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(230, 255), anchor=ANCHOR_TOP_LEFT)
+AreaUITime = Area(anchor=ANCHOR_TOP_LEFT)
+AreaEscEntrances = Area(anchor=ANCHOR_LEFT_CENTER)
+IconGachaFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99, anchor=ANCHOR_TOP_RIGHT)
+IconShopFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99, anchor=ANCHOR_TOP_LEFT)
 # IconPageLoginFeature = ImgIcon(print_log=LOG_ALL, threshold=0.90, hsv_limit=([0, 0, 220], [179, 50, 255]))
-AreaLoginOCR = Area()
+AreaLoginOCR = Area(anchor=ANCHOR_CENTER, expand=True)
 AreaLaunchButton = Area()
 
 # loading界面
 IconUILoading = ImgIcon(print_log=LOG_NONE, threshold=0.99)
 
 # 大地图相关
-IconUIBigmap = ImgIcon(print_log=LOG_WHEN_TRUE)
-IconBigMapMaxScale = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(155, 255))
-ButtonBigMapZoom = Button(print_log=LOG_WHEN_TRUE)
-AreaBigMapTeleportButton = Area()
-AreaBigMapRegionName = Area()
-AreaBigMapRegionSelect = Area()
-AreaBigMapTeleporterSelect = Area()
+IconUIBigmap = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_LEFT)
+IconBigMapMaxScale = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(155, 255), anchor=ANCHOR_BOTTOM_LEFT)
+ButtonBigMapZoom = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_LEFT)
+AreaBigMapTeleportButton = Area(anchor=ANCHOR_BOTTOM_RIGHT)
+AreaBigMapRegionName = Area(anchor=ANCHOR_TOP_RIGHT)
+AreaBigMapRegionSelect = Area(anchor=ANCHOR_TOP_RIGHT, expand=True)
+AreaBigMapTeleporterSelect = Area(anchor=ANCHOR_RIGHT_CENTER)
 # 大地图材料追踪
-AreaBigMapMaterialTypeSelect = Area()
-AreaBigMapMaterialSelect = Area()
-AreaBigMapMaterialTrackConfirm = Area()
+AreaBigMapMaterialTypeSelect = Area(anchor=ANCHOR_CENTER)
+AreaBigMapMaterialSelect = Area(anchor=ANCHOR_CENTER)
+AreaBigMapMaterialTrackConfirm = Area(anchor=ANCHOR_CENTER)
 
 # 大世界采集、跳跃、移动、跳过等相关的UI
-AreaPickup = Area()
+AreaPickup = Area(anchor=ANCHOR_CENTER, expand=True)
 TextPickUp = Text("拾取", cap_area = AreaPickup)
 IconPickupFeature = ImgIcon(print_log=LOG_NONE, threshold=0.75, gray_limit=(210, 255))
-IconSkip = ImgIcon(print_log=LOG_NONE, threshold=0.73, gray_limit=(210, 255))
-IconClickSkip = ImgIcon(print_log=LOG_ALL, threshold=0.80, gray_limit=(210, 255))
-AreaDialogSelection = Area()
-IconSkipDialog = ImgIcon(print_log=LOG_NONE, threshold=0.73, gray_limit=(210, 255))
-IconMovementWalk = ImgIcon(print_log=LOG_NONE, threshold=0.85, hsv_limit=([0, 0, 210], [180, 50, 255]))
-AreaMaterialGetText = Area()
-AreaAbilityButton = Area()
+IconSkip = ImgIcon(print_log=LOG_NONE, threshold=0.73, gray_limit=(210, 255), anchor=ANCHOR_BOTTOM_RIGHT)
+IconClickSkip = ImgIcon(print_log=LOG_ALL, threshold=0.80, gray_limit=(210, 255), anchor=ANCHOR_BOTTOM_RIGHT)
+AreaDialogSelection = Area(anchor=ANCHOR_RIGHT_CENTER)
+IconSkipDialog = ImgIcon(print_log=LOG_NONE, threshold=0.73, gray_limit=(210, 255), anchor=ANCHOR_BOTTOM_RIGHT)
+IconMovementWalk = ImgIcon(print_log=LOG_NONE, threshold=0.85, hsv_limit=([0, 0, 210], [180, 50, 255]), anchor=ANCHOR_BOTTOM_RIGHT)
+AreaMaterialGetText = Area(anchor=ANCHOR_BOTTOM_LEFT)
+AreaAbilityButton = Area(anchor=ANCHOR_BOTTOM_RIGHT)
 
 # 钓鱼相关
-IconFishingNoFish = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, hsv_limit=([0,0,175], [20,255,255])) # 鱼掉光时候的图标
-AreaFishingDetection = Area()  # B区域（鱼进度检测区域）
-AreaFishingIcons = Area()
+IconFishingNoFish = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, hsv_limit=([0,0,175], [20,255,255]), anchor=ANCHOR_TOP_CENTER) # 鱼掉光时候的图标
+AreaFishingDetection = Area(anchor=ANCHOR_CENTER, expand=True)  # B区域（鱼进度检测区域）
+AreaFishingIcons = Area(anchor=ANCHOR_BOTTOM_RIGHT)
 IconFishingHomeFeature = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))      # 取消钓陨星
 IconFishingMiralandFeature = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 取消钓鱼
-IconFishingFinish = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 收竿图标，容易和收线图标识别错，提高点阈值
+IconFishingFinish = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 收竿图标
 IconFishingStrike = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255)) # 提竿图标
 IconFishingPullLine = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 大世界拉扯鱼线图标
 IconFishingPullLineHome = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 家园拉扯鱼线图标
 IconFishingReelIn = ImgIcon(print_log=LOG_NONE, threshold=0.80, gray_limit=(210, 255))  # 收线图标
 
 # 幻境挑战页面
-ButtonHuanjingGo = Button(print_log=LOG_WHEN_TRUE)
-AreaHuanjingMonsterEntrace = Area()
+ButtonHuanjingGo = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+AreaHuanjingMonsterEntrace = Area(anchor=ANCHOR_CENTER)
 TextHuanjingMonsterEntrace = Text("魔物试炼幻境", cap_area = AreaHuanjingMonsterEntrace)
-AreaHuanjingBlessEntrace = Area()
+AreaHuanjingBlessEntrace = Area(anchor=ANCHOR_CENTER)
 TextHuanjingBlessEntrace = Text("祝福闪光幻境", cap_area = AreaHuanjingBlessEntrace)
-AreaHuanjingZiyangEntrace = Area()
+AreaHuanjingZiyangEntrace = Area(anchor=ANCHOR_CENTER)
 TextHuanjingZiyangEntrace = Text("奇想滋养幻境", cap_area = AreaHuanjingZiyangEntrace)
-AreaHuanjingJihuaEntrace = Area()
+AreaHuanjingJihuaEntrace = Area(anchor=ANCHOR_CENTER)
 TextHuanjingJihuaEntrace = Text("素材激化幻境", cap_area = AreaHuanjingJihuaEntrace)
-AreaHuanjingBossEntrace = Area()
+AreaHuanjingBossEntrace = Area(anchor=ANCHOR_CENTER)
 TextHuanjingBossEntrace = Text("心之突破幻境", cap_area = AreaHuanjingBossEntrace)
 
 # 祝福闪光幻境相关
-AreaBlessHuanjingLevelsSelect = Area()
-AreaBlessHuanjingDifficulty3 = Area()
-TextBlessHuanjingDifficulty3 = Text("困难", cap_area = AreaBlessHuanjingDifficulty3)
-ButtonBlessHuanjingQuickPlay = Button(print_log=LOG_WHEN_TRUE)
-ButtonBlessHuanjingNumMax = Button(print_log=LOG_WHEN_TRUE)
-ButtonHuanjingConfirm = Button(print_log=LOG_ALL, threshold=0.99)
-ButtonHuanjingCancel = Button(print_log=LOG_ALL, threshold=0.99)
+AreaBlessHuanjingLevelsSelect = Area(anchor=ANCHOR_TOP_LEFT, expand=True)
+AreaBlessHuanjingDifficulty3 = Area(anchor=ANCHOR_TOP_RIGHT)
+TextBlessHuanjingDifficulty3 = Text("困难", cap_area=AreaBlessHuanjingDifficulty3)
+ButtonBlessHuanjingQuickPlay = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_RIGHT)
+ButtonBlessHuanjingNumMax = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+ButtonHuanjingConfirm = Button(print_log=LOG_ALL, threshold=0.99, anchor=ANCHOR_CENTER)
+ButtonHuanjingCancel = Button(print_log=LOG_ALL, threshold=0.99, anchor=ANCHOR_CENTER)
 
 # 素材激化幻境相关
-ButtonJihuaInnerGo = Button(print_log=LOG_WHEN_TRUE)
-AreaTextJihuatai = Area()
+ButtonJihuaInnerGo = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_RIGHT)
+AreaTextJihuatai = Area(anchor=ANCHOR_CENTER, expand=True)
 TextJihuatai = Text("打开素材激化台", cap_area = AreaTextJihuatai)
-AreaJihuaTargetSelect = Area()
-AreaJihuaCostSelect = Area()
-ButtonJihuaNumMax = Button(print_log=LOG_WHEN_TRUE)
-ButtonJihuaNumConfirm = Button(print_log=LOG_WHEN_TRUE)
-ButtonJihuaFinallyConfirm = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
+AreaJihuaTargetSelect = Area(anchor=ANCHOR_TOP_RIGHT)
+AreaJihuaCostSelect = Area(anchor=ANCHOR_TOP_LEFT, expand=True)
+ButtonJihuaNumMax = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+ButtonJihuaNumConfirm = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+ButtonJihuaFinallyConfirm = Button(print_log=LOG_WHEN_TRUE, threshold=0.99, anchor=ANCHOR_BOTTOM_RIGHT)
 
 # 魔物试炼幻境相关
 # 基本可以复用祝福闪光幻境
 
 # 每周幻境相关
-AreaWeeklyCountText = Area()
+AreaWeeklyCountText = Area(anchor=ANCHOR_CENTER)
 
 # 美鸭梨挖掘相关
-ButtonDigGather = Button(print_log=LOG_WHEN_TRUE)
-ButtonDigGatherConfirm = Button(print_log=LOG_WHEN_TRUE)
-ButtonDigAgain = Button(print_log=LOG_WHEN_TRUE)
-AreaDigingNumText = Area()
+ButtonDigGather = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_RIGHT_CENTER)
+ButtonDigGatherConfirm = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+ButtonDigAgain = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+AreaDigingNumText = Area(anchor=ANCHOR_RIGHT_CENTER)
 AreaDigMainTypeSelect = Area()
 AreaDigSubTypeSelect = Area()
 AreaDigItemSelect = Area()
@@ -107,29 +108,29 @@ ButtonDigConfirm = Button(print_log=LOG_WHEN_TRUE)
 ButtonDigTime20h = Button(print_log=LOG_WHEN_TRUE, threshold=0.95)
 
 # 朝夕心愿相关
-ButtonZxxyEntrance = Button(print_log=LOG_WHEN_TRUE)
-IconZxxyFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(180, 255))
-AreaZxxyScore = Area()
-ButtonZxxyRewarded = Button(print_log=LOG_WHEN_TRUE)
-ButtonZxxyTask1 = Button()
-ButtonZxxyTask2 = Button()
-ButtonZxxyTask3 = Button()
-ButtonZxxyTask4 = Button()
-ButtonZxxyTask5 = Button()
-AreaZxxyTaskText = Area()
-IconUIZxxyTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE)
+ButtonZxxyEntrance = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_LEFT_CENTER)
+IconZxxyFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(180, 255), anchor=ANCHOR_RIGHT_CENTER)
+AreaZxxyScore = Area(anchor=ANCHOR_RIGHT_CENTER)
+ButtonZxxyRewarded = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_RIGHT_CENTER)
+ButtonZxxyTask1 = Button(anchor=ANCHOR_CENTER)
+ButtonZxxyTask2 = Button(anchor=ANCHOR_CENTER)
+ButtonZxxyTask3 = Button(anchor=ANCHOR_CENTER)
+ButtonZxxyTask4 = Button(anchor=ANCHOR_CENTER)
+ButtonZxxyTask5 = Button(anchor=ANCHOR_CENTER)
+AreaZxxyTaskText = Area(anchor=ANCHOR_BOTTOM_CENTER)
+IconUIZxxyTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_CENTER)
 
 # 星海拾遗相关
 # ButtonXhsyEntrance = Button(print_log=LOG_WHEN_TRUE)
 # IconUIXhsy = ImgIcon(print_log=LOG_WHEN_TRUE)
 
 # 换装界面
-ButtonWardrobeDressDIY = Button(print_log=LOG_WHEN_TRUE)
+ButtonWardrobeDressDIY = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_RIGHT_CENTER)
 
 # 能力配置界面
-AreaWardrobeTab3 = Area()
+AreaWardrobeTab3 = Area(anchor=ANCHOR_TOP_CENTER)
 TextWardrobeAbilityTab = Text("能力配置", cap_area = AreaWardrobeTab3)
-IconAbilityFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.70, gray_limit=(180, 255))
+IconAbilityFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.70, gray_limit=(180, 255), anchor=ANCHOR_CENTER)
 IconAbilityFloat = ImgIcon()    # 泡泡套跳跃
 IconAbilityWing = ImgIcon()    # 飞鸟套跳跃
 IconAbilityAnimal = ImgIcon()    # 清洁
@@ -137,12 +138,12 @@ IconAbilityInsect = ImgIcon()      # 捕虫
 IconAbilityFish = ImgIcon()     # 钓鱼
 IconAbilityFly = ImgIcon()      # 滑翔
 IconAbilitySmall = ImgIcon()    # 变小
-AreaAbilityChange = Area()
-ButtonAbilitySave = Button(print_log=LOG_WHEN_TRUE)
-AreaAbilityPlanChangeButton = Area()
-AreaAbilityPlan1Button = Area()
-AreaAbilityPlan2Button = Area()
-AreaAbilityPlan3Button = Area()
+AreaAbilityChange = Area(anchor=ANCHOR_CENTER)
+ButtonAbilitySave = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_RIGHT)
+AreaAbilityPlanChangeButton = Area(anchor=ANCHOR_TOP_LEFT)
+AreaAbilityPlan1Button = Area(anchor=ANCHOR_TOP_LEFT)
+AreaAbilityPlan2Button = Area(anchor=ANCHOR_TOP_LEFT)
+AreaAbilityPlan3Button = Area(anchor=ANCHOR_TOP_LEFT)
 
 # 素材相关
 IconMaterialTypeAnimal = ImgIcon(print_log=LOG_WHEN_TRUE)
@@ -154,14 +155,14 @@ IconMaterialTypeOther = ImgIcon(print_log=LOG_WHEN_TRUE)
 IconMaterialTypeDig1 = ImgIcon(print_log=LOG_WHEN_TRUE)
 
 # 拍照相关
-IconPhotoEdit = ImgIcon(print_log=LOG_WHEN_TRUE)
-IconPhotoDelete = ImgIcon(print_log=LOG_WHEN_TRUE)
-ButtonPhotoDeleteConfirm = Button(print_log=LOG_WHEN_TRUE)
+IconPhotoEdit = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_RIGHT)
+ButtonPhotoDelete = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_LEFT)
+ButtonPhotoDeleteConfirm = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
 
 # 大月卡，奇迹之旅
-ButtonMonthlyPassAward = Button(print_log=LOG_WHEN_TRUE)
-ButtonMonthlyPassTab1 = Button(print_log=LOG_WHEN_TRUE, threshold=0.95)
-ButtonMonthlyPassTab2 = Button(print_log=LOG_WHEN_TRUE, threshold=0.95)
+ButtonMonthlyPassAward = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+ButtonMonthlyPassTab1 = Button(print_log=LOG_WHEN_TRUE, threshold=0.95, anchor=ANCHOR_TOP_LEFT)
+ButtonMonthlyPassTab2 = Button(print_log=LOG_WHEN_TRUE, threshold=0.95, anchor=ANCHOR_TOP_LEFT)
 
 # 奇迹之冠
 AreaMiraCrownOverview = Area()
@@ -190,6 +191,6 @@ IconMonopolyTicketFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.99)
 ButtonMonopolyTaskFull = Button(print_log=LOG_WHEN_TRUE, threshold=0.99)
 
 # 小游戏相关
-ButtonMinigameQuit = Button(print_log=LOG_ALL, threshold=0.99)
-ButtonMinigameRetry = Button(print_log=LOG_ALL, threshold=0.99)
-ButtonMinigameRetryOk = Button(print_log=LOG_ALL, threshold=0.99)
+ButtonMinigameQuit = Button(print_log=LOG_ALL, threshold=0.99, anchor=ANCHOR_CENTER)
+ButtonMinigameRetry = Button(print_log=LOG_ALL, threshold=0.99, anchor=ANCHOR_CENTER)
+ButtonMinigameRetryOk = Button(print_log=LOG_ALL, threshold=0.99, anchor=ANCHOR_CENTER)

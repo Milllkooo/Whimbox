@@ -35,6 +35,7 @@ class MiniMap:
 
     def _get_minimap(self, image, radius):
         area = area_offset((-radius, -radius, radius, radius), offset=MINIMAP_CENTER)
+        area = AnchorPosi(area[0], area[1], area[2], area[3], anchor=ANCHOR_TOP_LEFT)
         image = crop(image, area)
         return image
 
@@ -65,6 +66,7 @@ class MiniMap:
         search_area = area_offset((0, 0, *search_size), offset=(-search_size // 2).astype(np.int64))
         search_area = area_offset(search_area, offset=np.multiply(search_position, POSITION_SEARCH_SCALE))
         search_area = np.array(search_area).astype(np.int64)
+        search_area = AnchorPosi(search_area[0], search_area[1], search_area[2], search_area[3])
         search_image = crop(MAP_ASSETS_DICT[self.map_name]['luma_05x'].img, search_area)
         if CV_DEBUG_MODE:
             show_search_image = search_image.copy()
@@ -87,14 +89,16 @@ class MiniMap:
         _, local_sim, _, loca = cv2.minMaxLoc(local_maximum)
 
         # Calculate the precise location using CUBIC
-        precise = crop(result, area=area_offset((-4, -4, 4, 4), offset=loca))
+        area = area_offset((-4, -4, 4, 4), offset=loca)
+        area = AnchorPosi(area[0], area[1], area[2], area[3])
+        precise = crop(result, area)
         precise_sim, precise_loca = cubic_find_maximum(precise, precision=0.05)
         precise_loca -= 5
 
         # Location on search_image
         lookup_loca = precise_loca + loca + np.array(image_size(image)) * scale / 2
         # Location on png
-        global_loca = (lookup_loca + search_area[:2]) / POSITION_SEARCH_SCALE
+        global_loca = (lookup_loca + [search_area.x1, search_area.y1]) / POSITION_SEARCH_SCALE
         # Can't figure out why but the result_of_0.5_lookup_scale + 0.5 ~= result_of_1.0_lookup_scale
         global_loca += POSITION_MOVE
         return precise_sim, local_sim, global_loca
@@ -150,6 +154,7 @@ class MiniMap:
         image = color_similarity_2d(image, color=DIRECTION_SIMILARITY_COLOR)
         try:
             area = area_pad(get_bbox(image, threshold=128), pad=-1)
+            area = AnchorPosi(area[0], area[1], area[2], area[3])
         except IndexError:
             # IndexError: index 0 is out of bounds for axis 0 with size 0
             logger.warning('No direction arrow on minimap')
@@ -229,6 +234,7 @@ class MiniMap:
         # Search 15% larger
         area = area_pad(area, pad=-int(radius * 0.15))
         area = np.array(area).astype(int)
+        area = AnchorPosi(area[0], area[1], area[2], area[3])
 
         # Crop pngmap around current position and resize to current minimap
         image = crop(MAP_ASSETS_DICT[self.map_name]['luma_05x'].img, area)

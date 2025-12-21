@@ -83,7 +83,7 @@ def scroll_find_click(area: Area, target, threshold=0, hsv_limit=None, scale=0, 
         bool: 是否找到目标
     '''
     box = None
-    cap = itt.capture(posi = area.position)
+    cap = itt.capture(anchor_posi = area.position)
     while True:
         stop_flag = get_current_stop_flag()
         if stop_flag.is_set():
@@ -140,13 +140,14 @@ def scroll_find_click(area: Area, target, threshold=0, hsv_limit=None, scale=0, 
             raise Exception(f"不支持的target类型: {type(target)}")
 
         # 如果没找到目标，就把鼠标移到area的右下角，向下滚动
-        scroll_posi = (area.position[2], area.position[3])
-        itt.move_to(scroll_posi)
+        # todo: 支持expand，不过暂时没什么关系
+        scroll_posi = (area.position.x2, area.position.y2)
+        itt.move_to(scroll_posi, anchor=area.position.anchor)
         itt.middle_scroll(-15)
         time.sleep(0.2)
 
         # 如果画面不再变化，说明滚到头了
-        new_cap = itt.capture(posi = area.position)
+        new_cap = itt.capture(anchor_posi = area.position)
         rate = similar_img(cap, new_cap)
         if rate > 0.99:
             break
@@ -154,12 +155,7 @@ def scroll_find_click(area: Area, target, threshold=0, hsv_limit=None, scale=0, 
             cap = new_cap
         
     if box:
-        center = area_center(box)
-        click_posi = (
-            area.position[0] + center[0] + click_offset[0], 
-            area.position[1] + center[1] + click_offset[1]
-        )
-        itt.move_and_click(click_posi)
+        area.click(target_box=box, offset=click_offset)
         return True
     else:
         return False
@@ -167,13 +163,14 @@ def scroll_find_click(area: Area, target, threshold=0, hsv_limit=None, scale=0, 
 
 def scroll_to_top(area: Area):
     # 鼠标移到area的右下角
-    scroll_posi = (area.position[2], area.position[3])
-    itt.move_to(scroll_posi)
-    last_cap = itt.capture(posi=area.position)
+    # todo: 支持expand，不过暂时没什么关系
+    scroll_posi = (area.position.x2, area.position.y2)
+    itt.move_to(scroll_posi, anchor=area.position.anchor)
+    last_cap = itt.capture(anchor_posi=area.position)
     while True:
         itt.middle_scroll(15)
         time.sleep(0.2)
-        new_cap = itt.capture(posi=area.position)
+        new_cap = itt.capture(anchor_posi=area.position)
         rate = similar_img(last_cap, new_cap)
         if rate > 0.99:
             break
@@ -216,7 +213,7 @@ def back_to_page_main():
     while not stop_flag.is_set():
         if itt.get_img_existence(IconDungeonFeature):
             itt.key_press(keybind.KEYBIND_BACK)
-        if itt.get_img_existence(IconPageMainFeature):
+        elif itt.get_img_existence(IconPageMainFeature):
             break
         else:
             itt.key_press('esc')
@@ -275,6 +272,9 @@ if __name__ == "__main__":
     # # scroll_find_click(AreaDigMainTypeSelect, IconMaterialTypeMonster, threshold=0.85, hsv_limit=hsv_limit, scale=1.233)
     # scroll_find_click(AreaDigSubTypeSelect, IconMaterialTypeInsect, threshold=0.85, hsv_limit=hsv_limit, scale=0.83)
 
-    scroll_find_click(AreaBlessHuanjingLevelsSelect, "翻滚", str_match_mode=1)
+    # scroll_find_click(AreaBlessHuanjingLevelsSelect, "翻滚", str_match_mode=1)
+    # scroll_find_click(AreaEscEntrances, "美鸭梨挖掘")
+    itt.capture()
+    scroll_to_top(AreaBlessHuanjingLevelsSelect)
 
     

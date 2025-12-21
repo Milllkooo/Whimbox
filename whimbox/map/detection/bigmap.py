@@ -41,7 +41,9 @@ class BigMap:
         _, local_sim, _, loca = cv2.minMaxLoc(local_maximum)
 
         # Calculate the precise location using CUBIC
-        precise = crop(result, area=area_offset((-4, -4, 4, 4), offset=loca))
+        area = area_offset((-4, -4, 4, 4), offset=loca)
+        area = AnchorPosi(area[0], area[1], area[2], area[3])
+        precise = crop(result, area)
         precise_sim, precise_loca = cubic_find_maximum(precise, precision=0.05)
         precise_loca -= 5
 
@@ -53,7 +55,9 @@ class BigMap:
         if CV_DEBUG_MODE:
             cv2.imshow("image",image)
             loca = loca + precise_loca + center
-            close_area = crop(MAP_ASSETS_DICT[self.map_name]["luma_0125x"].img, [loca[0]-200,loca[1]-200,loca[0]+200,loca[1]+200])
+            area = AnchorPosi(loca[0]-200, loca[1]-200, loca[0]+200, loca[1]+200)
+            area = AnchorPosi(area[0], area[1], area[2], area[3])
+            close_area = crop(MAP_ASSETS_DICT[self.map_name]["luma_0125x"].img, area)
             center = (close_area.shape[1] // 2, close_area.shape[0] // 2)
             cv2.circle(close_area, center, 5, (0, 0, 255), 2)
             cv2.imshow("bigmap_nearby", close_area)

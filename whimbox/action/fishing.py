@@ -53,7 +53,7 @@ class FishingTask(TaskTemplate):
         self.material_count_dict = {}
 
     def get_fishing_type(self):
-        cap = itt.capture(posi=AreaFishingIcons.position)
+        cap = itt.capture(anchor_posi=AreaFishingIcons.position)
         if itt.get_img_existence(IconFishingHomeFeature, cap=cap):
             return FISHING_TYPE_HOME
         elif itt.get_img_existence(IconFishingMiralandFeature, cap=cap):
@@ -62,7 +62,7 @@ class FishingTask(TaskTemplate):
 
     def get_current_state(self):
         """在模板区域内检测当前状态"""
-        cap = itt.capture(posi=AreaFishingIcons.position)
+        cap = itt.capture(anchor_posi=AreaFishingIcons.position)
         for icon, state in FISHING_STATE_MAPPING:
             if itt.get_img_existence(icon, cap=cap):
                 return state
@@ -76,7 +76,7 @@ class FishingTask(TaskTemplate):
         itt.key_down(key)
         while not self.need_stop():
             time.sleep(0.2)
-            cap = itt.capture(posi=AreaFishingDetection.position)
+            cap = itt.capture(anchor_posi=AreaFishingDetection.position)
             current_px_count = count_px_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
             logger.debug(f"尝试方向: {key}, {px_count} -> {current_px_count}")
             if px_count - current_px_count > 5 or current_px_count == 0:
@@ -93,7 +93,7 @@ class FishingTask(TaskTemplate):
     def handle_pull_line(self):
         """处理拉扯鱼线状态的核心逻辑"""
         self.log_to_gui("进入拉扯鱼线状态")
-        cap = itt.capture(posi=AreaFishingDetection.position)
+        cap = itt.capture(anchor_posi=AreaFishingDetection.position)
         px_count = count_px_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
         while not self.need_stop():
             px_count = self._pull_in_direction('a', px_count)
