@@ -12,6 +12,7 @@ from whimbox.common.path_lib import ASSETS_PATH
 from whimbox.config.default_config import DEFAULT_CONFIG
 from whimbox.config.config import global_config
 from whimbox.ui.material_icon_assets import material_icon_dict
+from whimbox.ingame_ui.components.keybind_input import KeybindInput
 
 
 class SaveConfigWorker(QThread):
@@ -246,12 +247,26 @@ class SettingsDialog(QDialog):
             }
         """)
         
-        layout = QVBoxLayout()
-        layout.setSpacing(8)
-        
-        for key, config_item in section_data.items():
-            item_widget = self.create_config_item(section_name, key, config_item)
-            layout.addWidget(item_widget)
+        # Keybinds 使用特殊的两列布局
+        if section_name == "Keybinds":
+            layout = QGridLayout()
+            layout.setSpacing(10)
+            layout.setContentsMargins(10, 10, 10, 10)
+            
+            keys = list(section_data.keys())
+            for idx, key in enumerate(keys):
+                config_item = section_data[key]
+                row = idx // 2
+                col = idx % 2
+                item_widget = self.create_keybind_item(section_name, key, config_item)
+                layout.addWidget(item_widget, row, col)
+        else:
+            layout = QVBoxLayout()
+            layout.setSpacing(8)
+            
+            for key, config_item in section_data.items():
+                item_widget = self.create_config_item(section_name, key, config_item)
+                layout.addWidget(item_widget)
         
         group_box.setLayout(layout)
         return group_box
@@ -396,6 +411,34 @@ class SettingsDialog(QDialog):
             # 重写focusInEvent
             input_widget.focusInEvent = show_completer_on_focus
     
+    def create_keybind_item(self, section: str, key: str, config_item: Dict[str, Any]) -> QWidget:
+        """创建键位绑定配置项的控件"""
+        item_widget = QWidget()
+        item_widget.setStyleSheet("""
+            QWidget {
+                background-color: #FAFAFA;
+                border-radius: 6px;
+                padding: 5px;
+            }
+        """)
+        
+        # 获取描述和初始值
+        label_text = config_item['description']
+        value = str(config_item.get('value', ''))
+        
+        # 创建KeybindInput组件
+        keybind_input = KeybindInput(label_text, value, self)
+        
+        # 将组件包装在布局中
+        layout = QVBoxLayout(item_widget)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(keybind_input)
+        
+        # 保存控件引用
+        self.input_widgets[f"{section}.{key}"] = keybind_input
+        
+        return item_widget
+    
     def load_config(self):
         """从 global_config 加载配置到界面"""
         try:
@@ -410,6 +453,9 @@ class SettingsDialog(QDialog):
                     # 对于布尔值，使用 get_bool 方法
                     is_checked = global_config.get_bool(section, key)
                     widget.setChecked(is_checked)
+                elif isinstance(widget, KeybindInput):
+                    # 对于键位绑定输入
+                    widget.set_value(str(value))
                 elif isinstance(widget, QLineEdit):
                     # 对于数字，尝试使用对应的类型方法
                     if widget.validator():
@@ -437,6 +483,8 @@ class SettingsDialog(QDialog):
                 # 获取控件的值
                 if isinstance(widget, QCheckBox):
                     value = 'true' if widget.isChecked() else 'false'
+                elif isinstance(widget, KeybindInput):
+                    value = widget.get_value()
                 elif isinstance(widget, QLineEdit):
                     value = widget.text()
                 else:
@@ -480,6 +528,16 @@ class SettingsDialog(QDialog):
         self.save_button.setEnabled(True)
         self.cancel_button.setEnabled(True)
         self.save_button.setText("保存")
+    
+    def keyPressEvent(self, event):
+        """重写按键事件，阻止ESC关闭对话框"""
+        # 如果按下ESC键，忽略该事件（不关闭对话框）
+        if event.key() == Qt.Key_Escape:
+            event.ignore()
+            return
+        
+        # 其他按键使用默认处理
+        super().keyPressEvent(event)
     
     def show_centered(self):
         screen = QApplication.desktop().screenGeometry()

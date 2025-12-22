@@ -14,7 +14,7 @@ class Keybind:
         self.KEYBIND_FORWARD = "w"
         self.KEYBIND_JUMP = "space"
         self.KEYBIND_FALLING = "q"
-        self.KEYBIND_FISHING_REEL_IN = "鼠标右键"
+        self.KEYBIND_FISHING_REEL_IN = "mouse_right"
         self.KEYBIND_BACK = "backspace"
         self.KEYBIND_ABILITY_1 = "1"
         self.KEYBIND_ABILITY_2 = "2"

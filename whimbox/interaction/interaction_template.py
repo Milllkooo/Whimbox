@@ -54,6 +54,4 @@ class InteractionTemplate():
             return VkKeyScanA(ord(key)) & 0xff
         else:
             key = key.lower()
-            if key == "space":
-                key = 'spacebar'
             return VK_CODE[key]

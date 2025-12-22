@@ -50,6 +50,16 @@ class GlobalConfig:
             # 如果配置存在，就检查新增的默认配置项
             with open(self.config_file, 'r', encoding='utf-8') as f:
                 user_config = json.load(f)
+            
+            # 旧按键名到新按键名的映射（兼容旧版本配置）
+            key_name_mapping = {
+                '鼠标左键': 'mouse_left',
+                '鼠标右键': 'mouse_right',
+                '鼠标中键': 'mouse_middle',
+                '鼠标侧键1': 'mouse_x1',
+                '鼠标侧键2': 'mouse_x2',
+            }
+            
             for section_name, section_data in DEFAULT_CONFIG.items():
                 if section_name not in user_config:
                     user_config[section_name] = {}
@@ -58,6 +68,12 @@ class GlobalConfig:
                         user_config[section_name][key] = config_item
                     else:
                         user_config[section_name][key]['description'] = config_item['description']
+                        # 转换旧的按键名为新的按键名
+                        if 'value' in user_config[section_name][key]:
+                            old_value = user_config[section_name][key]['value']
+                            if old_value in key_name_mapping:
+                                user_config[section_name][key]['value'] = key_name_mapping[old_value]
+            
             # 删除已经不存在的配置项
             sections_to_delete = [section_name for section_name in user_config 
                                  if section_name not in DEFAULT_CONFIG]

@@ -5,7 +5,7 @@ import time
 from typing import Dict
 
 key_dict = {
-    keyboard.Key.space: 'spacebar',
+    keyboard.Key.space: 'space',
     keyboard.KeyCode.from_char('f'): 'f',
     keyboard.KeyCode.from_char('w'): 'w',
 }

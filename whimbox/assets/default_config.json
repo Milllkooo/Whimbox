@@ -155,7 +155,7 @@
             "description": "退出关卡"
         },
         "fishing_reel_in":{
-            "value": "鼠标右键",
+            "value": "mouse_right",
             "description": "钓鱼收线"
         },
         "ability_1":{

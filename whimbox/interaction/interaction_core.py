@@ -416,8 +416,12 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        if key == "鼠标右键":
+        if key == "mouse_left":
+            self.itt_exec.left_click()
+        if key == "mouse_right":
             self.itt_exec.right_click()
+        elif key == "mouse_middle":
+            self.itt_exec.middle_click()
         else:
             self.itt_exec.key_press(key)
         self.operation_lock.release()

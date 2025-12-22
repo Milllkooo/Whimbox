@@ -77,7 +77,7 @@ class InteractionNormal(InteractionTemplate):
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
         time.sleep(0.1)
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
-    
+
     def middle_click(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0)
         time.sleep(0.1)

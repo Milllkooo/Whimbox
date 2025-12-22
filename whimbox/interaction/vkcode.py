@@ -1,4 +1,6 @@
 VK_CODE = {
+    "mouse_x1": 0x05,
+    "mouse_x2": 0x06,
     'backspace': 0x08,
     'tab': 0x09,
     'clear': 0x0C,
@@ -9,7 +11,7 @@ VK_CODE = {
     'pause': 0x13,
     'caps_lock': 0x14,
     'esc': 0x1B,
-    'spacebar': 0x20,
+    'space': 0x20,
     'page_up': 0x21,
     'page_down': 0x22,
     'end': 0x23,
@@ -130,4 +132,5 @@ VK_CODE = {
     '[': 0xDB,
     '\\': 0xDC,
     ']': 0xDD,
-    "'": 0xDE}
+    "'": 0xDE,
+    }
