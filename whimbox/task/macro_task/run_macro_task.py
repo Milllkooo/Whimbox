@@ -4,6 +4,7 @@ from whimbox.common.scripts_manager import *
 from whimbox.common.logger import logger
 import time
 from whimbox.common.scripts_manager import *
+from whimbox.common.handle_lib import HANDLE_OBJ
 
 
 class RunMacroTask(TaskTemplate):
@@ -45,10 +46,19 @@ class RunMacroTask(TaskTemplate):
                     
         except Exception as e:
             logger.error(f"执行步骤失败: {e}, step: {step}")
-        
+    
     @register_step(state_msg="执行宏操作")
     def execute_macro(self):
-        """执行宏操作"""
+        aspect_ratio = self.macro_record.info.aspect_ratio
+        _, width, height = HANDLE_OBJ.check_shape()
+        if aspect_ratio == "16:9" and not (1.70<width/height<1.80):
+            self.log_to_gui(f"宏\"{self.macro_record.info.name}\"只支持16:9分辨率，请修改游戏设置", is_error=True)
+            return
+        elif aspect_ratio == "16:10" and not (1.55<width/height<1.65):
+            self.log_to_gui(f"宏\"{self.macro_record.info.name}\"只支持16:10分辨率，请修改游戏设置", is_error=True)
+            return
+
+        # 执行宏操作
         offset = self.macro_record.info.offset + self.delay
         start_time = time.time()
         
@@ -83,5 +93,5 @@ class RunMacroTask(TaskTemplate):
         # 不调用父类的 handle_finally，因为不需要返回主界面
 
 if __name__ == "__main__":
-    task = RunMacroTask("我的宏_20251222211613")
+    task = RunMacroTask("我的宏_20251222214158")
     task.task_run()

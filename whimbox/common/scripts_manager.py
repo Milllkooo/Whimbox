@@ -37,6 +37,7 @@ class PathRecord(BaseModel):
 # 宏脚本信息
 class MacroInfo(ScriptInfo):
     offset: Optional[float] = 0.0  # 整体偏移时间
+    aspect_ratio: Optional[Literal["16:9", "16:10"]] = None  # 分辨率比例
 
 # 宏脚本步骤
 class MacroStep(BaseModel):

@@ -30,8 +30,11 @@ class RecordMacroTask(TaskTemplate):
         self.pressed_keys = set()  # 记录当前按下的键
         self.pressed_mouse_buttons = set()  # 记录当前按下的鼠标键
         
+        # 窗口分辨率比例
+        self.aspect_ratio = None
+        
     def _screen_to_window_position(self, screen_x: int, screen_y: int) -> tuple[int, int]:
-        """将屏幕坐标转换为窗口内坐标（1920x1080标准分辨率）"""
+        """将屏幕坐标转换为窗口内坐标（只对宽度归一化到1920）"""
         hwnd = HANDLE_OBJ.get_handle()
         if not hwnd:
             logger.warning("无法获取窗口句柄，使用屏幕坐标")
@@ -49,10 +52,10 @@ class RecordMacroTask(TaskTemplate):
         window_width = rect[2] - rect[0]
         window_height = rect[3] - rect[1]
         
-        # 归一化到 1920x1080
-        if window_width > 0 and window_height > 0:
+        # 只对宽度归一化到 1920，高度保持原始比例
+        if window_width > 0:
             normalized_x = int(window_x * 1920 / window_width)
-            normalized_y = int(window_y * 1080 / window_height)
+            normalized_y = int(window_y * 1920 / window_width)
             return (normalized_x, normalized_y)
         else:
             return (window_x, window_y)
@@ -195,6 +198,16 @@ class RecordMacroTask(TaskTemplate):
         self.pressed_keys.clear()
         self.pressed_mouse_buttons.clear()
         
+        # 检测窗口分辨率比例
+        _, width, height = HANDLE_OBJ.check_shape()
+        ratio = width / height
+        if 1.70<ratio<1.80:
+            self.aspect_ratio = "16:9"
+        elif 1.55<ratio<1.65:
+            self.aspect_ratio = "16:10"
+        else:
+            self.aspect_ratio = "其他"
+        
         # 启动键盘监听器
         self.keyboard_listener = keyboard.Listener(
             on_press=self._on_keyboard_press,
@@ -225,6 +238,10 @@ class RecordMacroTask(TaskTemplate):
         if self.mouse_listener:
             self.mouse_listener.stop()
         
+        # 检查是否有鼠标事件
+        has_mouse_event = any(step.type == "mouse_button" for step in self.steps)
+        aspect_ratio_to_save = self.aspect_ratio if has_mouse_event else None
+        
         now = time.localtime(time.time())
         macro_name = f"我的宏_{time.strftime('%Y%m%d%H%M%S', now)}"
         macro_filename = f"{macro_name}.json"
@@ -233,7 +250,8 @@ class RecordMacroTask(TaskTemplate):
             type="宏",
             version="2.0",
             update_time=time.strftime("%Y-%m-%d %H:%M:%S", now),
-            offset=0.0
+            offset=0.0,
+            aspect_ratio=aspect_ratio_to_save
         )
         macro_record = MacroRecord(
             info=macro_info,
