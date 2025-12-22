@@ -15,7 +15,7 @@ from whimbox.common.logger import logger
 
 zxxy_task_info_list = [
     {
-        "key_words": ["活跃能量"],
+        "key_words": ["150点活跃能量"],
         "score": 200,
         "priority": 5,
         "task_name": DAILY_TASK_COST_ENERGY
