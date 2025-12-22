@@ -185,55 +185,55 @@ class AutoPathTask(TaskTemplate):
         
         if target_dist <= self.offset:
             logger.debug(f"arrive target point {self.target_point.id}")
+
+            # 处理各种ACTION
+            if self.target_point.action:
+                self.stop_move()
+                self.change_to_walk()
+                if self.target_point.action == ACTION_PICK_UP:
+                    pickup_task = PickupTask()
+                    task_result = pickup_task.task_run()
+                    self.merge_material_count_dict(task_result.data)
+                elif self.target_point.action == ACTION_CATCH_INSECT:
+                    excepted_count = int(self.target_point.action_params or 1)
+                    catch_insect_task = CatchInsectTask(
+                        self.path_info.target, 
+                        expected_count=excepted_count)
+                    task_result = catch_insect_task.task_run()
+                    self.merge_material_count_dict(task_result.data)
+                elif self.target_point.action == ACTION_CLEAN_ANIMAL:
+                    excepted_count = int(self.target_point.action_params or 1)
+                    clean_animal_task = CleanAnimalTask(
+                        self.path_info.target, 
+                        expected_count=excepted_count)
+                    task_result = clean_animal_task.task_run()
+                    self.merge_material_count_dict(task_result.data)
+                elif self.target_point.action == ACTION_FISHING:
+                    fishing_task = FishingTask()
+                    task_result = fishing_task.task_run()
+                    self.merge_material_count_dict(task_result.data)
+                elif self.target_point.action == ACTION_WAIT:
+                    wait_time = self.target_point.action_params
+                    if wait_time is None:
+                        wait_time = self.jump2walk_stop_time
+                    time.sleep(float(wait_time))
+                elif self.target_point.action == ACTION_KEY_CLICK:
+                    itt.key_press(self.target_point.action_params)
+                elif self.target_point.action == ACTION_MINIGAME:
+                    macro_name = self.target_point.action_params
+                    if macro_name is not None:
+                        minigame_task = MinigameTask(self.target_point.action_params)
+                        minigame_task.task_run()
+                elif self.target_point.action == ACTION_MACRO:
+                    macro_name = self.target_point.action_params
+                    if macro_name is not None:
+                        macro_task = RunMacroTask(macro_name)
+                        macro_task.task_run()
+
             if self.curr_target_point_id >= len(self.path_points) - 1:
                 # 走到终点了
                 is_end = True
             else:
-                # 处理各种ACTION
-                if self.target_point.action:
-                    self.stop_move()
-                    self.change_to_walk()
-                    if self.target_point.action == ACTION_PICK_UP:
-                        pickup_task = PickupTask()
-                        task_result = pickup_task.task_run()
-                        self.merge_material_count_dict(task_result.data)
-                    elif self.target_point.action == ACTION_CATCH_INSECT:
-                        excepted_count = int(self.target_point.action_params or 1)
-                        catch_insect_task = CatchInsectTask(
-                            self.path_info.target, 
-                            expected_count=excepted_count)
-                        task_result = catch_insect_task.task_run()
-                        self.merge_material_count_dict(task_result.data)
-                    elif self.target_point.action == ACTION_CLEAN_ANIMAL:
-                        excepted_count = int(self.target_point.action_params or 1)
-                        clean_animal_task = CleanAnimalTask(
-                            self.path_info.target, 
-                            expected_count=excepted_count)
-                        task_result = clean_animal_task.task_run()
-                        self.merge_material_count_dict(task_result.data)
-                    elif self.target_point.action == ACTION_FISHING:
-                        fishing_task = FishingTask()
-                        task_result = fishing_task.task_run()
-                        self.merge_material_count_dict(task_result.data)
-                    elif self.target_point.action == ACTION_WAIT:
-                        wait_time = self.target_point.action_params
-                        if wait_time is None:
-                            wait_time = self.jump2walk_stop_time
-                        time.sleep(float(wait_time))
-                    elif self.target_point.action == ACTION_KEY_CLICK:
-                        itt.key_press(self.target_point.action_params)
-                    elif self.target_point.action == ACTION_MINIGAME:
-                        macro_name = self.target_point.action_params
-                        if macro_name is not None:
-                            minigame_task = MinigameTask(self.target_point.action_params)
-                            minigame_task.task_run()
-                    elif self.target_point.action == ACTION_MACRO:
-                        macro_name = self.target_point.action_params
-                        if macro_name is not None:
-                            macro_task = RunMacroTask(macro_name)
-                            macro_task.task_run()
-                    
-                    
                 # 当行动模式切换时停一下，避免因为状态切换时图标显示比较乱而错判
                 self.need_move_mode = self.target_point.move_mode
                 if self.is_moving() and self.target_point.action != ACTION_WAIT:
@@ -324,6 +324,6 @@ class AutoPathTask(TaskTemplate):
 
 
 if __name__ == "__main__":
-    task = AutoPathTask(path_name="example5_钓鱼测试")
+    task = AutoPathTask(path_name="朝夕心愿_捕虫")
     task_result = task.task_run()
     print(task_result.to_dict())
