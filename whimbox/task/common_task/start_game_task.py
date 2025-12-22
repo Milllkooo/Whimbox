@@ -20,8 +20,8 @@ class StartGameTask(TaskTemplate):
     @register_step("启动叠纸启动器")
     def step1(self):
         # 判断游戏是否已经在运行
+        HANDLE_OBJ.refresh_handle()
         if HANDLE_OBJ.get_handle():
-            # self.update_task_result(status=STATE_TYPE_SUCCESS, message="游戏已经在运行，无需自动启动")
             return
         
         # 判断启动器是否已经在运行
@@ -42,18 +42,6 @@ class StartGameTask(TaskTemplate):
                 self.task_stop("未能自动找到叠纸启动器路径，请手动打开游戏或在奇想盒设置中设置")
                 return
 
-            # subprocess.Popen(
-            #     launcher_path, 
-            #     creationflags=(
-            #         subprocess.DETACHED_PROCESS |
-            #         subprocess.CREATE_NO_WINDOW |
-            #         subprocess.CREATE_NEW_PROCESS_GROUP
-            #     ),
-            #     stdin=subprocess.DEVNULL,
-            #     stdout=subprocess.DEVNULL,
-            #     stderr=subprocess.DEVNULL,
-            #     close_fds=True
-            # )
             try:
                 os.startfile(launcher_path)
             except Exception as e:
@@ -82,16 +70,20 @@ class StartGameTask(TaskTemplate):
             if text == "":
                 retry_time -= 1
                 continue
+            elif text == "游戏运行中":
+                return
             else:
                 if text != "启动游戏":
                     # 点击更新，直到按钮变成“启动游戏”
                     self.log_to_gui("更新游戏中……")
+                    launcher_handle.set_foreground()
                     launcher_itt.move_and_click(AreaLaunchButton.center_position())
                     while not self.need_stop():
                         time.sleep(1)
                         text = launcher_itt.ocr_single_line(AreaLaunchButton)
                         if text == "启动游戏":
                             break
+                launcher_handle.set_foreground()
                 launcher_itt.move_and_click(AreaLaunchButton.center_position())
                 self.log_to_gui("点击启动游戏按钮成功")
                 break
