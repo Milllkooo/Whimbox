@@ -154,15 +154,21 @@ class StartGameTask(TaskTemplate):
         while not self.need_stop():
             time.sleep(1)
             if not itt.get_img_existence(IconUILoading):
-                self.log_to_gui("加载完成")
+                self.log_to_gui("游戏加载完成")
                 break
         # 不停点击，尝试点掉月卡界面，直到出现主界面
+        self.log_to_gui("检测是否需要领取小月卡")
+        times = 0
         while not self.need_stop():
             time.sleep(1)
-            itt.move_and_click((1920/2, 1080/2))
+            # 有些电脑比较卡，会在小月卡出现前卡出主界面特征，所以需要多次验证
             if itt.get_img_existence(IconPageMainFeature):
-                self.update_task_result(status=STATE_TYPE_SUCCESS, message="成功进入游戏")
-                break
+                times += 1
+                if times > 3:
+                    self.update_task_result(status=STATE_TYPE_SUCCESS, message="成功进入游戏")
+                    break
+            else:
+                itt.move_and_click((1920/2, 1080/2))
 
     def handle_finally(self):
         pass
