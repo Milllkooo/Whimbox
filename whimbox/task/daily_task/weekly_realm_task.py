@@ -10,6 +10,11 @@ from whimbox.common.utils.ui_utils import *
 class WeeklyRealmTask(TaskTemplate):
     def __init__(self):
         super().__init__("weekly_realm_task")
+        realm_target = global_config.get("Game", "realm_target")
+        if realm_target == "全部":
+            self.realm_target = ["奇格格达", "卷卷"]
+        else:
+            self.realm_target = [realm_target]
 
     @register_step("检查每周幻境完成情况")
     def step1(self):
@@ -22,16 +27,17 @@ class WeeklyRealmTask(TaskTemplate):
             self.log_to_gui(f"每周幻境完成情况: {finished_count}/{total_count}")
         except:
             raise Exception(f"每周幻境完成数量识别异常:{weekly_count_str}")
-        if finished_count < total_count:
+        if finished_count < len(self.realm_target):
             return
         else:
-            return "step5"
+            return "step4"
     
     @register_step("前往心之突破幻境")
     def step2(self):
         ui_control.goto_page(page_huanjing_weekly)
     
     def quick_challenge(self, level_name):
+        self.log_to_gui(f"快速挑战{level_name}")
         if not scroll_find_click(AreaBlessHuanjingLevelsSelect, level_name, str_match_mode=1):
             self.log_to_gui(f"未找到{level_name}", is_error=True)
             return False
@@ -50,16 +56,15 @@ class WeeklyRealmTask(TaskTemplate):
         else:
             raise Exception("领取奖励失败")
 
-    @register_step("快速挑战奇格格达")
+    @register_step("开始快速挑战每周幻境")
     def step3(self):
-        self.quick_challenge("奇格格达")
-    
-    @register_step("快速挑战卷卷")
-    def step4(self):
-        self.quick_challenge("卷卷")
+        for realm_name in self.realm_target:
+            if self.need_stop():
+                break
+            self.quick_challenge(realm_name)
 
     @register_step("完成每周幻境")
-    def step5(self):
+    def step4(self):
         self.log_to_gui("每周幻境已完成")
         self.update_task_result(message="每周幻境已完成", data=True)
 

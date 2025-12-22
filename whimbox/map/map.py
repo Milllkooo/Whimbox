@@ -181,8 +181,8 @@ class Map(MiniMap, BigMap):
         ui_control.ensure_page(page_bigmap)
         times = 3
         while times > 0 and not itt.get_img_existence(IconBigMapMaxScale):
-            time.sleep(0.5)
             itt.appear_then_click(ButtonBigMapZoom)
+            time.sleep(0.5)
             times -= 1
 
     def get_bigmap_posi(self, is_upd=True) -> t.Tuple[float, float]:

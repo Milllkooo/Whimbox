@@ -92,6 +92,10 @@
             "value": "攀越",
             "description": "魔物试炼幻境的默认目标"
         },
+        "realm_target": {
+            "value": "全部",
+            "description": "周本的默认目标"
+        },
         "ability_plan": {
             "value": 3,
             "description": "允许奇想盒使用第几号能力配置方案"
