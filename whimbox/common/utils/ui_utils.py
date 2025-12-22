@@ -84,6 +84,7 @@ def scroll_find_click(area: Area, target, threshold=0, hsv_limit=None, scale=0, 
     '''
     box = None
     cap = itt.capture(anchor_posi = area.position)
+    is_first_time = True
     while True:
         stop_flag = get_current_stop_flag()
         if stop_flag.is_set():
@@ -139,20 +140,27 @@ def scroll_find_click(area: Area, target, threshold=0, hsv_limit=None, scale=0, 
         else:
             raise Exception(f"不支持的target类型: {type(target)}")
 
-        # 如果没找到目标，就把鼠标移到area的右下角，向下滚动
-        # todo: 支持expand，不过暂时没什么关系
-        scroll_posi = (area.position.x2, area.position.y2)
-        itt.move_to(scroll_posi, anchor=area.position.anchor)
-        itt.middle_scroll(-15)
-        time.sleep(0.2)
 
-        # 如果画面不再变化，说明滚到头了
-        new_cap = itt.capture(anchor_posi = area.position)
-        rate = similar_img(cap, new_cap)
-        if rate > 0.99:
-            break
+        # 如果第一次没找到目标，就先把画面滚到顶，再开始寻找
+        if is_first_time:
+            logger.info(f"第一次没找到目标，先把画面滚到顶")
+            cap = scroll_to_top(area)
+            is_first_time = False
         else:
-            cap = new_cap
+            # 如果没找到目标，就把鼠标移到area的右下角，向下滚动
+            # todo: 支持expand，不过暂时没什么关系
+            scroll_posi = (area.position.x2, area.position.y2)
+            itt.move_to(scroll_posi, anchor=area.position.anchor)
+            itt.middle_scroll(-15)
+            time.sleep(0.2)
+
+            # 如果画面不再变化，说明滚到底了
+            new_cap = itt.capture(anchor_posi = area.position)
+            rate = similar_img(cap, new_cap)
+            if rate > 0.99:
+                break
+            else:
+                cap = new_cap
         
     if box:
         area.click(target_box=box, offset=click_offset)
@@ -168,12 +176,15 @@ def scroll_to_top(area: Area):
     itt.move_to(scroll_posi, anchor=area.position.anchor)
     last_cap = itt.capture(anchor_posi=area.position)
     while True:
+        stop_flag = get_current_stop_flag()
+        if stop_flag.is_set():
+            return last_cap
         itt.middle_scroll(15)
         time.sleep(0.2)
         new_cap = itt.capture(anchor_posi=area.position)
         rate = similar_img(last_cap, new_cap)
         if rate > 0.99:
-            break
+            return new_cap
         last_cap = new_cap
 
     

@@ -25,7 +25,6 @@ class MonsterTask(TaskTemplate):
     @register_step("选择试炼")
     def step2(self):
         self.log_to_gui(f"选择试炼：{self.level_name}")
-        scroll_to_top(AreaBlessHuanjingLevelsSelect)
         if not scroll_find_click(AreaBlessHuanjingLevelsSelect, self.level_name, str_match_mode=1):
             raise Exception(f"未找到{self.level_name}")
         

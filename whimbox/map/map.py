@@ -290,7 +290,6 @@ class Map(MiniMap, BigMap):
             text_box_dict = itt.ocr_and_detect_posi(AreaBigMapRegionSelect)
             if tp_province not in text_box_dict or tp_province == "星海":
                 # 如果目标province不在当前页面，说明当前province不是目标，就滑动并点击展开
-                scroll_to_top(AreaBigMapRegionSelect)
                 if not scroll_find_click(AreaBigMapRegionSelect, tp_province):
                     return False
                 itt.wait_until_stable()

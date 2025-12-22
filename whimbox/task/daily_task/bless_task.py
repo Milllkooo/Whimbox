@@ -25,7 +25,6 @@ class BlessTask(TaskTemplate):
     @register_step("选择试炼")
     def step2(self):
         self.log_to_gui(f"选择试炼：{self.level_name}")
-        scroll_to_top(AreaBlessHuanjingLevelsSelect)
         if not scroll_find_click(AreaBlessHuanjingLevelsSelect, self.level_name, str_match_mode=1):
             raise Exception(f"未找到{self.level_name}")
     
@@ -51,7 +50,7 @@ class BlessTask(TaskTemplate):
         if not wait_until_appear_then_click(ButtonHuanjingConfirm):
             self.log_to_gui("未找到注入能量按钮", is_error=True)
             wait_until_appear_then_click(ButtonHuanjingCancel)
-            return "step5"
+            return "step6"
     
 
     @register_step("等待挑战完成")
