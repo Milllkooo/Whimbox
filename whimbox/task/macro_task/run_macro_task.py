@@ -2,8 +2,6 @@ from whimbox.task.task_template import TaskTemplate, register_step
 from whimbox.interaction.interaction_core import itt
 from whimbox.common.scripts_manager import *
 from whimbox.common.logger import logger
-from whimbox.common.utils.utils import load_json
-from whimbox.common.path_lib import SCRIPT_PATH
 import time
 from whimbox.common.scripts_manager import *
 
@@ -28,12 +26,9 @@ class RunMacroTask(TaskTemplate):
                 # 键盘操作
                 if step.action == "press":
                     itt.key_down(step.key)
-                    logger.debug(f"执行键盘按下: {step.key}")
                     self.pressing_keys.add(step.key)
-                    time.sleep(0.1)
                 elif step.action == "release":
                     itt.key_up(step.key)
-                    logger.debug(f"执行键盘松开: {step.key}")
                     self.pressing_keys.discard(step.key)
                     
             elif step.type == "mouse_button":
@@ -44,35 +39,20 @@ class RunMacroTask(TaskTemplate):
                     if step.action == "press":
                         if step.key == "left":
                             itt.move_to(step.position)
-                            time.sleep(0.1)
                             itt.left_down()
-                            logger.debug(f"执行鼠标左键按下 at {step.position}")
                             self.pressing_keys.add("left")
-                            time.sleep(0.1)
                         elif step.key == "right":
                             itt.move_to(step.position)
-                            time.sleep(0.1)
                             itt.right_down()
-                            logger.debug(f"执行鼠标右键按下 at {step.position}")
                             self.pressing_keys.add("right")
-                            time.sleep(0.1)
-                        elif step.key == "middle":
-                            itt.move_to(step.position)
-                            time.sleep(0.1)
-                            # 中键操作
-                            pass
                             
                     elif step.action == "release":
                         if step.key == "left":
                             itt.left_up()
-                            logger.debug(f"执行鼠标左键松开 at {step.position}")
                             self.pressing_keys.discard("left")
                         elif step.key == "right":
                             itt.right_up()
-                            logger.debug(f"执行鼠标右键松开 at {step.position}")
                             self.pressing_keys.discard("right")
-                        elif step.key == "middle":
-                            pass
                     
         except Exception as e:
             logger.error(f"执行步骤失败: {e}, step: {step}")
@@ -82,7 +62,6 @@ class RunMacroTask(TaskTemplate):
         """执行宏操作"""
         offset = self.macro_record.info.offset + self.delay
         start_time = time.time()
-        last_timestamp = 0.0
         
         for i, step in enumerate(self.macro_record.steps):
             if self.need_stop():
@@ -93,15 +72,17 @@ class RunMacroTask(TaskTemplate):
             self.current_step_index = i
             step_timestamp = step.timestamp + offset
             
+            # 计算该步骤应该执行的绝对时间点
+            target_time = start_time + step_timestamp
+            current_time = time.time()
+            time_to_wait = target_time - current_time
+            
             # 等待到达该步骤的时间点
-            time_to_wait = step_timestamp - last_timestamp
             if time_to_wait > 0:
                 time.sleep(time_to_wait)
             
             # 执行步骤
             self._execute_step(step)
-            
-            last_timestamp = step_timestamp
         
         execution_time = time.time() - start_time
         self.log_to_gui(f"宏执行结束！耗时: {execution_time:.2f}秒")
