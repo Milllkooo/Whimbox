@@ -27,7 +27,7 @@ class WeeklyRealmTask(TaskTemplate):
             self.log_to_gui(f"每周幻境完成情况: {finished_count}/{total_count}")
         except:
             raise Exception(f"每周幻境完成数量识别异常:{weekly_count_str}")
-        if finished_count < len(self.realm_target):
+        if finished_count < total_count and finished_count < len(self.realm_target):
             return
         else:
             return "step4"
