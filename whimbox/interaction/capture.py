@@ -87,7 +87,7 @@ class PrintWindowCapture(Capture):
         self.max_fps = 30
 
     def _check_shape(self, img:np.ndarray):
-        if img.shape[2] == 4 and img.shape[1] > 1900 and 1.55<img.shape[1]/img.shape[0]<1.80:
+        if img.shape[2] == 4 and img.shape[1] > 0 and 1.55<img.shape[1]/img.shape[0]<1.80:
             # 支持16:9和16:10分辨率
             # 有些用户在特定显示器和缩放下会生成奇怪的1920x1081分辨率，增加宽容度
             return True

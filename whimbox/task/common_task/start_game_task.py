@@ -8,7 +8,6 @@ from whimbox.common.handle_lib import HANDLE_OBJ
 from whimbox.ui.ui import ui_control
 from whimbox.ui.ui_assets import *
 from whimbox.interaction.interaction_core import itt
-from whimbox.task.background_task.background_task import background_manager
 from whimbox.common.logger import logger
 from whimbox.common.utils.posi_utils import area_center
 
@@ -100,23 +99,22 @@ class StartGameTask(TaskTemplate):
             self.task_stop("未找到启动游戏按钮")
             return
 
-    @register_step("等待游戏窗口出现，等待分辨率恢复正常")
+    @register_step("等待游戏窗口出现……")
     def step2(self):
         retry_time = 20
         while not self.need_stop():
-            if background_manager.is_game_started:
+            if HANDLE_OBJ.is_alive():
                 retry_time -= 1
-                if not HANDLE_OBJ.is_alive():
-                    HANDLE_OBJ.refresh_handle()
                 shape_ok, width, height = HANDLE_OBJ.check_shape()
                 if shape_ok:
                     break
                 else:
-                    if retry_time == 24:
-                        self.log_to_gui(f"当前游戏分辨率为{width}x{height}，请等待分辨率恢复正常，或手动设置游戏的显示模式设置为窗口模式，分辨率设置为1920x1080或2560x1440")
+                    self.log_to_gui(f"请等待游戏分辨率恢复正常……")
                     if retry_time <= 0:
-                        self.task_stop(f"当前游戏分辨率为{width}x{height}，请先将游戏的显示模式设置为窗口模式，分辨率设置为1920x1080或2560x1440")
+                        self.task_stop(f"启动失败，当前游戏分辨率为:{width}x{height}，奇想盒只支持16:9与16:10的分辨率")
                         return
+            else:
+                HANDLE_OBJ.refresh_handle()
             time.sleep(5)
 
     @register_step("进入游戏")

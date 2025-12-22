@@ -19,7 +19,7 @@ from starlette.responses import JSONResponse
 def check_game_ok(func):
     @functools.wraps(func)
     async def wrapper(**kwargs):
-        if not background_manager.is_game_started:
+        if not HANDLE_OBJ.is_alive():
             return {
                 "status": STATE_TYPE_ERROR,
                 "message": "游戏未启动，请先启动游戏"
@@ -28,7 +28,7 @@ def check_game_ok(func):
         if not shape_ok:
             return {
                 "status": STATE_TYPE_ERROR,
-                "message": "请先将游戏的显示模式设置为窗口模式，分辨率设置为1920x1080或2560x1440"
+                "message": "奇想盒只支持16:9与16:10的游戏分辨率"
             }
         logger.info(f"游戏分辨率正常：{width}x{height}")
         return await func(**kwargs)

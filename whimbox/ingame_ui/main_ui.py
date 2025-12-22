@@ -104,7 +104,6 @@ class IngameUI(QWidget):
         # 添加欢迎消息（仅在首次展开时）
         if self.chat_view and not self.chat_view.has_messages():
             self.chat_view.add_message("👋 您好！我是奇想盒📦，你可以直接选择功能，或者和我聊天。", 'ai')
-            self.chat_view.add_message("❗请确认游戏分辨率为1920x1080或2560x1440。如已设置，请忽略~", "ai")
     
     def create_expanded_widget(self):
         """创建展开状态的聊天界面"""
@@ -321,13 +320,6 @@ class IngameUI(QWidget):
     def on_function_clicked(self, config: dict):
         """统一处理功能按钮点击"""
         self.give_back_focus()
-        # shape_ok, width, height = HANDLE_OBJ.check_shape()
-        # logger.info(f"分辨率: {width}x{height}")
-        # if not shape_ok:
-        #     self.chat_view.add_message("请先将游戏的显示模式设置为窗口模式，分辨率设置为1920x1080或2560x1440", 'error')
-        #     self.switch_to_chat_view()
-        #     return
-        
         # 检查是否已有任务在运行
         if self.task_worker and self.task_worker.isRunning():
             self.chat_view.add_message("已有任务正在运行中，请稍候...", "ai")
