@@ -146,14 +146,8 @@ class RecordMacroTask(TaskTemplate):
             
         try:
             # 获取按键名称
-            if button == mouse.Button.left:
-                button_name = "left"
-            elif button == mouse.Button.right:
-                button_name = "right"
-            elif button == mouse.Button.middle:
-                button_name = "middle"
-            else:
-                button_name = str(button)
+            button_name = str(button).replace('Button.', '')
+            button_name = f"mouse_{button_name}"
             
             # 防止重复记录鼠标按下事件
             if pressed:

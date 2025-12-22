@@ -42,17 +42,9 @@ class InteractionNormal(InteractionTemplate):
 
     def left_down(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-        # time.sleep(0.01)
-        # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-        # time.sleep(0.01)
-        # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
     
     def left_up(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
-        # time.sleep(0.01)
-        # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
-        # time.sleep(0.01)
-        # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
     
     def left_double_click(self):
         self.left_click()
@@ -61,22 +53,20 @@ class InteractionNormal(InteractionTemplate):
     
     def right_down(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
-        # time.sleep(0.01)
-        # win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
-        # time.sleep(0.01)
-        # win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
 
     def right_up(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
-        # time.sleep(0.01)
-        # win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
-        # time.sleep(0.01)
-        # win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
 
     def right_click(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
         time.sleep(0.1)
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
+
+    def middle_down(self):
+        win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0)
+    
+    def middle_up(self):
+        win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEUP, 0, 0, 0, 0)
 
     def middle_click(self):
         win32api.mouse_event(win32con.MOUSEEVENTF_MIDDLEDOWN, 0, 0, 0, 0)
@@ -123,7 +113,10 @@ class InteractionNormal(InteractionTemplate):
             y = int(y * scale)
             win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
         else:
-            actual_h = int(resolution[0] / scale)
+            if resolution is not None:
+                actual_h = int(resolution[0] / scale)
+            else:
+                actual_h = standard_h
             if "TOP" in anchor:
                 pass
             elif "BOTTOM" in anchor:

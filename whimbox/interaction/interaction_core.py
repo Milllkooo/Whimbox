@@ -394,7 +394,14 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        self.itt_exec.key_down(key)
+        if key == "mouse_left":
+            self.itt_exec.left_down()
+        elif key == "mouse_right":
+            self.itt_exec.right_down()
+        elif key == "mouse_middle":
+            self.itt_exec.middle_down()
+        else:
+            self.itt_exec.key_down(key)
         self.operation_lock.release()
 
     @before_operation()
@@ -405,7 +412,14 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        self.itt_exec.key_up(key)
+        if key == "mouse_left":
+            self.itt_exec.left_up()
+        elif key == "mouse_right":
+            self.itt_exec.right_up()
+        elif key == "mouse_middle":
+            self.itt_exec.middle_up()
+        else:
+            self.itt_exec.key_up(key)
         self.operation_lock.release()
 
     @before_operation()

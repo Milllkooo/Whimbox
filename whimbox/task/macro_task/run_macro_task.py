@@ -33,26 +33,15 @@ class RunMacroTask(TaskTemplate):
                     
             elif step.type == "mouse_button":
                 # 鼠标按键操作
-                # 窗口内坐标直接使用，itt会自动处理坐标转换
                 if step.position:
                     # 移动到目标位置并点击
                     if step.action == "press":
-                        if step.key == "left":
-                            itt.move_to(step.position)
-                            itt.left_down()
-                            self.pressing_keys.add("left")
-                        elif step.key == "right":
-                            itt.move_to(step.position)
-                            itt.right_down()
-                            self.pressing_keys.add("right")
-                            
+                        itt.move_to(step.position)
+                        itt.key_down(step.key)
+                        self.pressing_keys.add(step.key)
                     elif step.action == "release":
-                        if step.key == "left":
-                            itt.left_up()
-                            self.pressing_keys.discard("left")
-                        elif step.key == "right":
-                            itt.right_up()
-                            self.pressing_keys.discard("right")
+                        itt.key_up(step.key)
+                        self.pressing_keys.discard(step.key)
                     
         except Exception as e:
             logger.error(f"执行步骤失败: {e}, step: {step}")
@@ -94,5 +83,5 @@ class RunMacroTask(TaskTemplate):
         # 不调用父类的 handle_finally，因为不需要返回主界面
 
 if __name__ == "__main__":
-    task = RunMacroTask("朝夕心愿_小游戏_穿梭大冒险_宏.json")
+    task = RunMacroTask("我的宏_20251222211613")
     task.task_run()
