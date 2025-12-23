@@ -36,16 +36,17 @@ class PathRecord(BaseModel):
 
 # 宏脚本信息
 class MacroInfo(ScriptInfo):
-    offset: Optional[float] = 0.0  # 整体偏移时间
     aspect_ratio: Optional[Literal["16:9", "16:10"]] = None  # 分辨率比例
 
 # 宏脚本步骤
 class MacroStep(BaseModel):
-    type: Literal["keyboard", "mouse_button"]  # 操作类型
+    type: Literal["gap", "keyboard", "mouse", "loop"]  # 操作类型
     key: Optional[str] = None  # 键盘按键名称或鼠标按键名称（left/right/middle）
     action: Optional[Literal["press", "release"]] = None  # 按键动作：按下/松开
-    position: Optional[tuple[int, int]] = None  # 鼠标位置（窗口内坐标，1920x1080标准分辨率）
-    timestamp: float  # 时间戳（相对于录制开始的秒数）
+    position: Optional[tuple[int, int]] = None  # 鼠标位置（窗口内坐标，归一化到 width=1920）
+    duration: Optional[float] = None  # 间隔时间（秒），仅当 type="gap" 时有效
+    loop_count: Optional[int] = None  # 循环次数（仅当 type="loop" 时有效）
+    loop_steps: Optional[int] = None  # 循环的步骤数量（仅当 type="loop" 时有效，表示接下来几个步骤需要循环）
 
 # 宏脚本
 class MacroRecord(BaseModel):

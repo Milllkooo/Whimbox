@@ -77,6 +77,7 @@ class MinigameTask(TaskTemplate):
         if not scroll_find_click(AreaDialogSelection, "谢谢你", str_match_mode=1):
             raise Exception("未找到对话选项：不了")
         skip_dialog()
+        wait_until_appear(IconPageMainFeature, 3)
 
 if __name__ == "__main__":
     task = MinigameTask("朝夕心愿_小游戏_穿梭大冒险_宏")

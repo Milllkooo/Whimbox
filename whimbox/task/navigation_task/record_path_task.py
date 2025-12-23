@@ -131,7 +131,7 @@ class RecordPathTask(TaskTemplate):
         )
         if not os.path.exists(SCRIPT_PATH):
             os.makedirs(SCRIPT_PATH)
-        save_json(path_record.model_dump(), json_name, SCRIPT_PATH)
+        save_json(path_record.model_dump(exclude_none=True), json_name, SCRIPT_PATH)
         logger.info(f"路线保存成功，路径：{os.path.join(SCRIPT_PATH, json_name)}")
         self.update_task_result(message=f"录制成功，路线名：{name}")
 

@@ -37,6 +37,9 @@ class AutoPathTask(TaskTemplate):
         else:
             raise ValueError("path_record和path_name不能同时为空")
         
+        if self.path_info.version != "2.0":
+            raise ValueError("路线版本不匹配，请更新路线")
+        
         # 路线脚本中的坐标为游戏原生坐标，whimbox使用时需要转换为图片像素坐标
         for point in self.path_points:
             pngmap_position = convert_GameLoc_to_PngMapPx(point.position, self.path_info.map)
@@ -128,9 +131,6 @@ class AutoPathTask(TaskTemplate):
 
     @register_step("初始化各种信息")
     def step0(self):
-        if self.path_info.version != "2.0":
-            self.task_stop(message="路线版本不匹配，请更新路线或前往路线编辑网站重新导出新版本的路线")
-            return
         # 启动动作控制线程
         self.jump_controller = JumpController()
         self.move_controller = MoveController()

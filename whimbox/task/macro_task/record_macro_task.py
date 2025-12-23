@@ -20,7 +20,7 @@ class RecordMacroTask(TaskTemplate):
         
         # 录制状态
         self.is_recording = False
-        self.start_time = None
+        self.last_event_time = None  # 上一个事件的时间
         
         # 键盘和鼠标监听器
         self.keyboard_listener = None
@@ -80,12 +80,20 @@ class RecordMacroTask(TaskTemplate):
             
             current_time = time.time()
             
-            # 如果这是第一个事件，设置起始时间
-            if self.start_time is None:
-                self.start_time = current_time
-                logger.info("检测到第一个事件，开始计时")
+            # 如果不是第一个事件，添加间隔时间步骤
+            if self.last_event_time is not None:
+                gap_duration = current_time - self.last_event_time
+                if gap_duration > 0.01:  # 大于10ms才记录间隔
+                    gap_step = MacroStep(
+                        type="gap",
+                        duration=gap_duration
+                    )
+                    self.steps.append(gap_step)
+            else:
+                logger.info("检测到第一个事件，开始录制")
             
-            timestamp = current_time - self.start_time
+            # 更新最后事件时间
+            self.last_event_time = current_time
             
             # 标记该键为已按下
             self.pressed_keys.add(key_name)
@@ -93,12 +101,10 @@ class RecordMacroTask(TaskTemplate):
             step = MacroStep(
                 type="keyboard",
                 key=key_name,
-                action="press",
-                timestamp=timestamp
+                action="press"
             )
             
             self.steps.append(step)
-            logger.debug(f"记录键盘按下: {key_name} at {timestamp:.3f}s")
             
         except Exception as e:
             logger.error(f"键盘按下记录错误: {e}")
@@ -122,22 +128,28 @@ class RecordMacroTask(TaskTemplate):
             
             current_time = time.time()
             
-            # 如果这是第一个事件，设置起始时间
-            if self.start_time is None:
-                self.start_time = current_time
-                logger.info("检测到第一个事件，开始计时")
+            # 如果不是第一个事件，添加间隔时间步骤
+            if self.last_event_time is not None:
+                gap_duration = current_time - self.last_event_time
+                if gap_duration > 0.01:  # 大于10ms才记录间隔
+                    gap_step = MacroStep(
+                        type="gap",
+                        duration=gap_duration
+                    )
+                    self.steps.append(gap_step)
+            else:
+                logger.info("检测到第一个事件，开始录制")
             
-            timestamp = current_time - self.start_time
+            # 更新最后事件时间
+            self.last_event_time = current_time
             
             step = MacroStep(
                 type="keyboard",
                 key=key_name,
-                action="release",
-                timestamp=timestamp
+                action="release"
             )
             
             self.steps.append(step)
-            logger.debug(f"记录键盘松开: {key_name} at {timestamp:.3f}s")
             
         except Exception as e:
             logger.error(f"键盘松开记录错误: {e}")
@@ -162,27 +174,32 @@ class RecordMacroTask(TaskTemplate):
             
             current_time = time.time()
             
-            # 如果这是第一个事件，设置起始时间
-            if self.start_time is None:
-                self.start_time = current_time
-                logger.info("检测到第一个事件，开始计时")
+            # 如果不是第一个事件，添加间隔时间步骤
+            if self.last_event_time is not None:
+                gap_duration = current_time - self.last_event_time
+                if gap_duration > 0.01:  # 大于10ms才记录间隔
+                    gap_step = MacroStep(
+                        type="gap",
+                        duration=gap_duration
+                    )
+                    self.steps.append(gap_step)
+            else:
+                logger.info("检测到第一个事件，开始录制")
             
-            timestamp = current_time - self.start_time
+            # 更新最后事件时间
+            self.last_event_time = current_time
             
             # 转换为窗口内坐标
             window_pos = self._screen_to_window_position(x, y)
             
             step = MacroStep(
-                type="mouse_button",
+                type="mouse",
                 key=button_name,
                 action="press" if pressed else "release",
-                position=window_pos,
-                timestamp=timestamp
+                position=window_pos
             )
             
             self.steps.append(step)
-            action_text = "按下" if pressed else "松开"
-            logger.debug(f"记录鼠标{action_text}: {button_name} at {window_pos} ({timestamp:.3f}s)")
             
         except Exception as e:
             logger.error(f"鼠标点击记录错误: {e}")
@@ -193,7 +210,7 @@ class RecordMacroTask(TaskTemplate):
         """开始录制步骤"""
         # 初始化录制状态
         self.is_recording = True
-        self.start_time = None  # 延迟到第一个事件发生时设置
+        self.last_event_time = None  # 重置最后事件时间
         self.steps.clear()
         self.pressed_keys.clear()
         self.pressed_mouse_buttons.clear()
@@ -239,7 +256,7 @@ class RecordMacroTask(TaskTemplate):
             self.mouse_listener.stop()
         
         # 检查是否有鼠标事件
-        has_mouse_event = any(step.type == "mouse_button" for step in self.steps)
+        has_mouse_event = any(step.type == "mouse" for step in self.steps)
         aspect_ratio_to_save = self.aspect_ratio if has_mouse_event else None
         
         now = time.localtime(time.time())
@@ -248,16 +265,15 @@ class RecordMacroTask(TaskTemplate):
         macro_info = MacroInfo(
             name=macro_name,
             type="宏",
-            version="2.0",
+            version="3.0",
             update_time=time.strftime("%Y-%m-%d %H:%M:%S", now),
-            offset=0.0,
             aspect_ratio=aspect_ratio_to_save
         )
         macro_record = MacroRecord(
             info=macro_info,
             steps=self.steps
         )
-        save_json(macro_record.model_dump(), macro_filename, SCRIPT_PATH)
+        save_json(macro_record.model_dump(exclude_none=True), macro_filename, SCRIPT_PATH)
         logger.info(f"宏保存成功，路径：{os.path.join(SCRIPT_PATH, macro_filename)}")
         self.update_task_result(message=f"录制成功，宏文件名：{macro_filename}")
     
