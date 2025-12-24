@@ -49,6 +49,7 @@ class RunMacroTask(TaskTemplate):
                         itt.key_down(step.key)
                         self.pressing_keys.add(step.key)
                     elif step.action == "release":
+                        itt.move_to(step.position)
                         itt.key_up(step.key)
                         self.pressing_keys.discard(step.key)
                     
@@ -132,5 +133,5 @@ class RunMacroTask(TaskTemplate):
         # 不调用父类的 handle_finally，因为不需要返回主界面
 
 if __name__ == "__main__":
-    task = RunMacroTask("我的宏_20251223095722")
+    task = RunMacroTask("拖动测试")
     task.task_run()
