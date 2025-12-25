@@ -37,6 +37,12 @@ FUNCTION_BUTTONS = [
         'task_name': 'record_macro',
         'task_params': {},
         'start_message': '开始录制宏，按 / 停止录制\n',
+    },
+    {
+        'label': '星海一条龙（开发中）',
+        'task_name': 'xinghai_task',
+        'task_params': {},
+        'start_message': '开始星海一条龙，按 / 结束任务\n',
     }
 ]
 

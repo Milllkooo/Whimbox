@@ -5,10 +5,10 @@ from whimbox.task.navigation_task.record_path_task import RecordPathTask
 from whimbox.task.photo_task.daily_photo_task import DailyPhotoTask
 from whimbox.task.macro_task.record_macro_task import RecordMacroTask
 from whimbox.task.macro_task.run_macro_task import RunMacroTask
+from whimbox.task.daily_task.xinghai_task import XinghaiTask
 from whimbox.task.task_template import STATE_TYPE_SUCCESS, STATE_TYPE_ERROR
 from whimbox.common.logger import logger
 from whimbox.common.cvars import MCP_CONFIG
-from whimbox.task.background_task.background_task import background_manager
 from whimbox.common.handle_lib import HANDLE_OBJ
 
 import socket
@@ -286,7 +286,20 @@ async def weekly_realm_task() -> dict:
     weekly_realm_task = daily_task.WeeklyRealmTask()
     task_result = weekly_realm_task.task_run()
     return task_result.to_dict()
-    
+
+@mcp.tool()
+@check_game_ok
+async def xinghai_task() -> dict:
+    """
+    星海日常任务一条龙
+    Returns:
+        dict: 包含操作状态的字典，包含status和message字段
+    """
+    xinghai_task = XinghaiTask()
+    task_result = xinghai_task.task_run()
+    return task_result.to_dict()
+
+
 @mcp.custom_route("/health", methods=["GET"])
 async def health_check(request):
     """
