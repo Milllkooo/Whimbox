@@ -282,7 +282,7 @@ class MiniMap:
 
         # Magic parameters for scipy.find_peaks
         para = {
-            'height': 100,
+            'height': 150,
             'wlen': d * scale,
         }
 
@@ -389,11 +389,12 @@ if __name__ == '__main__':
     MiniMap windows窗口监听测试
     """
     import time
+    from whimbox.map.convert import convert_GameLoc_to_PngMapPx
     minimap = MiniMap()
     minimap.map_name = MAP_NAME_MIRALAND
     # minimap.init_position((2800*2, 3920*2)) # 疯愿之子营地
     # minimap.init_position((3213*2, 2203*2)) # 花愿镇，搭配师协会
-    minimap.init_position((6415.12, 3999.58))
+    minimap.init_position(convert_GameLoc_to_PngMapPx((-13351.5, -41940), MAP_NAME_MIRALAND))
     # minimap.init_position((5650.7, 4531.5)) # 蓝龙
     # minimap.map_name = MAP_NAME_STARSEA
     # minimap.init_position((3087.6,2260.0)) # 海滩
