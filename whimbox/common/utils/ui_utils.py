@@ -206,13 +206,17 @@ def wait_until_appear_then_click(obj, retry_time=3):
     return False
 
 
-def wait_until_appear(obj, retry_time=3):
+def wait_until_appear(obj, area=None, retry_time=3):
     while retry_time > 0:
+        if area:
+            cap = itt.capture(anchor_posi=area.position)
+        else:
+            cap = None
         if isinstance(obj, ImgIcon):
-            if itt.get_img_existence(obj):
+            if itt.get_img_existence(obj, cap=cap):
                 return True
         elif isinstance(obj, Text):
-            if itt.get_text_existence(obj):
+            if itt.get_text_existence(obj, cap=cap):
                 return True
         else:
             return False

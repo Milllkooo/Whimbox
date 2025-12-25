@@ -17,6 +17,8 @@ IconShopFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99, anchor=ANCHOR_TOP_
 # IconPageLoginFeature = ImgIcon(print_log=LOG_ALL, threshold=0.90, hsv_limit=([0, 0, 220], [179, 50, 255]))
 AreaLoginOCR = Area(anchor=ANCHOR_CENTER, expand=True)
 AreaLaunchButton = Area()
+IconPageChatFeature = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_LEFT)
+ButtonPageChatClose = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_TOP_LEFT)
 
 # loading界面
 IconUILoading = ImgIcon(print_log=LOG_NONE, threshold=0.99)
@@ -38,6 +40,7 @@ AreaBigMapMaterialTrackConfirm = Area(anchor=ANCHOR_CENTER)
 AreaPickup = Area(anchor=ANCHOR_CENTER, expand=True)
 TextPickUp = Text("拾取", cap_area = AreaPickup)
 IconPickupFeature = ImgIcon(print_log=LOG_NONE, threshold=0.75, gray_limit=(210, 255))
+IconSetdownFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.75, gray_limit=(210, 255))
 IconSkip = ImgIcon(print_log=LOG_NONE, threshold=0.73, gray_limit=(210, 255), anchor=ANCHOR_BOTTOM_RIGHT)
 IconClickSkip = ImgIcon(print_log=LOG_ALL, threshold=0.80, gray_limit=(210, 255), anchor=ANCHOR_BOTTOM_RIGHT)
 AreaDialogSelection = Area(anchor=ANCHOR_RIGHT_CENTER)
@@ -128,6 +131,7 @@ AreaXhsgTaskText = Area(anchor=ANCHOR_BOTTOM_CENTER)
 IconXhsgTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_CENTER)
 AreaXhsgBooklookWaterfall = Area(anchor=ANCHOR_TOP_CENTER, expand=True)
 IconXhsgBooklookLikeButton = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, hsv_limit=([15, 40, 195], [25, 110, 230]))
+IconXhsgGroupChatFeature = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_TOP_LEFT)
 
 # 换装界面
 ButtonWardrobeDressDIY = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_RIGHT_CENTER)

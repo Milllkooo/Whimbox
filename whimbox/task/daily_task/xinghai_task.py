@@ -13,6 +13,7 @@ from whimbox.map.map import nikki_map
 from whimbox.map.convert import convert_GameLoc_to_PngMapPx
 from whimbox.map.detection.cvars import MAP_NAME_STARSEA
 from whimbox.task.daily_task.lookbook_like_task import LookbookLikeTask
+from whimbox.task.daily_task.xinghai_group_chat_task import XinghaiGroupChatTask
 
 xhsg_task_info_list = [
     {
@@ -25,7 +26,7 @@ xhsg_task_info_list = [
         "key_words": ["聚会频道"],
         "score": 100,
         "priority": 5,
-        "task_name": XHSG_TASK_TALK
+        "task_name": XHSG_TASK_GROUP_CHAT
     },
     {
         "key_words": ["星绘图册", "点赞"],
@@ -74,6 +75,24 @@ xhsg_task_info_list = [
         "score": 200,
         "priority": 0,
         "task_name": XHSG_TASK_PLANE_PHOTO
+    },
+    {
+        "key_words": ["漂流瓶", "查看"],
+        "score": 200,
+        "priority": 0,
+        "task_name": XHSG_TASK_BOTTLE_PICKUP
+    },
+    {
+        "key_words": ["制造", "泡泡"],
+        "score": 200,
+        "priority": 0,
+        "task_name": XHSG_TASK_BUBBLE_MAKE
+    },
+    {
+        "key_words": ["泡泡", "合影"],
+        "score": 200,
+        "priority": 0,
+        "task_name": XHSG_TASK_BUBBLE_PHOTO
     },
 ]
 
@@ -174,6 +193,7 @@ class XinghaiTask(TaskTemplate):
     def step4(self):
         task_dict = {
             XHSG_TASK_BOOKLOOK_LIKE: LookbookLikeTask(),
+            XHSG_TASK_GROUP_CHAT: XinghaiGroupChatTask(),
         }
         for task_name in self.todo_list:
             if task_name in task_dict:

@@ -5,6 +5,7 @@ from whimbox.common.keybind import keybind
 page_loading = UIPage(check_icon=IconUILoading)
 
 page_main = UIPage(check_icon=IconPageMainFeature)
+page_chat = UIPage(check_icon=IconPageChatFeature)
 page_bigmap = UIPage(check_icon=IconUIBigmap)
 page_esc = TitlePage("美鸭梨")
 page_daily_task = TitlePage("奇想日历")
@@ -23,6 +24,7 @@ page_event = TitlePage("活动大厅")
 
 ui_pages = [
     page_main,
+    page_chat,
     page_bigmap,
     page_daily_task,
     page_zxxy,
@@ -40,6 +42,7 @@ ui_pages = [
     page_ability,
 ]
 
+page_main.link('enter', page_chat)
 page_main.link(keybind.KEYBIND_MAP, page_bigmap)
 page_main.link('esc', page_esc)
 page_main.link(keybind.KEYBIND_DAILY_TASK, page_daily_task)
@@ -48,8 +51,8 @@ page_main.link(keybind.KEYBIND_TAKE_PHOTO, page_photo)
 page_main.link(keybind.KEYBIND_MONTHLY_PASS, page_monthly_pass)
 page_main.link(keybind.KEYBIND_EVENT, page_event)
 
+page_chat.link(ButtonPageChatClose, page_main)
 page_bigmap.link(keybind.KEYBIND_MAP, page_main)
-
 page_esc.link('esc', page_main)
 
 page_daily_task.link('esc', page_main)
