@@ -8,7 +8,7 @@ from whimbox.common.logger import logger
 
 # 基础脚本信息
 class ScriptInfo(BaseModel):
-    name: str 
+    name: str
     type: Optional[str] = None
     update_time: Optional[str] = None
     version: Optional[str] = None
@@ -19,6 +19,7 @@ class PathInfo(ScriptInfo):
     count: Optional[int] = None # 目标数量
     region: Optional[str] = None
     map: Optional[str] = None
+    test_mode: Optional[bool] = False
 
 # 跑图脚本点位
 class PathPoint(BaseModel):

@@ -191,27 +191,43 @@ class AutoPathTask(TaskTemplate):
                 self.stop_move()
                 self.change_to_walk()
                 if self.target_point.action == ACTION_PICK_UP:
-                    pickup_task = PickupTask()
-                    task_result = pickup_task.task_run()
-                    self.merge_material_count_dict(task_result.data)
+                    if not self.path_info.test_mode:
+                        pickup_task = PickupTask()
+                        task_result = pickup_task.task_run()
+                        self.merge_material_count_dict(task_result.data)
+                    else:
+                        self.log_to_gui("测试跑图路线中，不进行采集")
+                        time.sleep(2)
                 elif self.target_point.action == ACTION_CATCH_INSECT:
-                    excepted_count = int(self.target_point.action_params or 1)
-                    catch_insect_task = CatchInsectTask(
-                        self.path_info.target, 
-                        expected_count=excepted_count)
-                    task_result = catch_insect_task.task_run()
-                    self.merge_material_count_dict(task_result.data)
+                    if not self.path_info.test_mode:
+                        excepted_count = int(self.target_point.action_params or 1)
+                        catch_insect_task = CatchInsectTask(
+                            self.path_info.target, 
+                            expected_count=excepted_count)
+                        task_result = catch_insect_task.task_run()
+                        self.merge_material_count_dict(task_result.data)
+                    else:
+                        self.log_to_gui("测试跑图路线中，不进行捕虫")
+                        time.sleep(2)
                 elif self.target_point.action == ACTION_CLEAN_ANIMAL:
-                    excepted_count = int(self.target_point.action_params or 1)
-                    clean_animal_task = CleanAnimalTask(
-                        self.path_info.target, 
-                        expected_count=excepted_count)
-                    task_result = clean_animal_task.task_run()
-                    self.merge_material_count_dict(task_result.data)
+                    if not self.path_info.test_mode:
+                        excepted_count = int(self.target_point.action_params or 1)
+                        clean_animal_task = CleanAnimalTask(
+                            self.path_info.target, 
+                            expected_count=excepted_count)
+                        task_result = clean_animal_task.task_run()
+                        self.merge_material_count_dict(task_result.data)
+                    else:
+                        self.log_to_gui("测试跑图路线中，不进行清洁")
+                        time.sleep(2)
                 elif self.target_point.action == ACTION_FISHING:
-                    fishing_task = FishingTask()
-                    task_result = fishing_task.task_run()
-                    self.merge_material_count_dict(task_result.data)
+                    if not self.path_info.test_mode:
+                        fishing_task = FishingTask()
+                        task_result = fishing_task.task_run()
+                        self.merge_material_count_dict(task_result.data)
+                    else:
+                        self.log_to_gui("测试跑图路线中，不进行钓鱼")
+                        time.sleep(2)
                 elif self.target_point.action == ACTION_WAIT:
                     wait_time = self.target_point.action_params
                     if wait_time is None:
