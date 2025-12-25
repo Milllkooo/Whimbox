@@ -14,12 +14,13 @@ from whimbox.map.convert import convert_GameLoc_to_PngMapPx
 from whimbox.map.detection.cvars import MAP_NAME_STARSEA
 from whimbox.task.daily_task.lookbook_like_task import LookbookLikeTask
 from whimbox.task.daily_task.xinghai_group_chat_task import XinghaiGroupChatTask
+from whimbox.task.navigation_task.auto_path_task import AutoPathTask
 
 xhsg_task_info_list = [
     {
         "key_words": ["摆饰"],
         "score": 200,
-        "priority": 5,
+        "priority": 0,
         "task_name": XHSG_TASK_PLACE_ITEM
     },
     {
@@ -85,7 +86,7 @@ xhsg_task_info_list = [
     {
         "key_words": ["制造", "泡泡"],
         "score": 200,
-        "priority": 0,
+        "priority": 5,
         "task_name": XHSG_TASK_BUBBLE_MAKE
     },
     {
@@ -112,7 +113,7 @@ class XinghaiTask(TaskTemplate):
         itt.key_down(keybind.KEYBIND_BELL)
         time.sleep(3)
         itt.key_up(keybind.KEYBIND_BELL)
-        wait_until_appear(IconPageMainFeature, 10)
+        wait_until_appear(IconPageMainFeature, retry_time=10)
 
     @register_step("检查星海拾光完成情况")
     def step2(self):
@@ -194,6 +195,7 @@ class XinghaiTask(TaskTemplate):
         task_dict = {
             XHSG_TASK_BOOKLOOK_LIKE: LookbookLikeTask(),
             XHSG_TASK_GROUP_CHAT: XinghaiGroupChatTask(),
+            XHSG_TASK_BUBBLE_MAKE: AutoPathTask(path_name="星海拾光_制造泡泡"),
         }
         for task_name in self.todo_list:
             if task_name in task_dict:
@@ -202,7 +204,15 @@ class XinghaiTask(TaskTemplate):
 
     @register_step("领取星海拾光奖励")
     def step5(self):
-        pass
+        ui_control.goto_page(page_xhsg)
+        if not itt.get_img_existence(ButtonXhsgRewarded):
+            ButtonXhsgRewarded.click()
+            if skip_get_award():
+                self.update_task_result(message="成功领取星海拾光奖励", data=self.todo_list)
+            else:
+                raise Exception("领取星海拾光奖励失败")
+        else:
+            self.update_task_result(message="星海拾光奖励已被领取过，无需再次领取", data=self.todo_list)
 
     @register_step("退出星海拾光")
     def step6(self):

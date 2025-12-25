@@ -191,7 +191,7 @@ class ZhaoxiTask(TaskTemplate):
             if skip_get_award():
                 self.update_task_result(message="成功领取朝夕心愿奖励", data=self.todo_list)
             else:
-                raise Exception("领取奖励失败")
+                raise Exception("领取朝夕心愿奖励失败")
         else:
             self.update_task_result(message="朝夕心愿奖励已被领取过，无需再次领取", data=self.todo_list)
 

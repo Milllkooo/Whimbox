@@ -127,6 +127,7 @@ IconZxxyTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_CEN
 ButtonXhsgEntrance = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
 IconXhsgFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, hsv_limit=([10, 40, 150], [35, 150, 255]), anchor=ANCHOR_BOTTOM_CENTER)
 AreaXhsgScore = Area(anchor=ANCHOR_RIGHT_CENTER)
+ButtonXhsgRewarded = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_RIGHT_CENTER)
 AreaXhsgTaskText = Area(anchor=ANCHOR_BOTTOM_CENTER)
 IconXhsgTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_CENTER)
 AreaXhsgBooklookWaterfall = Area(anchor=ANCHOR_TOP_CENTER, expand=True)
