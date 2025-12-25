@@ -97,10 +97,14 @@ def crop(image, anchor_posi: AnchorPosi, copy=True, base_resolution=(1920, 1080)
             # Offset from bottom edge
             offset_x = 0
             offset_y = h - base_h
+            if expand:
+                y1 -= h - base_h
         elif anchor == ANCHOR_BOTTOM_RIGHT:
             # Offset from bottom-right corner
             offset_x = w - base_w
             offset_y = h - base_h
+            if expand:
+                y1 -= h - base_h
         elif anchor == ANCHOR_CENTER:
             # Offset from center
             offset_x = (w - base_w) // 2
@@ -112,10 +116,14 @@ def crop(image, anchor_posi: AnchorPosi, copy=True, base_resolution=(1920, 1080)
             # Offset from top-center
             offset_x = (w - base_w) // 2
             offset_y = 0
+            if expand:
+                y2 += h - base_h
         elif anchor == ANCHOR_BOTTOM_CENTER:
             # Offset from bottom-center
             offset_x = (w - base_w) // 2
             offset_y = h - base_h
+            if expand:
+                y1 -= h - base_h
         elif anchor == ANCHOR_LEFT_CENTER:
             # Offset from left-center
             offset_x = 0

@@ -9,7 +9,7 @@ class Keybind:
         self.KEYBIND_MONTHLY_PASS = "j"
         self.KEYBIND_EVENT = "k"
         self.KEYBIND_INTERACTION = "f"
-        # self.KEYBIND_BELL = "e"
+        self.KEYBIND_BELL = "x"
         self.KEYBIND_ABILITY_DERIVATION_1 = "r"
         self.KEYBIND_FORWARD = "w"
         self.KEYBIND_JUMP = "space"
@@ -34,7 +34,7 @@ class Keybind:
         self.KEYBIND_MONTHLY_PASS = global_config.get('Keybinds', 'monthly_pass')
         self.KEYBIND_EVENT = global_config.get('Keybinds', 'event')
         self.KEYBIND_INTERACTION = global_config.get('Keybinds', 'interaction')
-        # self.KEYBIND_BELL = global_config.get('Keybinds', 'bell')
+        self.KEYBIND_BELL = global_config.get('Keybinds', 'bell')
         self.KEYBIND_ABILITY_DERIVATION_1 = global_config.get('Keybinds', 'ability_derivation_1')
         self.KEYBIND_FORWARD = global_config.get('Keybinds', 'forward')
         self.KEYBIND_JUMP = global_config.get('Keybinds', 'jump')

@@ -91,10 +91,13 @@ def scroll_find_click(area: Area, target, threshold=0, hsv_limit=None, scale=0, 
             return False
         if isinstance(target, ImgIcon):
             target_img = target.image
+            if target.hsv_limit:
+                hsv_limit = target.hsv_limit
             if hsv_limit:
                 if scale:
                     target_img = cv2.resize(target_img, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
-                target_img = target_img[:, :, 0]
+                if not target.hsv_limit:
+                    target_img = target_img[:, :, 0]
                 cap_hsv = process_with_hsv_limit(cap, hsv_limit[0], hsv_limit[1])
                 rate, loc = similar_img(cap_hsv, target_img, ret_mode=IMG_RECT)
             else:
@@ -285,7 +288,6 @@ if __name__ == "__main__":
 
     # scroll_find_click(AreaBlessHuanjingLevelsSelect, "翻滚", str_match_mode=1)
     # scroll_find_click(AreaEscEntrances, "美鸭梨挖掘")
-    itt.capture()
-    scroll_to_top(AreaBlessHuanjingLevelsSelect)
+    scroll_find_click(AreaXhsgBooklookWaterfall, IconXhsgBooklookLikeButton)
 
     

@@ -108,7 +108,7 @@ ButtonDigConfirm = Button(print_log=LOG_WHEN_TRUE)
 ButtonDigTime20h = Button(print_log=LOG_WHEN_TRUE, threshold=0.95)
 
 # 朝夕心愿相关
-ButtonZxxyEntrance = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_LEFT_CENTER)
+ButtonZxxyEntrance = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
 IconZxxyFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(180, 255), anchor=ANCHOR_RIGHT_CENTER)
 AreaZxxyScore = Area(anchor=ANCHOR_RIGHT_CENTER)
 ButtonZxxyRewarded = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_RIGHT_CENTER)
@@ -118,11 +118,16 @@ ButtonZxxyTask3 = Button(anchor=ANCHOR_CENTER)
 ButtonZxxyTask4 = Button(anchor=ANCHOR_CENTER)
 ButtonZxxyTask5 = Button(anchor=ANCHOR_CENTER)
 AreaZxxyTaskText = Area(anchor=ANCHOR_BOTTOM_CENTER)
-IconUIZxxyTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_CENTER)
+IconZxxyTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_CENTER)
 
-# 星海拾遗相关
-# ButtonXhsyEntrance = Button(print_log=LOG_WHEN_TRUE)
-# IconUIXhsy = ImgIcon(print_log=LOG_WHEN_TRUE)
+# 星海拾光相关
+ButtonXhsgEntrance = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+IconXhsgFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, hsv_limit=([10, 40, 150], [35, 150, 255]), anchor=ANCHOR_BOTTOM_CENTER)
+AreaXhsgScore = Area(anchor=ANCHOR_RIGHT_CENTER)
+AreaXhsgTaskText = Area(anchor=ANCHOR_BOTTOM_CENTER)
+IconXhsgTaskFinished = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_CENTER)
+AreaXhsgBooklookWaterfall = Area(anchor=ANCHOR_TOP_CENTER, expand=True)
+IconXhsgBooklookLikeButton = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, hsv_limit=([15, 40, 195], [25, 110, 230]))
 
 # 换装界面
 ButtonWardrobeDressDIY = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_RIGHT_CENTER)

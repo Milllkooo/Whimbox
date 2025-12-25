@@ -9,7 +9,6 @@ from whimbox.interaction.interaction_core import itt
 import time
 from whimbox.common.utils.ui_utils import *
 from whimbox.task.daily_task.cvar import *
-from whimbox.common.keybind import keybind
 from whimbox.common.logger import logger
 
 
@@ -101,7 +100,7 @@ class ZhaoxiTask(TaskTemplate):
         ui_control.goto_page(page_zxxy)
 
 
-    @register_step("查看完成情况")
+    @register_step("检查朝夕心愿完成情况")
     def step2(self):
         try:
             # time.sleep(2) # 等待分数变化
@@ -120,13 +119,13 @@ class ZhaoxiTask(TaskTemplate):
             return "step3"
 
 
-    @register_step("查看具体任务")
+    @register_step("查看朝夕心愿具体任务")
     def step3(self):
 
         def check_task(task_btn: Button):
             task_btn.click()
             time.sleep(0.3)
-            if not itt.get_img_existence(IconUIZxxyTaskFinished):
+            if not itt.get_img_existence(IconZxxyTaskFinished):
                 task_text = itt.ocr_single_line(AreaZxxyTaskText)
                 logger.info(f"任务文本：{task_text}")
                 for task_info in zxxy_task_info_list:
@@ -185,7 +184,7 @@ class ZhaoxiTask(TaskTemplate):
                 return "step5"
                 
 
-    @register_step("领取奖励")
+    @register_step("领取朝夕心愿奖励")
     def step4(self):
         if not itt.get_img_existence(ButtonZxxyRewarded):
             ButtonZxxyRewarded.click()

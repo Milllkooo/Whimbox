@@ -9,7 +9,7 @@ page_bigmap = UIPage(check_icon=IconUIBigmap)
 page_esc = TitlePage("美鸭梨")
 page_daily_task = TitlePage("奇想日历")
 page_zxxy = UIPage(check_icon=IconZxxyFeature)
-# page_xhsy = UIPage(check_icon=IconUIXhsy)
+page_xhsg = UIPage(check_icon=IconXhsgFeature)
 page_dress = UIPage(check_icon=ButtonWardrobeDressDIY)
 page_ability = UIPage(check_icon=IconAbilityFeature)
 page_huanjing = TitlePage("幻境挑战")
@@ -26,7 +26,7 @@ ui_pages = [
     page_bigmap,
     page_daily_task,
     page_zxxy,
-    # page_xhsy,
+    page_xhsg,
     page_esc,
     page_huanjing,
     page_huanjing_jihua,
@@ -55,7 +55,7 @@ page_esc.link('esc', page_main)
 page_daily_task.link('esc', page_main)
 page_daily_task.link(ButtonHuanjingGo, page_huanjing)
 page_daily_task.link(ButtonZxxyEntrance, page_zxxy)
-# page_daily_task.link(ButtonXhsyEntrance, page_xhsy)
+page_daily_task.link(ButtonXhsgEntrance, page_xhsg)
 
 page_huanjing.link('esc', page_daily_task)
 page_huanjing.link(TextHuanjingJihuaEntrace, page_huanjing_jihua)
@@ -69,8 +69,7 @@ page_huanjing_monster.link('esc', page_huanjing)
 page_huanjing_weekly.link('esc', page_huanjing)
 
 page_zxxy.link("esc", page_daily_task)
-
-# page_xhsy.link("esc", page_daily_task)
+page_xhsg.link("esc", page_daily_task)
 
 page_dress.link("esc", page_main)
 page_dress.link(TextWardrobeAbilityTab, page_ability)
