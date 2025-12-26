@@ -15,9 +15,9 @@ class RunMacroTask(TaskTemplate):
         self.check_stop_func = check_stop_func
         self.delay = delay
         self.macro_record = scripts_manager.query_macro(macro_filename)
-        if self.macro_record is None:
+        if not self.macro_record:
             raise ValueError(f"宏\"{macro_filename}\"不存在，请先下载该宏")
-        if self.macro_record.info.version != "3.0":
+        if self.macro_record and self.macro_record.info.version != "3.0":
             raise ValueError(f"宏版本不匹配，请更新宏")
 
         self.current_step_index = 0
