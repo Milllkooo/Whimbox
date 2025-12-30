@@ -6,6 +6,7 @@ from whimbox.task.photo_task.daily_photo_task import DailyPhotoTask
 from whimbox.task.macro_task.record_macro_task import RecordMacroTask
 from whimbox.task.macro_task.run_macro_task import RunMacroTask
 from whimbox.task.daily_task.xinghai_task import XinghaiTask
+from whimbox.task.bigmap_mark_task.map_collection import MapCollectionTask
 from whimbox.task.task_template import STATE_TYPE_SUCCESS, STATE_TYPE_ERROR
 from whimbox.common.logger import logger
 from whimbox.common.cvars import MCP_CONFIG
@@ -297,6 +298,20 @@ async def xinghai_task() -> dict:
     """
     xinghai_task = XinghaiTask()
     task_result = xinghai_task.task_run()
+    return task_result.to_dict()
+
+
+@mcp.tool()
+@check_game_ok
+async def map_collection_task() -> dict:
+    """
+    大地图标记任务，自动标记未获得的大地图物品
+    Returns:
+        dict: 包含操作状态的字典
+    """
+
+    map_collection_task = MapCollectionTask()
+    task_result = map_collection_task.task_run()
     return task_result.to_dict()
 
 

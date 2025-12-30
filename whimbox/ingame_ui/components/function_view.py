@@ -43,6 +43,12 @@ FUNCTION_BUTTONS = [
         'task_name': 'xinghai_task',
         'task_params': {},
         'start_message': '开始星海一条龙，按 / 结束任务\n',
+    },
+    {
+        'label': '大地图标记（test）',
+        'task_name': 'map_collection_task',
+        'task_params': {},
+        'start_message': '开始大地图标记，按 / 结束任务\n',
     }
 ]
 
