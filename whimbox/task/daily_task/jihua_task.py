@@ -2,7 +2,7 @@
 激化素材幻境
 """
 
-from whimbox.task.task_template import TaskTemplate, register_step
+from whimbox.task.task_template import *
 from whimbox.ui.ui import ui_control
 from whimbox.ui.page_assets import *
 from whimbox.interaction.interaction_core import itt
@@ -22,9 +22,12 @@ class JihuaTask(TaskTemplate):
         else:
             self.target_material = global_config.get("Game", "jihua_target")
         if cost_material:
-            self.cost_material = cost_material
+            self.cost_materials = [cost_material]
         else:
-            self.cost_material = global_config.get("Game", "jihua_cost")
+            self.cost_materials = [
+                global_config.get("Game", "jihua_cost"), 
+                global_config.get("Game", "jihua_cost_2"), 
+                global_config.get("Game", "jihua_cost_3")]
 
     @register_step("正在前往素材激化幻境")
     def step1(self):
@@ -65,19 +68,25 @@ class JihuaTask(TaskTemplate):
         itt.wait_until_stable()
         if not scroll_find_click(AreaJihuaTargetSelect, self.target_material):
             raise Exception(f"未找到激化产物{self.target_material}")
+        itt.wait_until_stable(threshold=0.99)
 
 
     @register_step("选择激化素材")
     def step5(self):
-        if self.cost_material not in material_icon_dict:
-            raise Exception(f"不支持使用{self.cost_material}作为消耗材料")
-        material_info = material_icon_dict[self.cost_material]
-        if not material_info["jihua"]:
-            raise Exception(f"{self.cost_material}不能用于激化")
-        
-        itt.wait_until_stable()
-        if not scroll_find_click(AreaJihuaCostSelect, material_info["icon"], threshold=0.75, scale=0.5):
-            raise Exception(f"未找到消耗材料{self.cost_material}")
+        for cost_material in self.cost_materials:
+            if cost_material not in material_icon_dict:
+                self.log_to_gui(f"不支持使用{cost_material}作为消耗材料，尝试使用备选素材", is_error=True)
+                continue
+            material_info = material_icon_dict[cost_material]
+            if not material_info["jihua"]:
+                self.log_to_gui(f"{cost_material}不能用于激化，尝试使用备选素材", is_error=True)
+                continue
+            if not scroll_find_click(AreaJihuaCostSelect, material_info["icon"], threshold=0.73, scale=0.5):
+                self.log_to_gui(f"未找到消耗材料{cost_material}，尝试使用备选素材", is_error=True)
+                continue
+            return
+        self.update_task_result(status=STATE_TYPE_FAILED, message="未找到激化消耗材料")
+        return "step9"
 
 
     @register_step("选择激化素材数量")
@@ -121,4 +130,5 @@ class JihuaTask(TaskTemplate):
 
 if __name__ == "__main__":
     jihua_task = JihuaTask()
-    jihua_task.task_run()
+    result = jihua_task.task_run()
+    print(result)

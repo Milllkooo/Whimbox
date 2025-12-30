@@ -89,8 +89,11 @@ class AllInOneTask(TaskTemplate):
         if energy_cost == "素材激化幻境":
             if DAILY_TASK_JIHUA not in self.zhaoxi_todo_list:
                 task = daily_task.JihuaTask()
-                task.task_run()
-            self.task_result_list['energy_cost_task'] = True
+                result = task.task_run()
+                if result.status == STATE_TYPE_SUCCESS:
+                    self.task_result_list['energy_cost_task'] = True
+                else:
+                    self.task_result_list['energy_cost_task'] = False
         elif energy_cost == "祝福闪光幻境":
             if DAILY_TASK_GET_BLESS not in self.zhaoxi_todo_list:
                 task = daily_task.BlessTask()

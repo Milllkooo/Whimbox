@@ -16,6 +16,7 @@ class Keybind:
         self.KEYBIND_FALLING = "q"
         self.KEYBIND_FISHING_REEL_IN = "mouse_right"
         self.KEYBIND_BACK = "backspace"
+        self.KEYBIND_CHAT = "enter"
         self.KEYBIND_ABILITY_1 = "1"
         self.KEYBIND_ABILITY_2 = "2"
         self.KEYBIND_ABILITY_3 = "3"
@@ -41,6 +42,7 @@ class Keybind:
         self.KEYBIND_FALLING = global_config.get('Keybinds', 'falling')
         self.KEYBIND_FISHING_REEL_IN = global_config.get('Keybinds', 'fishing_reel_in')
         self.KEYBIND_BACK = global_config.get('Keybinds', 'back')
+        self.KEYBIND_CHAT = global_config.get('Keybinds', 'chat')
         self.KEYBIND_ABILITY_1 = global_config.get('Keybinds', 'ability_1')
         self.KEYBIND_ABILITY_2 = global_config.get('Keybinds', 'ability_2')
         self.KEYBIND_ABILITY_3 = global_config.get('Keybinds', 'ability_3')

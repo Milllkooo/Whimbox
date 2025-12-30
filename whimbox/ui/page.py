@@ -58,5 +58,5 @@ class TitlePage(UIPage):
         self.links = {}
 
     def is_current_page(self, itt):
-        return itt.ocr_single_line(area = AreaPageTitleFeature) == self.title
+        return itt.ocr_single_line(area=AreaPageTitleFeature, hsv_limit=([0, 0, 220], [179, 35, 255])) == self.title
 

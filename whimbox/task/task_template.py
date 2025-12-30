@@ -11,9 +11,10 @@ import time
 import traceback
 import threading
 
-STATE_TYPE_SUCCESS = "success"
-STATE_TYPE_ERROR = "error"
-STATE_TYPE_STOP = "stop"
+STATE_TYPE_SUCCESS = "success"  # 成功
+STATE_TYPE_ERROR = "error"      # 错误，会引发一次重试
+STATE_TYPE_STOP = "stop"        # 手动停止，不会引发重试
+STATE_TYPE_FAILED = "failed"    # 失败，不会引发重试
 
 STEP_NAME_FINISH = "step_finish"
 
@@ -152,7 +153,7 @@ class TaskTemplate:
                 set_foreground_task_running(True)
             
             res = self._task_run()
-            if res.status in [STATE_TYPE_SUCCESS, STATE_TYPE_STOP]:
+            if res.status in [STATE_TYPE_SUCCESS, STATE_TYPE_STOP, STATE_TYPE_FAILED]:
                 return res
             else:
                 # 非手动停止导致的失败，就再试一次

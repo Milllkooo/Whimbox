@@ -7,18 +7,25 @@ from whimbox.common.cvars import *
 # 很多界面左上角都有的文字标题区域
 AreaPageTitleFeature = Area(anchor=ANCHOR_TOP_LEFT)
 
-# 主界面、esc菜单、抽卡、商城相关
+# 主界面、esc菜单
 IconPageMainFeature = ImgIcon(print_log=LOG_NONE, threshold=0.90, gray_limit=(230, 255), anchor=ANCHOR_BOTTOM_LEFT)
 IconDungeonFeature = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.90, gray_limit=(230, 255), anchor=ANCHOR_TOP_LEFT)
 AreaUITime = Area(anchor=ANCHOR_TOP_LEFT)
 AreaEscEntrances = Area(anchor=ANCHOR_LEFT_CENTER)
+# 商城抽卡特征
 IconGachaFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99, anchor=ANCHOR_TOP_RIGHT)
 IconShopFeature = ImgIcon(print_log=LOG_NONE, threshold=0.99, anchor=ANCHOR_TOP_LEFT)
+# 登录界面特征
 # IconPageLoginFeature = ImgIcon(print_log=LOG_ALL, threshold=0.90, hsv_limit=([0, 0, 220], [179, 50, 255]))
 AreaLoginOCR = Area(anchor=ANCHOR_CENTER, expand=True)
 AreaLaunchButton = Area()
+# 聊天框特征
 IconPageChatFeature = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_BOTTOM_LEFT)
 ButtonPageChatClose = Button(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_TOP_LEFT)
+# 小月卡特征
+IconDailyRewardFeature1 = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+IconDailyRewardFeature2 = ImgIcon(print_log=LOG_WHEN_TRUE, anchor=ANCHOR_CENTER)
+
 
 # loading界面
 IconUILoading = ImgIcon(print_log=LOG_NONE, threshold=0.99)

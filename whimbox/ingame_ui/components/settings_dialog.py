@@ -362,7 +362,7 @@ class SettingsDialog(QDialog):
         completion_list = []
         
         # 特殊处理 jihua_cost: 从 material_icon_dict 获取材料名称
-        if key == "jihua_cost":
+        if key in ["jihua_cost", "jihua_cost_2", "jihua_cost_3"]:
             completion_list = list(material_icon_dict.keys())
         # 如果 key 在 setting_options.json 中存在，使用对应的选项列表
         elif key in self.setting_options:

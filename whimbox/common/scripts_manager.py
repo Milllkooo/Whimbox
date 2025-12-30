@@ -190,7 +190,7 @@ class ScriptsManager:
                     logger.warning(f"Failed to delete file {file_path}: {e}")
                     continue
             if deleted_count > 0:
-                self.init_path_dict()
+                self.init_scripts_dict()
                 logger.info(f"Deleted {deleted_count} file(s) for path '{path_name}'")
             return deleted_count
             
