@@ -13,6 +13,8 @@ page_zxxy = UIPage(check_icon=IconZxxyFeature)
 page_xhsg = UIPage(check_icon=IconXhsgFeature)
 page_dress = UIPage(check_icon=ButtonWardrobeDressDIY)
 page_ability = UIPage(check_icon=IconAbilityFeature)
+page_daily_reward_1 = UIPage(check_icon=IconDailyRewardFeature1)
+page_daily_reward_2 = UIPage(check_icon=IconDailyRewardFeature2)
 page_huanjing = TitlePage("幻境挑战")
 page_huanjing_jihua = TitlePage("素材激化幻境")
 page_huanjing_bless = TitlePage("祝福闪光幻境")
@@ -40,6 +42,8 @@ ui_pages = [
     page_event,
     page_dress,
     page_ability,
+    page_daily_reward_1,
+    page_daily_reward_2,
 ]
 
 page_main.link('enter', page_chat)
@@ -84,3 +88,6 @@ page_photo.link("esc", page_main)
 page_monthly_pass.link("esc", page_main)
 
 page_event.link('esc', page_main)
+
+page_daily_reward_1.link(keybind.KEYBIND_INTERACTION, page_daily_reward_2)
+page_daily_reward_2.link(keybind.KEYBIND_INTERACTION, page_main)
