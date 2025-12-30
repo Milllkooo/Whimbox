@@ -46,7 +46,7 @@ ui_pages = [
     page_daily_reward_2,
 ]
 
-page_main.link('enter', page_chat)
+page_main.link(keybind.KEYBIND_CHAT, page_chat)
 page_main.link(keybind.KEYBIND_MAP, page_bigmap)
 page_main.link('esc', page_esc)
 page_main.link(keybind.KEYBIND_DAILY_TASK, page_daily_task)

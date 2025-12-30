@@ -158,6 +158,10 @@
             "value": "backspace",
             "description": "退出关卡"
         },
+        "chat":{
+            "value": "enter",
+            "description": "聊天"
+        },
         "fishing_reel_in":{
             "value": "mouse_right",
             "description": "钓鱼收线"
