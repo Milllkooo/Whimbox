@@ -76,7 +76,7 @@ class JihuaTask(TaskTemplate):
             raise Exception(f"{self.cost_material}不能用于激化")
         
         itt.wait_until_stable()
-        if not scroll_find_click(AreaJihuaCostSelect, material_info["icon"], threshold=0.75, scale=0.5):
+        if not scroll_find_click(AreaJihuaCostSelect, material_info["icon"], threshold=0.73, scale=0.5):
             raise Exception(f"未找到消耗材料{self.cost_material}")
 
 
