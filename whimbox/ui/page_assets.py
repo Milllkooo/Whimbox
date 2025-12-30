@@ -23,6 +23,7 @@ page_huanjing_weekly = TitlePage("心之突破幻境")
 page_photo = TitlePage("大喵相机")
 page_monthly_pass = TitlePage("奇迹之旅")
 page_event = TitlePage("活动大厅")
+page_setting = TitlePage("设置")
 
 ui_pages = [
     page_main,
@@ -40,6 +41,7 @@ ui_pages = [
     page_photo,
     page_monthly_pass,
     page_event,
+    page_setting,
     page_dress,
     page_ability,
     page_daily_reward_1,
@@ -88,6 +90,8 @@ page_photo.link("esc", page_main)
 page_monthly_pass.link("esc", page_main)
 
 page_event.link('esc', page_main)
+
+page_setting.link('esc', page_esc)
 
 page_daily_reward_1.link(keybind.KEYBIND_INTERACTION, page_daily_reward_2)
 page_daily_reward_2.link(keybind.KEYBIND_INTERACTION, page_main)
