@@ -84,6 +84,14 @@
             "value": "星荧草",
             "description": "激化幻境的默认消耗材料"
         },
+        "jihua_cost_2": {
+            "value": "纽扣松果",
+            "description": "激化幻境的默认消耗材料，备选1"
+        },
+        "jihua_cost_3": {
+            "value": "小棉菊",
+            "description": "激化幻境的默认消耗材料，备选2"
+        },
         "bless_target": {
             "value": "巨蛇遗迹试炼",
             "description": "祝福闪光幻境的默认目标"
