@@ -31,7 +31,7 @@ from whimbox.ui.ui_assets import AreaBigMapTeleportButton
 class MapCollectionTask(TaskTemplate):
     """
     大地图物品收集任务类。
-    """、、
+    """
 
     def __init__(self):
         super().__init__("map_collection_task")
